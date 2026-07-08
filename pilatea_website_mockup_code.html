@@ -1,0 +1,589 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PILATEA | Sip. Stretch. Glow.</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Parisienne&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --baby-blue: #BFEFFF;
+      --lavender: #DCCEF9;
+      --blush-pink: #F8D6E8;
+      --pearl-white: #F9F7FA;
+      --soft-lilac: #CFA5E8;
+      --deep-plum: #3A1D35;
+      --pink-glow: #E7A6D8;
+      --holographic-silver: #EAE7F2;
+      --white-glass: rgba(255, 255, 255, 0.58);
+      --border-glass: rgba(255, 255, 255, 0.8);
+      --shadow-soft: 0 18px 50px rgba(58, 29, 53, 0.12);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      color: var(--deep-plum);
+      min-height: 100vh;
+      background:
+        radial-gradient(circle at 15% 15%, rgba(191, 239, 255, 0.9), transparent 30%),
+        radial-gradient(circle at 80% 20%, rgba(248, 214, 232, 0.9), transparent 28%),
+        radial-gradient(circle at 55% 75%, rgba(220, 206, 249, 0.85), transparent 30%),
+        linear-gradient(135deg, #fdfbff 0%, #eefaff 35%, #fff1fa 70%, #f9f7fa 100%);
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      background:
+        linear-gradient(120deg, transparent 0%, rgba(255,255,255,0.75) 18%, transparent 28%),
+        linear-gradient(45deg, transparent 40%, rgba(231,166,216,0.35), rgba(191,239,255,0.35), transparent 65%);
+      filter: blur(10px);
+      opacity: 0.8;
+      pointer-events: none;
+      animation: shimmer 10s ease-in-out infinite alternate;
+      z-index: -1;
+    }
+
+    @keyframes shimmer {
+      from { transform: translateX(-4%) translateY(-2%) scale(1); }
+      to { transform: translateX(4%) translateY(2%) scale(1.05); }
+    }
+
+    .page {
+      max-width: 1440px;
+      margin: auto;
+      padding: 28px 34px 42px;
+    }
+
+    .glass {
+      background: var(--white-glass);
+      border: 1px solid var(--border-glass);
+      backdrop-filter: blur(22px);
+      box-shadow: var(--shadow-soft);
+      border-radius: 30px;
+    }
+
+    .navbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 18px 34px;
+      position: sticky;
+      top: 18px;
+      z-index: 10;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      font-family: 'Poppins', sans-serif;
+      letter-spacing: 8px;
+      font-size: 34px;
+      font-weight: 300;
+    }
+
+    .logo-cup {
+      width: 58px;
+      height: 42px;
+      background: var(--baby-blue);
+      border: 4px solid #1f101d;
+      border-radius: 8px 8px 28px 28px;
+      position: relative;
+      box-shadow: 8px 8px 0 rgba(231,166,216,0.55);
+    }
+
+    .logo-cup::before {
+      content: "☕";
+      position: absolute;
+      font-size: 30px;
+      inset: 3px 0 0 10px;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 26px;
+      align-items: center;
+      font-size: 14px;
+      font-weight: 600;
+    }
+
+    .nav-links a {
+      color: var(--deep-plum);
+      text-decoration: none;
+      opacity: 0.9;
+    }
+
+    .btn {
+      border: 0;
+      border-radius: 999px;
+      padding: 14px 26px;
+      color: white;
+      font-weight: 700;
+      cursor: pointer;
+      background: linear-gradient(135deg, #e883d4, #cfa5e8);
+      box-shadow: 0 12px 28px rgba(207, 165, 232, 0.45);
+      transition: 0.3s ease;
+    }
+
+    .btn:hover {
+      transform: translateY(-3px) scale(1.02);
+      box-shadow: 0 18px 38px rgba(207, 165, 232, 0.6);
+    }
+
+    .hero {
+      min-height: 680px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 44px;
+      align-items: center;
+      padding: 70px 70px 40px;
+    }
+
+    .hero h1 {
+      font-family: 'Poppins', sans-serif;
+      font-size: clamp(72px, 9vw, 140px);
+      font-weight: 300;
+      letter-spacing: 18px;
+      line-height: 0.9;
+    }
+
+    .script {
+      font-family: 'Parisienne', cursive;
+      color: #d071c7;
+      font-size: clamp(42px, 5vw, 74px);
+      margin: 18px 0;
+      text-shadow: 0 8px 24px rgba(231,166,216,0.4);
+    }
+
+    .hero h2 {
+      font-size: 30px;
+      line-height: 1.35;
+      margin-bottom: 20px;
+      font-weight: 500;
+    }
+
+    .hero p {
+      font-size: 17px;
+      line-height: 1.8;
+      max-width: 520px;
+      margin-bottom: 30px;
+    }
+
+    .hero-actions {
+      display: flex;
+      gap: 18px;
+      flex-wrap: wrap;
+    }
+
+    .hero-visual {
+      position: relative;
+      min-height: 540px;
+      display: grid;
+      place-items: center;
+    }
+
+    .orb {
+      width: 520px;
+      height: 520px;
+      border-radius: 50%;
+      background: radial-gradient(circle at 30% 25%, rgba(255,255,255,0.8), rgba(248,214,232,0.25), rgba(191,239,255,0.22));
+      border: 1px solid rgba(255,255,255,0.9);
+      box-shadow: inset 0 0 80px rgba(255,255,255,0.55), var(--shadow-soft);
+      position: absolute;
+    }
+
+    .cup-character {
+      width: 300px;
+      height: 180px;
+      background: linear-gradient(160deg, #c9f7ff, #bdefff);
+      border: 7px solid #1f101d;
+      border-radius: 15px 15px 150px 150px;
+      position: relative;
+      z-index: 2;
+      box-shadow: 16px 16px 0 rgba(231,166,216,0.5);
+    }
+
+    .cup-character::before {
+      content: "";
+      position: absolute;
+      right: -86px;
+      top: 34px;
+      width: 100px;
+      height: 100px;
+      border: 12px solid #1f101d;
+      border-left: 0;
+      border-radius: 0 70px 70px 0;
+    }
+
+    .face {
+      position: absolute;
+      inset: 60px 65px;
+      font-size: 62px;
+      letter-spacing: 28px;
+    }
+
+    .smile {
+      position: absolute;
+      left: 118px;
+      top: 105px;
+      width: 65px;
+      height: 35px;
+      border-bottom: 7px solid #1f101d;
+      border-radius: 50%;
+    }
+
+    .steam {
+      position: absolute;
+      top: -110px;
+      left: 95px;
+      font-size: 82px;
+      line-height: 0.7;
+      color: #1f101d;
+      filter: drop-shadow(18px 0 0 rgba(231,166,216,0.55));
+      animation: float 3s ease-in-out infinite;
+    }
+
+    @keyframes float {
+      0%,100% { transform: translateY(0); }
+      50% { transform: translateY(-14px); }
+    }
+
+    .feature-row {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 22px;
+      padding: 30px;
+      margin: -20px auto 36px;
+    }
+
+    .feature-card, .panel, .social, footer {
+      padding: 28px;
+    }
+
+    .feature-card h3 {
+      color: #8c2c79;
+      margin: 12px 0 8px;
+    }
+
+    .icon {
+      width: 70px;
+      height: 70px;
+      display: grid;
+      place-items: center;
+      border-radius: 50%;
+      background: rgba(248, 214, 232, 0.65);
+      font-size: 34px;
+    }
+
+    .content-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 36px;
+      margin-bottom: 36px;
+    }
+
+    .section-title {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 24px;
+    }
+
+    .section-title h2 {
+      font-size: 36px;
+      font-weight: 500;
+    }
+
+    .event, .tea-item {
+      display: grid;
+      grid-template-columns: 150px 82px 1fr;
+      gap: 22px;
+      align-items: center;
+      margin: 22px 0;
+    }
+
+    .tea-item {
+      grid-template-columns: 220px 1fr;
+    }
+
+    .image-card {
+      height: 110px;
+      border-radius: 18px;
+      background: linear-gradient(135deg, var(--baby-blue), var(--blush-pink));
+      display: grid;
+      place-items: center;
+      font-size: 46px;
+      overflow: hidden;
+    }
+
+    .date-box {
+      border-radius: 18px;
+      background: rgba(248, 214, 232, 0.75);
+      text-align: center;
+      padding: 13px;
+      box-shadow: 0 12px 25px rgba(231,166,216,0.25);
+    }
+
+    .date-box span {
+      display: block;
+      color: #ce57b9;
+      font-weight: 700;
+    }
+
+    .date-box strong {
+      font-size: 34px;
+    }
+
+    .tag {
+      display: inline-block;
+      padding: 7px 13px;
+      border-radius: 999px;
+      background: rgba(220,206,249,0.7);
+      font-size: 12px;
+      margin: 10px 5px 0 0;
+    }
+
+    .go-section {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 28px;
+      align-items: center;
+      padding: 0;
+      overflow: hidden;
+      margin-bottom: 36px;
+    }
+
+    .go-image {
+      min-height: 280px;
+      background: linear-gradient(135deg, rgba(191,239,255,0.65), rgba(248,214,232,0.8)), url('https://images.unsplash.com/photo-1506126613408-eca07ce68773?auto=format&fit=crop&w=1200&q=80') center/cover;
+    }
+
+    .go-content {
+      padding: 42px;
+      text-align: center;
+    }
+
+    .location-icons {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 24px;
+      margin: 28px 0;
+      font-weight: 600;
+    }
+
+    .social {
+      display: grid;
+      grid-template-columns: 1fr 2fr 1fr;
+      gap: 24px;
+      align-items: center;
+      margin-bottom: 26px;
+    }
+
+    .mini-gallery {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 14px;
+    }
+
+    .mini-gallery div {
+      height: 120px;
+      border-radius: 18px;
+      background: linear-gradient(135deg, var(--blush-pink), var(--baby-blue));
+      display: grid;
+      place-items: center;
+      font-size: 34px;
+    }
+
+    footer {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr 1.5fr;
+      gap: 30px;
+    }
+
+    footer a {
+      display: block;
+      text-decoration: none;
+      color: var(--deep-plum);
+      margin: 8px 0;
+      font-size: 14px;
+    }
+
+    .email-box {
+      margin-top: 14px;
+      display: flex;
+      padding: 8px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.55);
+      border: 1px solid rgba(255,255,255,0.8);
+    }
+
+    .email-box input {
+      flex: 1;
+      border: 0;
+      background: transparent;
+      padding: 10px 14px;
+      outline: none;
+    }
+
+    @media (max-width: 980px) {
+      .hero, .content-grid, .go-section, .social, footer {
+        grid-template-columns: 1fr;
+      }
+      .feature-row {
+        grid-template-columns: 1fr 1fr;
+      }
+      .nav-links {
+        display: none;
+      }
+      .hero {
+        padding: 42px 24px;
+      }
+      .event, .tea-item {
+        grid-template-columns: 1fr;
+      }
+      .orb {
+        width: 380px;
+        height: 380px;
+      }
+    }
+
+    @media (max-width: 600px) {
+      .page {
+        padding: 18px;
+      }
+      .brand {
+        font-size: 24px;
+        letter-spacing: 5px;
+      }
+      .feature-row, .mini-gallery {
+        grid-template-columns: 1fr;
+      }
+      .hero h1 {
+        letter-spacing: 8px;
+        font-size: 58px;
+      }
+      .cup-character {
+        transform: scale(0.78);
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <nav class="navbar glass">
+      <div class="brand"><div class="logo-cup"></div>PILATEA</div>
+      <div class="nav-links">
+        <a href="#home">Home</a>
+        <a href="#about">About</a>
+        <a href="#go">Pilates on the Go</a>
+        <a href="#tea">Tea Experience</a>
+        <a href="#events">Events</a>
+        <a href="#contact">Contact</a>
+      </div>
+      <button class="btn">Book a Session</button>
+    </nav>
+
+    <section id="home" class="hero">
+      <div>
+        <h1>PILATEA</h1>
+        <div class="script">Sip. Stretch. Glow.</div>
+        <h2>Pilates, Tea & Serenity Anywhere You Go.</h2>
+        <p>We blend mindful movement with comforting tea experiences to nourish your body, mind, and soul — indoors, outdoors, and wherever your wellness journey takes you.</p>
+        <div class="hero-actions">
+          <button class="btn">Book a Session</button>
+          <button class="btn">Explore Events</button>
+          <button class="btn">Tea Experience</button>
+        </div>
+      </div>
+      <div class="hero-visual">
+        <div class="orb"></div>
+        <div class="cup-character">
+          <div class="steam">≋<br>≋</div>
+          <div class="face">⌒ ⌒</div>
+          <div class="smile"></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="about" class="feature-row glass">
+      <div class="feature-card"><div class="icon">🪷</div><h3>Mindful Movement</h3><p>Strengthen your body and calm your mind with our Pilates classes.</p></div>
+      <div class="feature-card"><div class="icon">🍵</div><h3>Premium Tea</h3><p>Handcrafted teas made to nourish, relax, and energize.</p></div>
+      <div class="feature-card"><div class="icon">🌅</div><h3>Outdoor Experiences</h3><p>Pilates on the go in beautiful locations near you.</p></div>
+      <div class="feature-card"><div class="icon">💗</div><h3>Community</h3><p>Connect, uplift, and grow with a like-minded wellness community.</p></div>
+    </section>
+
+    <section class="content-grid">
+      <div id="events" class="panel glass">
+        <div class="section-title"><h2>Upcoming <span class="script">Events</span></h2><button class="btn">View All</button></div>
+        <div class="event"><div class="image-card">🌴</div><div class="date-box"><span>MAY</span><strong>18</strong></div><div><h3>Sunset Pilates in the Park</h3><p>Lumphini Park · 5:30 PM – 6:30 PM</p><small>20 spots left</small></div></div>
+        <div class="event"><div class="image-card">🌇</div><div class="date-box"><span>MAY</span><strong>25</strong></div><div><h3>Rooftop Pilates Flow</h3><p>The Sky Lounge · 7:00 AM – 8:00 AM</p><small>15 spots left</small></div></div>
+        <div class="event"><div class="image-card">🏖️</div><div class="date-box"><span>JUN</span><strong>01</strong></div><div><h3>Beach Pilates & Tea</h3><p>Pattaya Beach · 6:00 PM – 7:00 PM</p><small>25 spots left</small></div></div>
+      </div>
+
+      <div id="tea" class="panel glass">
+        <div class="section-title"><h2>Tea Menu 💗</h2><button class="btn">Full Menu</button></div>
+        <div class="tea-item"><div class="image-card">💜</div><div><h3>Calm Lavender</h3><p>Lavender and chamomile for deep relaxation.</p><span class="tag">Relax</span><span class="tag">Sleep</span></div></div>
+        <div class="tea-item"><div class="image-card">🍵</div><div><h3>Matcha Glow</h3><p>Premium ceremonial matcha for energy and focus.</p><span class="tag">Energy</span><span class="tag">Focus</span></div></div>
+        <div class="tea-item"><div class="image-card">🍓</div><div><h3>Berry Bliss</h3><p>A fruity blend full of antioxidants and natural goodness.</p><span class="tag">Refresh</span><span class="tag">Glow</span></div></div>
+      </div>
+    </section>
+
+    <section id="go" class="go-section glass">
+      <div class="go-image"></div>
+      <div class="go-content">
+        <p>OUR SIGNATURE EXPERIENCE</p>
+        <div class="script">Pilates on the Go</div>
+        <h2>We bring Pilates to you.</h2>
+        <p>Different locations. Different vibes. Same good energy.</p>
+        <div class="location-icons"><span>🌳 Parks</span><span>🌊 Beaches</span><span>🏙️ Rooftops</span><span>💼 Corporate</span><span>📅 Events</span></div>
+        <button class="btn">Learn More</button>
+      </div>
+    </section>
+
+    <section class="social glass">
+      <div><h2>Follow Our Journey 💗</h2><p>Wellness, moments, and community.</p></div>
+      <div class="mini-gallery"><div>🍵</div><div>🧘‍♀️</div><div>🧋</div><div>🌊</div><div>🫖</div></div>
+      <div id="contact"><h3>@pilatea.official</h3><p>Join our community</p><h2>📷 ♪ ⓟ</h2></div>
+    </section>
+
+    <footer class="glass">
+      <div><div class="brand"><div class="logo-cup"></div>PILATEA</div><p class="script">Sip. Stretch. Glow.</p></div>
+      <div><h4>Quick Links</h4><a href="#home">Home</a><a href="#about">About</a><a href="#go">Pilates on the Go</a><a href="#tea">Tea Experience</a></div>
+      <div><h4>Support</h4><a href="#">FAQ</a><a href="#">Terms & Conditions</a><a href="#">Privacy Policy</a><a href="#">Cancellation Policy</a></div>
+      <div><h4>Stay Connected</h4><p>Subscribe for updates on events, tea drops, and wellness moments.</p><div class="email-box"><input placeholder="Your email address" /><button class="btn">➤</button></div></div>
+    </footer>
+  </main>
+
+  <script>
+    const cards = document.querySelectorAll('.glass, .feature-card, .image-card');
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.animate([
+            { opacity: 0, transform: 'translateY(28px)' },
+            { opacity: 1, transform: 'translateY(0)' }
+          ], {
+            duration: 700,
+            easing: 'ease-out',
+            fill: 'forwards'
+          });
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.12 });
+
+    cards.forEach(card => observer.observe(card));
+  </script>
+</body>
+</html>

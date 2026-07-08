@@ -1,0 +1,223 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --color-brand-pink: #e883d4;
+  --color-brand-lilac: #cfa5e8;
+  --color-brand-berry: #831843;
+  --color-brand-warm: #fdf2f8;
+  --color-brand-tea: #5b8c5a;
+
+  --color-bg: #faf6f9;
+  --color-bg-alt: #f5f0f4;
+  --color-surface: #ffffff;
+  --color-border: #eee8ed;
+  --color-text: #1f101d;
+  --color-text-secondary: #7c6b78;
+  --color-text-muted: #a898a4;
+
+  --color-destructive: #dc2626;
+  --color-success: #16a34a;
+  --color-warning: #d97706;
+
+  /* Dark mode overrides set via .dark class */
+  --color-bg-dark: #0f0a0e;
+  --color-bg-alt-dark: #1a1218;
+  --color-surface-dark: #231b21;
+  --color-border-dark: #382e34;
+  --color-text-dark: #f5eef2;
+  --color-text-secondary-dark: #b8a8b2;
+  --color-text-muted-dark: #786872;
+}
+
+html { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
+
+body {
+  font-family: 'Inter', sans-serif;
+  min-height: 100vh;
+  background: var(--color-bg);
+  color: var(--color-text);
+  transition: background 0.2s, color 0.2s;
+}
+
+body.dark {
+  background: var(--color-bg-dark);
+  color: var(--color-text-dark);
+}
+
+input, textarea, select {
+  width: 100%;
+  padding: 10px 14px;
+  border-radius: 12px;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  outline: none;
+  font-family: inherit;
+  font-size: 14px;
+  transition-property: border-color, box-shadow, background-color;
+  transition-duration: 0.15s;
+  transition-timing-function: ease-out;
+}
+
+input:focus, textarea:focus, select:focus {
+  border-color: var(--color-brand-lilac);
+  box-shadow: 0 0 0 3px rgba(207, 165, 232, 0.15);
+}
+
+body.dark input, body.dark textarea, body.dark select {
+  background: var(--color-surface-dark);
+  border-color: var(--color-border-dark);
+  color: var(--color-text-dark);
+}
+
+body.dark input:focus, body.dark textarea:focus, body.dark select:focus {
+  border-color: var(--color-brand-lilac);
+  box-shadow: 0 0 0 3px rgba(207, 165, 232, 0.2);
+}
+
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.625rem 1.25rem;
+  border-radius: 0.5rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: white;
+  border: none;
+  cursor: pointer;
+  text-decoration: none;
+  background: linear-gradient(135deg, var(--color-brand-pink), var(--color-brand-lilac));
+  transition-property: transform, box-shadow, opacity;
+  transition-duration: 0.15s;
+  transition-timing-function: ease-out;
+}
+
+.btn-primary:hover { opacity: 0.92; transform: translateY(-1px); box-shadow: 0 4px 12px rgba(207, 165, 232, 0.4); }
+.btn-primary:active { transform: translateY(0); }
+
+.btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.625rem 1.25rem;
+  border-radius: 0.5rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--color-text-secondary);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  cursor: pointer;
+  text-decoration: none;
+  transition-property: background-color, border-color, color;
+  transition-duration: 0.15s;
+  transition-timing-function: ease-out;
+}
+
+.btn-secondary:hover { background: var(--color-bg-alt); border-color: var(--color-brand-lilac); color: var(--color-brand-berry); }
+
+body.dark .btn-secondary {
+  background: var(--color-surface-dark);
+  border-color: var(--color-border-dark);
+  color: var(--color-text-secondary-dark);
+}
+
+body.dark .btn-secondary:hover {
+  background: var(--color-bg-alt-dark);
+  border-color: var(--color-brand-lilac);
+  color: var(--color-text-dark);
+}
+
+.btn-danger {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  padding: 0.375rem 0.75rem;
+  border-radius: 0.5rem;
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: var(--color-destructive);
+  background: transparent;
+  border: 1px solid #fecaca;
+  cursor: pointer;
+  transition-property: background-color;
+  transition-duration: 0.15s;
+}
+
+.btn-danger:hover { background: #fef2f2; }
+
+body.dark .btn-danger { color: #fca5a5; border-color: #7f1d1d; }
+body.dark .btn-danger:hover { background: #450a0a; }
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.125rem 0.625rem;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 500;
+}
+
+.card {
+  background: var(--color-surface);
+  border-radius: 0.75rem;
+  border: 1px solid var(--color-border);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+  transition-property: box-shadow, transform;
+  transition-duration: 0.2s;
+}
+
+.card:hover { box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06); }
+
+body.dark .card { background: var(--color-surface-dark); border-color: var(--color-border-dark); }
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.animate-fadeIn { animation: fadeIn 0.35s ease-out; }
+
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.animate-slideUp { animation: slideUp 0.3s ease-out; }
+
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+.skeleton {
+  background: linear-gradient(90deg, var(--color-border) 25%, var(--color-bg-alt) 50%, var(--color-border) 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+  border-radius: 0.5rem;
+}
+
+body.dark .skeleton {
+  background: linear-gradient(90deg, var(--color-border-dark) 25%, var(--color-bg-alt-dark) 50%, var(--color-border-dark) 75%);
+  background-size: 200% 100%;
+}
+
+/* Page transition */
+@keyframes pageEnter {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.page-enter { animation: pageEnter 0.25s ease-out; }
+
+/* Confirm dialog overlay */
+.dialog-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  animation: fadeIn 0.15s ease-out;
+}
