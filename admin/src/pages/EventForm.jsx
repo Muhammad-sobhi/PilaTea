@@ -3,12 +3,13 @@ import { useNavigate, useParams } from 'react-router-dom'
 import { getEvent, createEvent, updateEvent, getInstructors } from '../utils/api'
 import { ArrowLeft } from 'lucide-react'
 import PageHeader from '../components/PageHeader'
+import STORAGE_URL from '../utils/storage'
 
 export default function EventForm() {
   const { id } = useParams()
   const navigate = useNavigate()
   const isEdit = Boolean(id)
-  const [form, setForm] = useState({ title: '', description: '', event_type: 'outdoor', event_date: '', start_time: '', location_name: '', address: '', end_time: '', price: '', capacity: '', instructor_id: '', featured: false, status: 'published' })
+  const [form, setForm] = useState({ title: '', description: '', event_type: 'outdoor', event_date: '', start_time: '', location_name: '', address: '', end_time: '', price: '', capacity: '', instructor_id: '', featured: false, status: 'published', image: null })
   const [instructors, setInstructors] = useState([])
   const [error, setError] = useState('')
 
@@ -17,7 +18,7 @@ export default function EventForm() {
     if (isEdit) {
       getEvent(id).then(r => {
         const d = r.data || r
-        setForm({ title: d.title, description: d.description, event_type: d.event_type || 'outdoor', event_date: d.event_date, start_time: d.start_time, location_name: d.location_name, address: d.address || '', end_time: d.end_time || '', price: d.price, capacity: d.capacity, instructor_id: d.instructor_id || '', featured: !!d.featured, status: d.status || 'published' })
+        setForm({ title: d.title, description: d.description, event_type: d.event_type || 'outdoor', event_date: d.event_date, start_time: d.start_time, location_name: d.location_name, address: d.address || '', end_time: d.end_time || '', price: d.price, capacity: d.capacity, instructor_id: d.instructor_id || '', featured: !!d.featured, status: d.status || 'published', image: d.image || null })
       }).catch(() => navigate('/admin/events'))
     }
   }, [id])
@@ -29,8 +30,18 @@ export default function EventForm() {
     e.preventDefault()
     setError('')
     try {
-      if (isEdit) await updateEvent(id, form)
-      else await createEvent(form)
+      const fd = new FormData()
+      for (const [key, value] of Object.entries(form)) {
+        if (value !== null && value !== undefined) {
+          if (key === 'featured') {
+            fd.append(key, value ? '1' : '0')
+          } else {
+            fd.append(key, value)
+          }
+        }
+      }
+      if (isEdit) await updateEvent(id, fd)
+      else await createEvent(fd)
       navigate('/admin/events')
     } catch (err) {
       setError(err.response?.data?.message || 'Error saving event')
@@ -96,6 +107,39 @@ export default function EventForm() {
                 <option value="">No instructor</option>
                 {instructors.map(inst => <option key={inst.id} value={inst.id}>{inst.name}</option>)}
               </select>
+            </div>
+            <div className="md:col-span-2">
+              <label className="block text-sm font-medium text-[var(--color-text)] mb-1.5">Event Image</label>
+              <input 
+                type="file" 
+                accept="image/*" 
+                onChange={(e) => {
+                  if (e.target.files?.[0]) {
+                    setForm({ ...form, image: e.target.files[0] });
+                  }
+                }} 
+                className="file:mr-3 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-medium file:bg-[var(--color-brand-lilac)] file:text-white"
+              />
+              {form.image && typeof form.image === 'string' && (
+                <div className="mt-3">
+                  <p className="text-xs text-[var(--color-text-muted)] mb-1">Current Event Image Preview:</p>
+                  <img 
+                    src={`${STORAGE_URL}${form.image}`} 
+                    alt="Event Image" 
+                    className="max-h-40 rounded-lg object-cover border border-[var(--color-border)]"
+                  />
+                </div>
+              )}
+              {form.image && typeof form.image !== 'string' && (
+                <div className="mt-3">
+                  <p className="text-xs text-[var(--color-text-muted)] mb-1">New Image Selected (unsaved):</p>
+                  <img 
+                    src={URL.createObjectURL(form.image)} 
+                    alt="New Event Image Preview" 
+                    className="max-h-40 rounded-lg object-cover border border-[var(--color-border)]"
+                  />
+                </div>
+              )}
             </div>
             {isEdit && (
               <div>

@@ -17,7 +17,6 @@ import MembershipForm from './pages/MembershipForm'
 import Gallery from './pages/Gallery'
 import Testimonials from './pages/Testimonials'
 import Contacts from './pages/Contacts'
-import Banners from './pages/Banners'
 import Instructors from './pages/Instructors'
 import InstructorForm from './pages/InstructorForm'
 import DiscountCodes from './pages/DiscountCodes'
@@ -54,7 +53,6 @@ createRoot(document.getElementById('root')).render(
           <Route path="gallery" element={<Gallery />} />
           <Route path="testimonials" element={<Testimonials />} />
           <Route path="contacts" element={<Contacts />} />
-          <Route path="banners" element={<Banners />} />
           <Route path="instructors" element={<Instructors />} />
           <Route path="instructors/new" element={<InstructorForm />} />
           <Route path="instructors/:id/edit" element={<InstructorForm />} />

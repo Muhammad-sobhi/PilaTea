@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import { getInstructors, deleteInstructor } from '../utils/api'
+import STORAGE_URL from '../utils/storage'
 import { Link } from 'react-router-dom'
 import { Plus, Search, Pencil, Trash2 } from 'lucide-react'
 import PageHeader from '../components/PageHeader'
@@ -30,7 +31,7 @@ export default function Instructors() {
   const columns = [
     { key: 'name', label: 'Name', render: (row) => (
       <div className="flex items-center gap-3">
-        {row.photo && <img src={`http://localhost:8000/storage/${row.photo}`} alt={row.name} className="w-8 h-8 rounded-full object-cover" />}
+        {row.photo && <img src={`${STORAGE_URL}${row.photo}`} alt={row.name} className="w-8 h-8 rounded-full object-cover" />}
         <span className="font-semibold text-[var(--color-text)]">{row.name}</span>
       </div>
     )},

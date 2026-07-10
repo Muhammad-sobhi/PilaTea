@@ -11,7 +11,7 @@ const iconMap = {
   Dashboard: LayoutDashboard, Events: Calendar, Bookings: ClipboardList,
   'Tea Items': Coffee, 'Tea Categories': Tags, Memberships: Award,
   Users: UserPlus, Gallery: Image, Testimonials: MessageSquare, Contacts: Mail,
-  Banners: Megaphone, Instructors: Users, 'Discount Codes': Percent, Settings: Settings,
+  Instructors: Users, 'Discount Codes': Percent, Settings: Settings,
   Finance: Banknote, Expenses: Receipt, Newsletter: Send,
 }
 
@@ -27,7 +27,6 @@ const links = [
   { to: '/admin/testimonials', label: 'Testimonials' },
   { to: '/admin/contacts', label: 'Contacts' },
   { to: '/admin/newsletter', label: 'Newsletter' },
-  { to: '/admin/banners', label: 'Banners' },
   { to: '/admin/instructors', label: 'Instructors' },
   { to: '/admin/discount-codes', label: 'Discount Codes' },
   { to: '/admin/finance', label: 'Finance' },
@@ -85,7 +84,7 @@ export default function App() {
         </div>
         <SidebarNav />
         <div className="px-3 pb-4 pt-2 border-t border-slate-700/50 shrink-0 flex flex-col gap-0.5">
-          <a href="http://localhost:3000" target="_blank" rel="noopener noreferrer"
+          <a href={import.meta.env.VITE_FRONTEND_URL || "http://localhost:3000"} target="_blank" rel="noopener noreferrer"
             className="flex items-center gap-3 px-4 py-2.5 text-sm font-medium no-underline rounded-lg transition-colors duration-150 text-sky-300 hover:bg-slate-800/60 border-l-2 border-transparent rounded-l-none">
             <ExternalLink size={18} strokeWidth={1.5} className="shrink-0" />
             Visit Site

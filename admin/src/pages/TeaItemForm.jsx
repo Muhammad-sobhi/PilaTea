@@ -1,16 +1,17 @@
 import { useState, useEffect } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import api, { getTeaItem, createTeaItem, updateTeaItem, getTeaCategories } from '../utils/api'
+import STORAGE_URL from '../utils/storage'
 import { ArrowLeft } from 'lucide-react'
 import PageHeader from '../components/PageHeader'
 
-const STORAGE_URL = 'http://localhost:8000/storage/'
+
 
 export default function TeaItemForm() {
   const { id } = useParams()
   const navigate = useNavigate()
   const isEdit = Boolean(id)
-  const [form, setForm] = useState({ name: '', description: '', price: '', category_id: '' })
+  const [form, setForm] = useState({ name: '', description: '', price: '', category_id: '', ingredients: '' })
   const [image, setImage] = useState(null)
   const [preview, setPreview] = useState(null)
   const [categories, setCategories] = useState([])
@@ -21,7 +22,7 @@ export default function TeaItemForm() {
     if (isEdit) {
       getTeaItem(id).then(r => {
         const d = r.data || r
-        setForm({ name: d.name, description: d.description || '', price: d.price, category_id: d.category_id || '' })
+        setForm({ name: d.name, description: d.description || '', price: d.price, category_id: d.category_id || '', ingredients: d.ingredients || '' })
         if (d.image) setPreview(`${STORAGE_URL}${d.image}`)
       }).catch(() => navigate('/admin/tea-items'))
     }
@@ -75,6 +76,10 @@ export default function TeaItemForm() {
             <div className="md:col-span-2">
               <label className="block text-sm font-medium text-[var(--color-text)] mb-1.5">Description</label>
               <textarea rows="3" value={form.description} onChange={set('description')} />
+            </div>
+            <div className="md:col-span-2">
+              <label className="block text-sm font-medium text-[var(--color-text)] mb-1.5">Tags / Ingredients (comma-separated, e.g. Relax, Calm, Sleep)</label>
+              <input type="text" value={form.ingredients} onChange={set('ingredients')} placeholder="Relax, Calm, Sleep" />
             </div>
             <div className="md:col-span-2">
               <label className="block text-sm font-medium text-[var(--color-text)] mb-1.5">Image</label>

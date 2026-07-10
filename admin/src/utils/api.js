@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const api = axios.create({
-  baseURL: 'http://localhost:8000/api',
+  baseURL: import.meta.env.VITE_API_URL || 'http://localhost:8000/api',
   headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
 });
 
@@ -31,8 +31,18 @@ export const logout = () => api.post('/auth/logout');
 // Resources
 export const getEvents = () => api.get('/admin/events/all');
 export const getEvent = (id) => api.get(`/admin/events/${id}`);
-export const createEvent = (data) => api.post('/admin/events', data);
-export const updateEvent = (id, data) => api.put(`/admin/events/${id}`, data);
+export const createEvent = (data) => api.post('/admin/events', data, {
+  headers: { 'Content-Type': 'multipart/form-data' }
+});
+export const updateEvent = (id, data) => {
+  if (data instanceof FormData) {
+    data.append('_method', 'PUT');
+    return api.post(`/admin/events/${id}`, data, {
+      headers: { 'Content-Type': 'multipart/form-data' }
+    });
+  }
+  return api.put(`/admin/events/${id}`, data);
+};
 export const deleteEvent = (id) => api.delete(`/admin/events/${id}`);
 
 export const getBookings = () => api.get('/admin/bookings');
@@ -91,7 +101,9 @@ export const updateDiscountCode = (id, data) => api.put(`/admin/discount-codes/$
 export const deleteDiscountCode = (id) => api.delete(`/admin/discount-codes/${id}`);
 
 export const getSettings = () => api.get('/admin/settings');
-export const updateSettings = (data) => api.post('/admin/settings', data);
+export const updateSettings = (data) => api.post('/admin/settings', data, {
+  headers: { 'Content-Type': 'multipart/form-data' }
+});
 
 // Phase 1 - Event completion
 export const completeEvent = (id) => api.post(`/admin/events/${id}/complete`);

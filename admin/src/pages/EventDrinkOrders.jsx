@@ -24,7 +24,7 @@ export default function EventDrinkOrders() {
         getEvent(id), getTeaOrders(id), getTeaSummary(id), getTeaItems(), getBookings()
       ])
       setEvent(evRes.data || evRes)
-      setOrders(ordersRes.data || [])
+      setOrders(ordersRes.data?.data || ordersRes.data || [])
       setSummary(summaryRes.data || summaryRes)
       setTeaItems(teaRes.data || [])
       setBookings(bookingsRes.data || [])

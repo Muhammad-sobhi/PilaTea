@@ -1,10 +1,11 @@
 import { useState, useEffect } from 'react'
 import api, { getGallery, deleteGalleryItem, updateGalleryItem } from '../utils/api'
+import STORAGE_URL from '../utils/storage'
 import { Plus, Trash2, Pencil, X } from 'lucide-react'
 import PageHeader from '../components/PageHeader'
 import { useConfirm } from '../components/ConfirmDialog'
 
-const STORAGE_URL = 'http://localhost:8000/storage/'
+
 
 export default function Gallery() {
   const [items, setItems] = useState([])

@@ -1,6 +1,9 @@
 import { useState, useEffect } from 'react'
 import { getSettings, updateSettings } from '../utils/api'
+import STORAGE_URL from '../utils/storage'
 import PageHeader from '../components/PageHeader'
+
+
 
 const defaults = {
   site_name: 'PILATEA', site_tagline: 'Sip. Stretch. Glow.',
@@ -15,8 +18,13 @@ const defaults = {
   instagram: '@pilatea.official', tiktok: '@pilatea', pinterest: 'pilatea', facebook_url: '',
   signature_label: 'OUR SIGNATURE EXPERIENCE', signature_title: 'Pilates on the Go',
   signature_subtitle: 'We bring Pilates to you.', signature_description: 'Different locations. Different vibes. Same good energy.',
+  signature_bg_image: '',
+  signature_btn_text: 'Learn More',
+  signature_btn_link: '/pilates-on-the-go',
+  signature_overlay_opacity: '0.5',
   gallery_heading: 'Moments Captured',
   social_title: 'Follow Our Journey', social_cta_text: 'Join our community',
+  social_img_1: '', social_img_2: '', social_img_3: '', social_img_4: '', social_img_5: '',
   faq_heading: 'Got Questions?',
   events_heading: 'Join Us', events_title: 'Events & Workshops', events_description: 'From sunrise Pilates to tea-tasting workshops — discover what\'s happening at PILATEA.',
   tea_heading: 'Sip & Savor', tea_description: 'Explore our curated collection of premium wellness teas.',
@@ -49,9 +57,27 @@ export default function Settings() {
     e.preventDefault()
     setError(''); setSaved(false)
     try {
-      await updateSettings(form)
+      const fd = new FormData()
+      for (const [key, value] of Object.entries(form)) {
+        if (value !== null && value !== undefined) {
+          fd.append(key, value)
+        }
+      }
+      await updateSettings(fd)
       setSaved(true)
       setTimeout(() => setSaved(false), 3000)
+      
+      // Refresh settings to get the stored file paths
+      getSettings().then(r => {
+        const d = r.data || r
+        setForm(prev => {
+          const merged = { ...prev }
+          for (const key of Object.keys(prev)) {
+            if (d[key] !== undefined) merged[key] = d[key]
+          }
+          return merged
+        })
+      }).catch(() => {})
     } catch (err) {
       setError(err.response?.data?.message || 'Error saving settings')
     }
@@ -63,6 +89,7 @@ export default function Settings() {
     { id: 'contact', label: 'Contact' },
     { id: 'social', label: 'Social' },
     { id: 'signature', label: 'Signature' },
+    { id: 'journey', label: 'Follow Our Journey' },
     { id: 'pages', label: 'Pages' },
   ]
 
@@ -123,6 +150,108 @@ export default function Settings() {
         <div className="md:col-span-2"><label className="block text-sm font-medium mb-1.5">Signature Title</label><input value={form.signature_title} onChange={set('signature_title')} /></div>
         <div className="md:col-span-2"><label className="block text-sm font-medium mb-1.5">Signature Subtitle</label><input value={form.signature_subtitle} onChange={set('signature_subtitle')} /></div>
         <div className="md:col-span-2"><label className="block text-sm font-medium mb-1.5">Signature Description</label><textarea rows="2" value={form.signature_description} onChange={set('signature_description')} /></div>
+        
+        {/* Background Image Upload */}
+        <div className="md:col-span-2">
+          <label className="block text-sm font-medium mb-1.5">Signature Background Image</label>
+          <input 
+            type="file" 
+            accept="image/*" 
+            onChange={(e) => {
+              if (e.target.files?.[0]) {
+                setForm({ ...form, signature_bg_image: e.target.files[0] });
+              }
+            }} 
+            className="file:mr-3 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-medium file:bg-[var(--color-brand-lilac)] file:text-white"
+          />
+          {form.signature_bg_image && typeof form.signature_bg_image === 'string' && (
+            <div className="mt-3">
+              <p className="text-xs text-[var(--color-text-muted)] mb-1">Current Background Preview:</p>
+              <img 
+                src={`${STORAGE_URL}${form.signature_bg_image}`} 
+                alt="Signature Background" 
+                className="max-h-40 rounded-lg object-cover border border-[var(--color-border)]"
+              />
+            </div>
+          )}
+          {form.signature_bg_image && typeof form.signature_bg_image !== 'string' && (
+            <div className="mt-3">
+              <p className="text-xs text-[var(--color-text-muted)] mb-1">New Image Selected (unsaved):</p>
+              <img 
+                src={URL.createObjectURL(form.signature_bg_image)} 
+                alt="New Signature Background Preview" 
+                className="max-h-40 rounded-lg object-cover border border-[var(--color-border)]"
+              />
+            </div>
+          )}
+        </div>
+
+        {/* Dynamic Button Settings */}
+        <div>
+          <label className="block text-sm font-medium mb-1.5">Button Text</label>
+          <input value={form.signature_btn_text} onChange={set('signature_btn_text')} />
+        </div>
+        <div>
+          <label className="block text-sm font-medium mb-1.5">Button Link</label>
+          <input value={form.signature_btn_link} onChange={set('signature_btn_link')} />
+        </div>
+
+        {/* Overlay Opacity Slider */}
+        <div className="md:col-span-2">
+          <label className="block text-sm font-medium mb-1.5 flex justify-between">
+            <span>Overlay Opacity (Darkness)</span>
+            <span className="font-mono text-xs">{Math.round((parseFloat(form.signature_overlay_opacity) || 0.5) * 100)}%</span>
+          </label>
+          <input 
+            type="range" 
+            min="0" 
+            max="1" 
+            step="0.05" 
+            value={form.signature_overlay_opacity || "0.5"} 
+            onChange={(e) => setForm({ ...form, signature_overlay_opacity: e.target.value })} 
+            className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-[var(--color-brand-lilac)]"
+          />
+          <p className="text-xs text-[var(--color-text-muted)] mt-1">
+            Increase the opacity if the white text is hard to read on top of your background image.
+          </p>
+        </div>
+      </div>
+    ),
+    journey: (
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+        {[1, 2, 3, 4, 5].map(num => (
+          <div key={num} className="md:col-span-2 border-b border-[var(--color-border)] pb-4 last:border-b-0">
+            <label className="block text-sm font-medium mb-1.5">Journey Image {num}</label>
+            <input 
+              type="file" 
+              accept="image/*" 
+              onChange={(e) => {
+                if (e.target.files?.[0]) {
+                  setForm({ ...form, [`social_img_${num}`]: e.target.files[0] });
+                }
+              }} 
+              className="file:mr-3 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-medium file:bg-[var(--color-brand-lilac)] file:text-white"
+            />
+            {form[`social_img_${num}`] && typeof form[`social_img_${num}`] === 'string' && (
+              <div className="mt-3">
+                <img 
+                  src={`${STORAGE_URL}${form[`social_img_${num}`]}`} 
+                  alt={`Journey Image ${num}`} 
+                  className="max-h-24 rounded-lg object-cover border border-[var(--color-border)]"
+                />
+              </div>
+            )}
+            {form[`social_img_${num}`] && typeof form[`social_img_${num}`] !== 'string' && (
+              <div className="mt-3">
+                <img 
+                  src={URL.createObjectURL(form[`social_img_${num}`])} 
+                  alt={`New Journey Image ${num} Preview`} 
+                  className="max-h-24 rounded-lg object-cover border border-[var(--color-border)]"
+                />
+              </div>
+            )}
+          </div>
+        ))}
       </div>
     ),
     pages: (
