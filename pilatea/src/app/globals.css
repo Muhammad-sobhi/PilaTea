@@ -1139,10 +1139,23 @@ h1,
   letter-spacing: 3px;
 }
 
+.brand img {
+  max-width: 15px !important;
+  height: auto !important;
+}
+
 .logo-img {
   height: 40px;
   width: auto;
   object-fit: contain;
+}
+
+.nav-links a,
+.nav-actions a,
+.nav-actions button,
+.btn-sm,
+.btn-ghost-sm {
+  white-space: nowrap !important;
 }
 
 .nav-links {
