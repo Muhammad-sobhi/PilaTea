@@ -84,15 +84,18 @@ export default function Events() {
     {
       key: 'actions', label: 'Actions',
       render: (row) => (
-        <div className="flex flex-wrap items-center gap-2">
+        <div className="flex items-center gap-1.5 whitespace-nowrap">
           {row.status === 'published' && (
-            <button onClick={() => handleComplete(row.id)} className="btn-secondary text-xs !px-3 !py-1.5 text-green-600">
-              <CheckCircle size={14} /> Complete
+            <button onClick={() => handleComplete(row.id)} title="Mark Event as Completed" className="btn-secondary !p-2 text-emerald-600 border-emerald-100 hover:bg-emerald-50/50 rounded-lg transition-colors">
+              <CheckCircle size={15} />
             </button>
           )}
-
-          <Link to={`/admin/events/${row.id}/edit`} className="btn-secondary text-xs !px-3 !py-1.5 no-underline"><Pencil size={14} /> Edit</Link>
-          <button onClick={() => handleDelete(row.id)} className="btn-danger"><Trash2 size={14} /> Delete</button>
+          <Link to={`/admin/events/${row.id}/edit`} title="Edit Event" className="btn-secondary !p-2 text-indigo-600 border-indigo-100 hover:bg-indigo-50/50 no-underline rounded-lg transition-colors">
+            <Pencil size={15} />
+          </Link>
+          <button onClick={() => handleDelete(row.id)} title="Delete Event" className="btn-danger !p-2 rounded-lg transition-colors">
+            <Trash2 size={15} />
+          </button>
         </div>
       )
     },

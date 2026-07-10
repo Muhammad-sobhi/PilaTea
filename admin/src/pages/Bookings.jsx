@@ -72,22 +72,22 @@ export default function Bookings() {
     {
       key: 'actions', label: 'Actions',
       render: (row) => (
-        <div className="flex flex-col gap-2 min-w-[200px]">
-          {/* Row 1: Core management */}
-          <div className="flex items-center gap-1.5">
-            <Link to={`/admin/bookings/${row.id}`} className="btn-secondary text-xs !px-2 py-1 no-underline flex items-center gap-1 flex-1 justify-center"><Eye size={12} /> View</Link>
-            <Link to={`/admin/bookings/${row.id}/drinks`} className="btn-secondary text-xs !px-2 py-1 no-underline text-sky-600 flex items-center gap-1 flex-1 justify-center"><Coffee size={12} /> Drinks</Link>
-            <button onClick={() => handleDelete(row.id)} className="btn-danger text-xs !px-2 py-1 flex items-center gap-1 justify-center"><Trash2 size={12} /></button>
-          </div>
-          {/* Row 2: Mail triggers */}
-          <div className="flex items-center gap-1.5">
-            <button onClick={() => handleSendTemplateEmail(row.id, 'post_event')} className="btn-secondary text-[11px] !px-2 py-1 text-indigo-600 flex-1 flex items-center gap-1 justify-center">
-              <Mail size={12} /> Thank You
-            </button>
-            <button onClick={() => handleSendTemplateEmail(row.id, 'review_request')} className="btn-secondary text-[11px] !px-2 py-1 text-purple-600 flex-1 flex items-center gap-1 justify-center">
-              <Mail size={12} /> Review
-            </button>
-          </div>
+        <div className="flex items-center gap-1.5 whitespace-nowrap">
+          <Link to={`/admin/bookings/${row.id}`} title="View Booking Details" className="btn-secondary !p-2 text-indigo-600 border-indigo-100 hover:bg-indigo-50/50 no-underline rounded-lg transition-colors">
+            <Eye size={15} />
+          </Link>
+          <Link to={`/admin/bookings/${row.id}/drinks`} title="Manage Drinks" className="btn-secondary !p-2 text-sky-600 border-sky-100 hover:bg-sky-50/50 no-underline rounded-lg transition-colors">
+            <Coffee size={15} />
+          </Link>
+          <button onClick={() => handleSendTemplateEmail(row.id, 'post_event')} title="Send Thank You Email" className="btn-secondary !p-2 text-emerald-600 border-emerald-100 hover:bg-emerald-50/50 rounded-lg transition-colors">
+            <Mail size={15} />
+          </button>
+          <button onClick={() => handleSendTemplateEmail(row.id, 'review_request')} title="Send Review Request" className="btn-secondary !p-2 text-purple-600 border-purple-100 hover:bg-purple-50/50 rounded-lg transition-colors">
+            <Mail size={15} className="rotate-12" />
+          </button>
+          <button onClick={() => handleDelete(row.id)} title="Delete Booking" className="btn-danger !p-2 rounded-lg transition-colors">
+            <Trash2 size={15} />
+          </button>
         </div>
       )
     },
