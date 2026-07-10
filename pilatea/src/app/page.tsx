@@ -184,6 +184,27 @@ export default function Home() {
           </div>
         </motion.div>
       </div>
+
+      {values.length > 0 && (
+        <motion.div 
+          className="hero-features-panel"
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, delay: 0.4 }}
+        >
+          {values.map((v, i) => (
+            <div key={i} className="feature-card">
+              <div className={`feature-icon-wrapper pastel-${i % 4}`}>
+                {getFeatureIcon(v.icon)}
+              </div>
+              <div className="feature-text">
+                <h3>{v.title}</h3>
+                <p>{v.text}</p>
+              </div>
+            </div>
+          ))}
+        </motion.div>
+      )}
     </section>
 
       <div className="content-grid">
