@@ -72,7 +72,22 @@ export default function Home() {
   } as React.CSSProperties;
 
   let values: Array<{ icon: string; title: string; text: string }> = [];
-  try { values = JSON.parse(s("about_values", "[]")); } catch { values = []; }
+  try { 
+    const rawValues = s("about_values", "");
+    values = rawValues ? JSON.parse(rawValues) : [
+      { icon: '🪷', title: 'Mindful Movement', text: 'Strengthen your body and calm your mind.' }, 
+      { icon: '🍵', title: 'Premium Tea', text: 'Handcrafted teas made to nourish.' }, 
+      { icon: '🌅', title: 'Outdoor Experiences', text: 'Pilates on the go in beautiful locations.' }, 
+      { icon: '💗', title: 'Community', text: 'Connect with a like-minded wellness community.' }
+    ];
+  } catch { 
+    values = [
+      { icon: '🪷', title: 'Mindful Movement', text: 'Strengthen your body and calm your mind.' }, 
+      { icon: '🍵', title: 'Premium Tea', text: 'Handcrafted teas made to nourish.' }, 
+      { icon: '🌅', title: 'Outdoor Experiences', text: 'Pilates on the go in beautiful locations.' }, 
+      { icon: '💗', title: 'Community', text: 'Connect with a like-minded wellness community.' }
+    ];
+  }
 
   const staggerItem = {
     hidden: { opacity: 0, y: 30 },
