@@ -73,6 +73,8 @@ export default function EmailTemplates() {
       fd.append('body', form.body)
       if (form.image instanceof File) {
         fd.append('image', form.image)
+      } else if (!form.image) {
+        fd.append('clear_image', '1')
       }
 
       const res = await updateEmailTemplate(selectedTemplate.slug, fd)
@@ -185,8 +187,16 @@ export default function EmailTemplates() {
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-[var(--color-text)] mb-1.5">Template Header Image</label>
-                  <input type="file" accept="image/*" ref={fileInputRef} onChange={handleImageChange}
-                    className="file:mr-3 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-medium file:bg-[var(--color-brand-lilac)] file:text-white" />
+                  <div className="flex items-center gap-3">
+                    <input type="file" accept="image/*" ref={fileInputRef} onChange={handleImageChange}
+                      className="file:mr-3 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-medium file:bg-[var(--color-brand-lilac)] file:text-white" />
+                    {form.image && (
+                      <button type="button" onClick={() => {
+                        setForm(prev => ({ ...prev, image: null }));
+                        if (fileInputRef.current) fileInputRef.current.value = '';
+                      }} className="btn-danger text-xs !px-2.5 !py-1.5">Remove Image</button>
+                    )}
+                  </div>
                   {form.image && typeof form.image === 'string' && (
                     <p className="text-xs text-[var(--color-text-muted)] mt-1">Current file: {form.image.split('/').pop()}</p>
                   )}

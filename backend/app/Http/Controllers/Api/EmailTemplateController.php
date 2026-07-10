@@ -38,6 +38,8 @@ class EmailTemplateController extends Controller
 
         if ($request->hasFile('image')) {
             $data['image'] = $request->file('image')->store('templates', 'public');
+        } elseif ($request->get('clear_image') === '1') {
+            $data['image'] = null;
         }
 
         $template->update($data);
