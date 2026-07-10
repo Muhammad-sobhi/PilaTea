@@ -74,13 +74,12 @@ export default function Home() {
   let values: Array<{ icon: string; title: string; text: string }> = [];
   try { 
     const rawValues = s("about_values", "");
-    values = rawValues ? JSON.parse(rawValues) : [
-      { icon: '🪷', title: 'Mindful Movement', text: 'Strengthen your body and calm your mind.' }, 
-      { icon: '🍵', title: 'Premium Tea', text: 'Handcrafted teas made to nourish.' }, 
-      { icon: '🌅', title: 'Outdoor Experiences', text: 'Pilates on the go in beautiful locations.' }, 
-      { icon: '💗', title: 'Community', text: 'Connect with a like-minded wellness community.' }
-    ];
-  } catch { 
+    if (rawValues) {
+      values = JSON.parse(rawValues);
+    }
+  } catch {}
+  
+  if (!values || values.length === 0) {
     values = [
       { icon: '🪷', title: 'Mindful Movement', text: 'Strengthen your body and calm your mind.' }, 
       { icon: '🍵', title: 'Premium Tea', text: 'Handcrafted teas made to nourish.' }, 
@@ -299,7 +298,7 @@ export default function Home() {
       <ScrollReveal>
         <section className="go-section">
           <div className="go-image-wrapper">
-            <img src={signatureBgUrl || "hero-background.PNG?v=2"} alt="Pilates on the Go" />
+            <img src={signatureBgUrl || "hero-background.png?v=2"} alt="Pilates on the Go" />
           </div>
           <div className="go-content">
             <p className="go-label">{s("signature_label", "OUR SIGNATURE EXPERIENCE")}</p>

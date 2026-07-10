@@ -262,7 +262,7 @@ h1,
   z-index: -1;
   background:
     linear-gradient(to bottom, rgba(248, 244, 248, 0) 0%, var(--color-bg) 100%),
-    url("hero-background.PNG?v=2") center / cover no-repeat;
+    url("/pilatea/hero-background.png?v=2") center / cover no-repeat;
   pointer-events: none;
 }
 
