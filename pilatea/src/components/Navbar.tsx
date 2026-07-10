@@ -33,7 +33,7 @@ export function Navbar() {
   return (
     <div ref={navRef} className="navbar">
       <Link href="/" className="brand">
-        <img src="/logo.png" alt="PILATEA" className="h-10 w-auto object-contain" />
+        <img src="/logo.png" alt="PILATEA" width="40" height="40" className="h-10 w-auto object-contain" />
         PILATEA
       </Link>
 
