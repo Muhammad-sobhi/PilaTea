@@ -34,7 +34,7 @@ import PageHeader from './components/PageHeader'
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-    <BrowserRouter basename={import.meta.env.BASE_URL}>
+    <BrowserRouter basename={window.location.pathname.startsWith('/pilatea-admin') ? '/pilatea-admin' : '/'}>
       <Routes>
         <Route path="/admin/login" element={<Login />} />
         <Route path="/admin" element={<App />}>
