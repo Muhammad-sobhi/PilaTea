@@ -45,4 +45,34 @@ class DiscountCodeController extends Controller
         DiscountCode::findOrFail($id)->delete();
         return response()->json(['message' => 'Discount code deleted']);
     }
+
+    public function validateCode(Request $request)
+    {
+        $data = $request->validate([
+            'code' => 'required|string',
+        ]);
+
+        $discount = DiscountCode::where('code', $data['code'])
+            ->where('active', true)
+            ->first();
+
+        if (!$discount) {
+            return response()->json(['valid' => false, 'message' => 'Invalid discount code'], 404);
+        }
+
+        if ($discount->expires_at && $discount->expires_at->isPast()) {
+            return response()->json(['valid' => false, 'message' => 'Discount code has expired'], 422);
+        }
+
+        if ($discount->max_uses && $discount->used_count >= $discount->max_uses) {
+            return response()->json(['valid' => false, 'message' => 'Discount code usage limit reached'], 422);
+        }
+
+        return response()->json([
+            'valid' => true,
+            'code' => $discount->code,
+            'discount_type' => $discount->discount_type,
+            'value' => $discount->value,
+        ]);
+    }
 }

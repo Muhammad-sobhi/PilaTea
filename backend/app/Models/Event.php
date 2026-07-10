@@ -10,7 +10,8 @@ class Event extends Model
         'title', 'slug', 'description', 'event_type', 'location_name',
         'address', 'lat', 'lng', 'event_date', 'start_time', 'end_time',
         'capacity', 'spots_remaining', 'price', 'image', 'featured',
-        'status', 'instructor_id',
+        'status', 'instructor_id', 'byo_enabled', 'byo_capacity',
+        'byo_price', 'byo_description', 'byo_spots_remaining',
     ];
 
     protected function casts(): array
@@ -21,6 +22,8 @@ class Event extends Model
             'end_time' => 'datetime:H:i',
             'featured' => 'boolean',
             'price' => 'decimal:2',
+            'byo_enabled' => 'boolean',
+            'byo_price' => 'decimal:2',
         ];
     }
 

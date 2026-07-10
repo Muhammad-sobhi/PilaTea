@@ -53,11 +53,18 @@ class EventController extends Controller
             'featured' => 'boolean',
             'status' => 'in:published,draft,cancelled,completed',
             'instructor_id' => 'nullable|exists:instructors,id',
+            'byo_enabled' => 'boolean',
+            'byo_capacity' => 'nullable|integer|min:0',
+            'byo_price' => 'nullable|numeric|min:0',
+            'byo_description' => 'nullable|string',
         ]);
 
         $data['status'] = 'published';
         $data['slug'] = Str::slug($data['title']) . '-' . Str::random(4);
         $data['spots_remaining'] = $data['capacity'];
+        if (!empty($data['byo_enabled']) && isset($data['byo_capacity'])) {
+            $data['byo_spots_remaining'] = $data['byo_capacity'];
+        }
 
         if ($request->hasFile('image')) {
             $data['image'] = $request->file('image')->store('events', 'public');
@@ -85,10 +92,19 @@ class EventController extends Controller
             'featured' => 'boolean',
             'status' => 'in:published,draft,cancelled,completed',
             'instructor_id' => 'nullable|exists:instructors,id',
+            'byo_enabled' => 'boolean',
+            'byo_capacity' => 'nullable|integer|min:0',
+            'byo_price' => 'nullable|numeric|min:0',
+            'byo_description' => 'nullable|string',
         ]);
 
         if (isset($data['capacity'])) {
             $data['spots_remaining'] = $data['capacity'] - ($event->capacity - $event->spots_remaining);
+        }
+
+        if (isset($data['byo_capacity'])) {
+            $currentUsedByo = ($event->byo_capacity ?? 0) - ($event->byo_spots_remaining ?? 0);
+            $data['byo_spots_remaining'] = $data['byo_capacity'] - $currentUsedByo;
         }
 
         if ($request->hasFile('image')) {

@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
-import { getContacts, updateContactRead, deleteContact, updateSubscription, sendMarketingEmail } from '../utils/api'
-import { Trash2, Check, X, Mail, Send } from 'lucide-react'
+import { getContacts, updateContactRead, deleteContact, updateSubscription, sendMarketingEmail, sendTemplateEmail } from '../utils/api'
+import { Trash2, Check, X, Mail, Send, Megaphone } from 'lucide-react'
 import PageHeader from '../components/PageHeader'
 import DataTable from '../components/DataTable'
 import { useConfirm } from '../components/ConfirmDialog'
@@ -13,6 +13,7 @@ export default function Contacts() {
   const [emailForm, setEmailForm] = useState({ subject: '', body: '', contactId: null, contactEmail: '' })
   const [sending, setSending] = useState(false)
   const [emailMsg, setEmailMsg] = useState('')
+  const [globalEmailMsg, setGlobalEmailMsg] = useState('')
   const { confirm, dialog } = useConfirm()
 
   const load = () => {
@@ -20,6 +21,23 @@ export default function Contacts() {
     getContacts().then(r => setItems(r.data || [])).catch(() => {}).finally(() => setLoading(false))
   }
   useEffect(() => { load() }, [])
+
+  const handleSendMarketingToAll = async () => {
+    const ok = await confirm('Send marketing template email to all subscribed users?', { confirmLabel: 'Send' })
+    if (!ok) return
+    setGlobalEmailMsg('Sending marketing campaign...')
+    try {
+      const res = await sendTemplateEmail({
+        slug: 'marketing',
+        recipient_type: 'all_subscribers'
+      })
+      setGlobalEmailMsg(res.data?.message || 'Marketing emails sent successfully to all subscribers!')
+      setTimeout(() => setGlobalEmailMsg(''), 4000)
+    } catch (err) {
+      setGlobalEmailMsg('Error: ' + (err.response?.data?.message || err.message))
+      setTimeout(() => setGlobalEmailMsg(''), 5000)
+    }
+  }
 
   const handleDelete = async (id) => {
     const ok = await confirm('Delete this contact?', { confirmLabel: 'Delete' })
@@ -112,13 +130,23 @@ export default function Contacts() {
     <div className="animate-fadeIn">
       <PageHeader title="Contacts" description="Messages from the contact form and subscriber management"
         actions={
-          <label className="flex items-center gap-2 text-sm cursor-pointer">
-            <input type="checkbox" checked={showSubscribersOnly} onChange={e => setShowSubscribersOnly(e.target.checked)}
-              className="rounded accent-[var(--color-brand-lilac)]" />
-            <span className="text-[var(--color-text-secondary)]">Subscribers only</span>
-          </label>
+          <div className="flex items-center gap-4">
+            <button onClick={handleSendMarketingToAll} className="btn-primary text-sm">
+              <Megaphone size={16} /> Send Marketing Email
+            </button>
+            <label className="flex items-center gap-2 text-sm cursor-pointer">
+              <input type="checkbox" checked={showSubscribersOnly} onChange={e => setShowSubscribersOnly(e.target.checked)}
+                className="rounded accent-[var(--color-brand-lilac)]" />
+              <span className="text-[var(--color-text-secondary)]">Subscribers only</span>
+            </label>
+          </div>
         }
       />
+      {globalEmailMsg && (
+        <div className={`mb-6 rounded-lg px-4 py-3 text-sm font-semibold border ${globalEmailMsg.includes('Error') ? 'bg-red-50 text-red-700 border-red-100' : 'bg-blue-50 text-blue-700 border-blue-100'}`}>
+          {globalEmailMsg}
+        </div>
+      )}
       <DataTable columns={columns} rows={filtered} loading={loading} emptyMessage="No messages yet." />
       {dialog}
 

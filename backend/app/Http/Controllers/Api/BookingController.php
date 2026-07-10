@@ -30,6 +30,7 @@ class BookingController extends Controller
             'payment_method' => 'nullable|string|in:card,pay_on_arrival',
             'discount_code' => 'nullable|string|exists:discount_codes,code',
             'notes' => 'nullable|string',
+            'is_byo' => 'nullable|boolean',
         ]);
 
         $user = null;
@@ -44,12 +45,24 @@ class BookingController extends Controller
         }
 
         $event = Event::findOrFail($data['event_id']);
+        $isByo = !empty($data['is_byo']);
 
-        if ($event->spots_remaining < $data['spots_booked']) {
-            return response()->json(['message' => 'Not enough spots available'], 422);
+        if ($isByo) {
+            if (!$event->byo_enabled) {
+                return response()->json(['message' => 'BYO is not enabled for this event'], 422);
+            }
+            if ($event->byo_spots_remaining < $data['spots_booked']) {
+                return response()->json(['message' => 'Not enough BYO spots available'], 422);
+            }
+            $pricePerSpot = $event->byo_price ?? $event->price;
+        } else {
+            if ($event->spots_remaining < $data['spots_booked']) {
+                return response()->json(['message' => 'Not enough spots available'], 422);
+            }
+            $pricePerSpot = $event->price;
         }
 
-        $totalPrice = $event->price * $data['spots_booked'];
+        $totalPrice = $pricePerSpot * $data['spots_booked'];
 
         if (!empty($data['discount_code'])) {
             $discount = DiscountCode::where('code', $data['discount_code'])
@@ -72,14 +85,19 @@ class BookingController extends Controller
         $data['payment_status'] = ($data['payment_method'] ?? '') === 'pay_on_arrival' ? 'pay_on_arrival' : 'pending';
 
         $booking = Booking::create($data);
-        $event->decrement('spots_remaining', $data['spots_booked']);
+
+        if ($isByo) {
+            $event->decrement('byo_spots_remaining', $data['spots_booked']);
+        } else {
+            $event->decrement('spots_remaining', $data['spots_booked']);
+        }
 
         return response()->json($booking->load('user'), 201);
     }
 
     public function show($id)
     {
-        return response()->json(Booking::with(['event', 'user'])->findOrFail($id));
+        return response()->json(Booking::with(['event', 'user', 'teaOrders.teaItem'])->findOrFail($id));
     }
 
     public function update(Request $request, $id)

@@ -12,7 +12,8 @@ const iconMap = {
   'Tea Items': Coffee, 'Tea Categories': Tags, Memberships: Award,
   Users: UserPlus, Gallery: Image, Testimonials: MessageSquare, Contacts: Mail,
   Instructors: Users, 'Discount Codes': Percent, Settings: Settings,
-  Finance: Banknote, Expenses: Receipt, Newsletter: Send,
+  Finance: Banknote, Expenses: Receipt, Newsletter: Send, 'Email Templates': Mail,
+  'Dashboard Users': Users
 }
 
 const links = [
@@ -23,10 +24,12 @@ const links = [
   { to: '/admin/tea-categories', label: 'Tea Categories' },
   { to: '/admin/memberships', label: 'Memberships' },
   { to: '/admin/users', label: 'Users' },
+  { to: '/admin/dashboard-users', label: 'Dashboard Users', adminOnly: true },
   { to: '/admin/gallery', label: 'Gallery' },
   { to: '/admin/testimonials', label: 'Testimonials' },
   { to: '/admin/contacts', label: 'Contacts' },
   { to: '/admin/newsletter', label: 'Newsletter' },
+  { to: '/admin/email-templates', label: 'Email Templates' },
   { to: '/admin/instructors', label: 'Instructors' },
   { to: '/admin/discount-codes', label: 'Discount Codes' },
   { to: '/admin/finance', label: 'Finance' },
@@ -35,9 +38,13 @@ const links = [
 ]
 
 function SidebarNav() {
+  const adminUser = typeof window !== 'undefined' ? JSON.parse(localStorage.getItem('admin_user') || '{}') : {}
+  const isAdmin = adminUser.role === 'admin'
+
   return (
     <nav className="flex-1 overflow-y-auto px-3 py-2 flex flex-col gap-0.5">
       {links.map(l => {
+        if (l.adminOnly && !isAdmin) return null
         const Icon = iconMap[l.label]
         return (
           <NavLink key={l.to} to={l.to} end={l.end}

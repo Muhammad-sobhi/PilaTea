@@ -89,6 +89,13 @@ export default function Finance() {
               </div>
               <p className="text-lg font-bold text-green-700 tabular-nums">{fmt(summary?.total_booking_revenue)}</p>
             </div>
+            <div className="flex items-center justify-between p-4 rounded-xl bg-amber-50 border border-amber-100">
+              <div>
+                <p className="text-sm font-medium text-amber-800">Drinks</p>
+                <p className="text-xs text-amber-600">On-site tea &amp; beverage sales</p>
+              </div>
+              <p className="text-lg font-bold text-amber-700 tabular-nums">{fmt(summary?.total_tea_revenue)}</p>
+            </div>
             <div className="flex items-center justify-between p-4 rounded-xl bg-blue-50 border border-blue-100">
               <div>
                 <p className="text-sm font-medium text-blue-800">Memberships</p>

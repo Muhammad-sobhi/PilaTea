@@ -1,33 +1,31 @@
 import { useState, useEffect } from 'react'
 import { useParams, Link, useNavigate } from 'react-router-dom'
-import { getTeaOrders, createTeaOrder, getTeaSummary, deleteTeaOrder, getEvent, getTeaItems, getBookings } from '../utils/api'
+import { getTeaOrders, createTeaOrder, getTeaSummary, deleteTeaOrder, getBooking, getTeaItems } from '../utils/api'
 import { ArrowLeft, Plus, Trash2 } from 'lucide-react'
 import PageHeader from '../components/PageHeader'
 
 export default function EventDrinkOrders() {
-  const { id } = useParams()
+  const { id } = useParams() // Booking ID
   const navigate = useNavigate()
-  const [event, setEvent] = useState(null)
+  const [booking, setBooking] = useState(null)
   const [orders, setOrders] = useState([])
   const [summary, setSummary] = useState(null)
   const [teaItems, setTeaItems] = useState([])
-  const [bookings, setBookings] = useState([])
   const [loading, setLoading] = useState(true)
   const [showModal, setShowModal] = useState(false)
-  const [form, setForm] = useState({ booking_id: '', tea_item_id: '', quantity: 1, notes: '' })
+  const [form, setForm] = useState({ tea_item_id: '', quantity: 1, notes: '' })
   const [error, setError] = useState('')
 
   const load = async () => {
     setLoading(true)
     try {
-      const [evRes, ordersRes, summaryRes, teaRes, bookingsRes] = await Promise.all([
-        getEvent(id), getTeaOrders(id), getTeaSummary(id), getTeaItems(), getBookings()
+      const [bookingRes, ordersRes, summaryRes, teaRes] = await Promise.all([
+        getBooking(id), getTeaOrders(id), getTeaSummary(id), getTeaItems()
       ])
-      setEvent(evRes.data || evRes)
+      setBooking(bookingRes.data || bookingRes)
       setOrders(ordersRes.data?.data || ordersRes.data || [])
       setSummary(summaryRes.data || summaryRes)
       setTeaItems(teaRes.data || [])
-      setBookings(bookingsRes.data || [])
     } catch {}
     setLoading(false)
   }
@@ -40,7 +38,7 @@ export default function EventDrinkOrders() {
     try {
       await createTeaOrder(id, form)
       setShowModal(false)
-      setForm({ booking_id: '', tea_item_id: '', quantity: 1, notes: '' })
+      setForm({ tea_item_id: '', quantity: 1, notes: '' })
       load()
     } catch (err) {
       setError(err.response?.data?.message || 'Error adding order')
@@ -57,11 +55,11 @@ export default function EventDrinkOrders() {
   return (
     <div className="animate-fadeIn">
       <PageHeader
-        title={`Drink Orders — ${event?.title || ''}`}
-        description="Track drinks ordered on-site by attendees"
+        title={`Drink Orders — ${booking?.name || 'Attendee'}`}
+        description={`Manage drinks ordered on-site for booking: ${booking?.reference || ''}`}
         actions={
-          <button onClick={() => navigate('/admin/events')} className="btn-secondary text-sm">
-            <ArrowLeft size={16} /> Back to Events
+          <button onClick={() => navigate('/admin/bookings')} className="btn-secondary text-sm">
+            <ArrowLeft size={16} /> Back to Bookings
           </button>
         }
       />
@@ -104,7 +102,7 @@ export default function EventDrinkOrders() {
               <tbody>
                 {orders.map((order) => (
                   <tr key={order.id} className="border-b border-[var(--color-border)] last:border-0 hover:bg-[var(--color-bg)] transition-colors">
-                    <td className="px-6 py-4 font-medium">{order.booking?.name || '—'}</td>
+                    <td className="px-6 py-4 font-medium">{booking?.name || '—'}</td>
                     <td className="px-6 py-4">{order.tea_item?.name || '—'}</td>
                     <td className="px-6 py-4">{order.quantity}</td>
                     <td className="px-6 py-4">${(order.unit_price * order.quantity).toFixed(2)}</td>
@@ -128,15 +126,6 @@ export default function EventDrinkOrders() {
             {error && <div className="mb-4 rounded-lg px-4 py-3 text-sm bg-red-50 text-red-700 border border-red-100">{error}</div>}
             <form onSubmit={handleSubmit}>
               <div className="space-y-4">
-                <div>
-                  <label className="block text-sm font-medium mb-1">Attendee (Booking)</label>
-                  <select required value={form.booking_id} onChange={e => setForm({ ...form, booking_id: e.target.value })}>
-                    <option value="">Select attendee...</option>
-                    {bookings.filter(b => String(b.event_id) === String(id)).map(b => (
-                      <option key={b.id} value={b.id}>{b.name} — {b.reference}</option>
-                    ))}
-                  </select>
-                </div>
                 <div>
                   <label className="block text-sm font-medium mb-1">Drink</label>
                   <select required value={form.tea_item_id} onChange={e => setForm({ ...form, tea_item_id: e.target.value })}>

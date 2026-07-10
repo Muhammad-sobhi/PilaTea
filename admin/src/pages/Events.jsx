@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
-import { getEvents, deleteEvent, completeEvent } from '../utils/api'
+import { getEvents, deleteEvent, completeEvent, sendTemplateEmail } from '../utils/api'
 import { Link } from 'react-router-dom'
-import { Plus, Search, Pencil, Trash2, CheckCircle, Coffee } from 'lucide-react'
+import { Plus, Search, Pencil, Trash2, CheckCircle, Coffee, Mail } from 'lucide-react'
 import PageHeader from '../components/PageHeader'
 import DataTable from '../components/DataTable'
 import { useConfirm } from '../components/ConfirmDialog'
@@ -23,6 +23,7 @@ export default function Events() {
   const [items, setItems] = useState([])
   const [search, setSearch] = useState('')
   const [loading, setLoading] = useState(true)
+  const [statusMsg, setStatusMsg] = useState('')
   const { confirm, dialog } = useConfirm()
 
   const load = () => {
@@ -49,6 +50,24 @@ export default function Events() {
     }
   }
 
+  const handleSendTemplateEmail = async (eventId, slug) => {
+    const ok = await confirm(`Are you sure you want to send the ${slug.replace('_', ' ')} email to all attendees of this event?`, { confirmLabel: 'Send' })
+    if (!ok) return
+    setStatusMsg('Sending email...')
+    try {
+      const res = await sendTemplateEmail({
+        slug: slug,
+        recipient_type: 'event_attendees',
+        event_id: eventId
+      })
+      setStatusMsg(res.data?.message || 'Emails sent successfully!')
+      setTimeout(() => setStatusMsg(''), 3000)
+    } catch (err) {
+      setStatusMsg('Error: ' + (err.response?.data?.message || err.message))
+      setTimeout(() => setStatusMsg(''), 5000)
+    }
+  }
+
   const filtered = items.filter(e =>
     !search || e.title?.toLowerCase().includes(search.toLowerCase()) || e.location_name?.toLowerCase().includes(search.toLowerCase()))
 
@@ -65,17 +84,13 @@ export default function Events() {
     {
       key: 'actions', label: 'Actions',
       render: (row) => (
-        <div className="flex items-center gap-2">
+        <div className="flex flex-wrap items-center gap-2">
           {row.status === 'published' && (
             <button onClick={() => handleComplete(row.id)} className="btn-secondary text-xs !px-3 !py-1.5 text-green-600">
               <CheckCircle size={14} /> Complete
             </button>
           )}
-          {row.status === 'completed' && (
-            <Link to={`/admin/events/${row.id}/drinks`} className="btn-secondary text-xs !px-3 !py-1.5 no-underline">
-              <Coffee size={14} /> Drinks
-            </Link>
-          )}
+
           <Link to={`/admin/events/${row.id}/edit`} className="btn-secondary text-xs !px-3 !py-1.5 no-underline"><Pencil size={14} /> Edit</Link>
           <button onClick={() => handleDelete(row.id)} className="btn-danger"><Trash2 size={14} /> Delete</button>
         </div>
@@ -99,6 +114,11 @@ export default function Events() {
           </>
         )}
       />
+      {statusMsg && (
+        <div className={`mb-6 rounded-lg px-4 py-3 text-sm font-semibold border ${statusMsg.includes('Error') ? 'bg-red-50 text-red-700 border-red-100' : 'bg-blue-50 text-blue-700 border-blue-100'}`}>
+          {statusMsg}
+        </div>
+      )}
       <DataTable columns={columns} rows={filtered} loading={loading} emptyMessage="No events found. Create your first event to get started." />
       {dialog}
     </div>

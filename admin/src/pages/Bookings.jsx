@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
-import { getBookings, deleteBooking } from '../utils/api'
+import { getBookings, deleteBooking, sendTemplateEmail } from '../utils/api'
 import { Link } from 'react-router-dom'
-import { Search, Eye, Trash2 } from 'lucide-react'
+import { Search, Eye, Trash2, Coffee, Mail } from 'lucide-react'
 import PageHeader from '../components/PageHeader'
 import DataTable from '../components/DataTable'
 import { useConfirm } from '../components/ConfirmDialog'
@@ -20,19 +20,42 @@ const statusBadge = (s) => {
 export default function Bookings() {
   const [items, setItems] = useState([])
   const [search, setSearch] = useState('')
+  const [statusMsg, setStatusMsg] = useState('')
   const [loading, setLoading] = useState(true)
   const { confirm, dialog } = useConfirm()
 
-  useEffect(() => {
+  const load = () => {
     setLoading(true)
     getBookings().then(r => setItems(r.data || [])).catch(() => {}).finally(() => setLoading(false))
+  }
+
+  useEffect(() => {
+    load()
   }, [])
 
   const handleDelete = async (id) => {
     const ok = await confirm('Are you sure you want to delete this booking?', { confirmLabel: 'Delete' })
     if (!ok) return
     await deleteBooking(id)
-    setItems(items.filter(i => i.id !== id))
+    load()
+  }
+
+  const handleSendTemplateEmail = async (bookingId, slug) => {
+    const ok = await confirm(`Are you sure you want to send the ${slug.replace('_', ' ')} email to this attendee?`, { confirmLabel: 'Send' })
+    if (!ok) return
+    setStatusMsg('Sending email...')
+    try {
+      const res = await sendTemplateEmail({
+        slug: slug,
+        recipient_type: 'booking',
+        booking_id: bookingId
+      })
+      setStatusMsg(res.data?.message || 'Email sent successfully!')
+      setTimeout(() => setStatusMsg(''), 3000)
+    } catch (err) {
+      setStatusMsg('Error: ' + (err.response?.data?.message || err.message))
+      setTimeout(() => setStatusMsg(''), 5000)
+    }
   }
 
   const filtered = items.filter(b =>
@@ -49,8 +72,17 @@ export default function Bookings() {
     {
       key: 'actions', label: 'Actions',
       render: (row) => (
-        <div className="flex items-center gap-2">
+        <div className="flex flex-wrap items-center gap-2">
           <Link to={`/admin/bookings/${row.id}`} className="btn-secondary text-xs !px-3 !py-1.5 no-underline"><Eye size={14} /> View</Link>
+          <Link to={`/admin/bookings/${row.id}/drinks`} className="btn-secondary text-xs !px-3 !py-1.5 no-underline text-sky-600">
+            <Coffee size={14} /> Drinks
+          </Link>
+          <button onClick={() => handleSendTemplateEmail(row.id, 'post_event')} className="btn-secondary text-xs !px-3 !py-1.5 text-indigo-600">
+            <Mail size={14} /> Thank You
+          </button>
+          <button onClick={() => handleSendTemplateEmail(row.id, 'review_request')} className="btn-secondary text-xs !px-3 !py-1.5 text-purple-600">
+            <Mail size={14} /> Review Request
+          </button>
           <button onClick={() => handleDelete(row.id)} className="btn-danger"><Trash2 size={14} /> Delete</button>
         </div>
       )
@@ -66,6 +98,11 @@ export default function Bookings() {
             <input type="text" placeholder="Search bookings..." value={search} onChange={e => setSearch(e.target.value)} className="!w-56 !pl-9" />
           </div>
         )} />
+      {statusMsg && (
+        <div className={`mb-4 rounded-lg px-4 py-3 text-sm border ${statusMsg.includes('Error') ? 'bg-red-50 text-red-700 border-red-200' : 'bg-green-50 text-green-700 border-green-200'}`}>
+          {statusMsg}
+        </div>
+      )}
       <DataTable columns={columns} rows={filtered} loading={loading} emptyMessage="No bookings found." />
       {dialog}
     </div>

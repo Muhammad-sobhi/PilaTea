@@ -30,6 +30,12 @@ export interface Event {
   capacity: number;
   image?: string;
   category?: { id: number; name: string };
+  byo_enabled?: boolean;
+  byo_capacity?: number;
+  byo_price?: number;
+  byo_description?: string;
+  byo_spots_remaining?: number;
+  spots_remaining?: number;
   [key: string]: unknown;
 }
 

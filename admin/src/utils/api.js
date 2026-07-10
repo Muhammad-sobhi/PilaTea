@@ -110,9 +110,9 @@ export const completeEvent = (id) => api.post(`/admin/events/${id}/complete`);
 export const sendThankYou = (id) => api.post(`/admin/events/${id}/send-thank-you`);
 
 // Phase 2 - Drink orders
-export const getTeaOrders = (eventId) => api.get(`/admin/events/${eventId}/tea-orders`);
-export const createTeaOrder = (eventId, data) => api.post(`/admin/events/${eventId}/tea-orders`, data);
-export const getTeaSummary = (eventId) => api.get(`/admin/events/${eventId}/tea-summary`);
+export const getTeaOrders = (bookingId) => api.get(`/admin/bookings/${bookingId}/tea-orders`);
+export const createTeaOrder = (bookingId, data) => api.post(`/admin/bookings/${bookingId}/tea-orders`, data);
+export const getTeaSummary = (bookingId) => api.get(`/admin/bookings/${bookingId}/tea-summary`);
 export const deleteTeaOrder = (id) => api.delete(`/admin/tea-orders/${id}`);
 
 // Phase 3 - Email / Marketing
@@ -129,3 +129,18 @@ export const createExpense = (data) => api.post('/admin/expenses', data);
 export const updateExpense = (id, data) => api.put(`/admin/expenses/${id}`, data);
 export const deleteExpense = (id) => api.delete(`/admin/expenses/${id}`);
 export const getFinanceSummary = (params) => api.get('/admin/finance/summary', { params });
+
+// Dashboard Users (Admin Only)
+export const getDashboardUsers = () => api.get('/admin/dashboard-users');
+export const createDashboardUser = (data) => api.post('/admin/dashboard-users', data);
+export const updateDashboardUser = (id, data) => api.put(`/admin/dashboard-users/${id}`, data);
+export const deleteDashboardUser = (id) => api.delete(`/admin/dashboard-users/${id}`);
+
+// Email Templates
+export const getEmailTemplates = () => api.get('/admin/email-templates');
+export const getEmailTemplate = (slug) => api.get(`/admin/email-templates/${slug}`);
+export const updateEmailTemplate = (slug, data) => api.post(`/admin/email-templates/${slug}`, data, {
+  headers: { 'Content-Type': 'multipart/form-data' }
+});
+export const previewEmailTemplate = (slug) => api.get(`/admin/email-templates/${slug}/preview`);
+export const sendTemplateEmail = (data) => api.post('/admin/email-templates/send', data);

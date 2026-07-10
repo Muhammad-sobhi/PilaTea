@@ -85,3 +85,7 @@ export function purchaseMembership<T = unknown>(membershipId: number) {
 export function getMyBookings<T = unknown>() {
   return fetchAPI<T>('/bookings/mine');
 }
+
+export function validateDiscountCode<T = unknown>(code: string) {
+  return fetchAPI<T>('/discount-codes/validate', { method: 'POST', body: JSON.stringify({ code }) });
+}

@@ -17,6 +17,7 @@ use App\Http\Controllers\Api\TeaOrderController;
 use App\Http\Controllers\Api\CampaignController;
 use App\Http\Controllers\Api\ExpenseController;
 use App\Http\Controllers\Api\FinanceController;
+use App\Http\Controllers\Api\EmailTemplateController;
 use Illuminate\Support\Facades\Route;
 
 // Public routes
@@ -37,6 +38,7 @@ Route::post('contact', [ContactController::class, 'store']);
 Route::get('instructors', [InstructorController::class, 'index']);
 Route::get('banners', [BannerController::class, 'index']);
 Route::get('settings', [SettingController::class, 'index']);
+Route::post('discount-codes/validate', [DiscountCodeController::class, 'validateCode']);
 
 // Auth routes
 Route::post('auth/login', [AuthController::class, 'login']);
@@ -46,6 +48,11 @@ Route::get('auth/user', [AuthController::class, 'user'])->middleware('auth:sanct
 
 // Admin routes (protected)
 Route::middleware('auth:sanctum')->prefix('admin')->group(function () {
+    Route::get('email-templates', [EmailTemplateController::class, 'index']);
+    Route::get('email-templates/{slug}', [EmailTemplateController::class, 'show']);
+    Route::post('email-templates/{slug}', [EmailTemplateController::class, 'update']);
+    Route::get('email-templates/{slug}/preview', [EmailTemplateController::class, 'preview']);
+    Route::post('email-templates/send', [EmailTemplateController::class, 'send']);
     Route::get('events/all', [EventController::class, 'all']);
     Route::get('events/{id}', [EventController::class, 'show']);
     Route::post('events', [EventController::class, 'store']);
@@ -105,6 +112,12 @@ Route::middleware('auth:sanctum')->prefix('admin')->group(function () {
 
     Route::get('users', [UserController::class, 'index']);
     Route::get('users/{id}', [UserController::class, 'show']);
+    
+    // Dashboard users CRUD (admin only)
+    Route::get('dashboard-users', [UserController::class, 'adminUsers']);
+    Route::post('dashboard-users', [UserController::class, 'storeAdmin']);
+    Route::put('dashboard-users/{id}', [UserController::class, 'updateAdmin']);
+    Route::delete('dashboard-users/{id}', [UserController::class, 'destroyAdmin']);
 
     // Admin listing routes (for sidebar pages)
     Route::get('events', [EventController::class, 'all']);
@@ -121,9 +134,9 @@ Route::middleware('auth:sanctum')->prefix('admin')->group(function () {
     Route::post('events/{id}/send-thank-you', [EventController::class, 'sendThankYou']);
 
     // Phase 2 - Drink orders
-    Route::get('events/{eventId}/tea-orders', [TeaOrderController::class, 'index']);
-    Route::post('events/{eventId}/tea-orders', [TeaOrderController::class, 'store']);
-    Route::get('events/{eventId}/tea-summary', [TeaOrderController::class, 'summary']);
+    Route::get('bookings/{bookingId}/tea-orders', [TeaOrderController::class, 'index']);
+    Route::post('bookings/{bookingId}/tea-orders', [TeaOrderController::class, 'store']);
+    Route::get('bookings/{bookingId}/tea-summary', [TeaOrderController::class, 'summary']);
     Route::delete('tea-orders/{id}', [TeaOrderController::class, 'destroy']);
 
     // Phase 3 - Email / Marketing

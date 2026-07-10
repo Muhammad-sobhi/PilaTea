@@ -9,7 +9,7 @@ export default function EventForm() {
   const { id } = useParams()
   const navigate = useNavigate()
   const isEdit = Boolean(id)
-  const [form, setForm] = useState({ title: '', description: '', event_type: 'outdoor', event_date: '', start_time: '', location_name: '', address: '', end_time: '', price: '', capacity: '', instructor_id: '', featured: false, status: 'published', image: null })
+  const [form, setForm] = useState({ title: '', description: '', event_type: 'outdoor', event_date: '', start_time: '', location_name: '', address: '', end_time: '', price: '', capacity: '', instructor_id: '', featured: false, status: 'published', image: null, byo_enabled: false, byo_capacity: '', byo_price: '', byo_description: '' })
   const [instructors, setInstructors] = useState([])
   const [error, setError] = useState('')
 
@@ -18,7 +18,7 @@ export default function EventForm() {
     if (isEdit) {
       getEvent(id).then(r => {
         const d = r.data || r
-        setForm({ title: d.title, description: d.description, event_type: d.event_type || 'outdoor', event_date: d.event_date, start_time: d.start_time, location_name: d.location_name, address: d.address || '', end_time: d.end_time || '', price: d.price, capacity: d.capacity, instructor_id: d.instructor_id || '', featured: !!d.featured, status: d.status || 'published', image: d.image || null })
+        setForm({ title: d.title, description: d.description, event_type: d.event_type || 'outdoor', event_date: d.event_date, start_time: d.start_time, location_name: d.location_name, address: d.address || '', end_time: d.end_time || '', price: d.price, capacity: d.capacity, instructor_id: d.instructor_id || '', featured: !!d.featured, status: d.status || 'published', image: d.image || null, byo_enabled: !!d.byo_enabled, byo_capacity: d.byo_capacity || '', byo_price: d.byo_price || '', byo_description: d.byo_description || '' })
       }).catch(() => navigate('/admin/events'))
     }
   }, [id])
@@ -33,7 +33,7 @@ export default function EventForm() {
       const fd = new FormData()
       for (const [key, value] of Object.entries(form)) {
         if (value !== null && value !== undefined) {
-          if (key === 'featured') {
+          if (key === 'featured' || key === 'byo_enabled') {
             fd.append(key, value ? '1' : '0')
           } else {
             fd.append(key, value)
@@ -150,6 +150,28 @@ export default function EventForm() {
                   <option value="cancelled">Cancelled</option>
                 </select>
               </div>
+            )}
+            <div className="md:col-span-2">
+              <label className="flex items-center gap-2.5 cursor-pointer">
+                <input type="checkbox" checked={form.byo_enabled} onChange={setCheck('byo_enabled')} className="rounded accent-[var(--color-brand-lilac)]" />
+                <span className="text-sm font-medium text-[var(--color-text)]">Enable BYO (Bring Your Own Mat) Booking option when capacity limits are reached</span>
+              </label>
+            </div>
+            {form.byo_enabled && (
+              <>
+                <div>
+                  <label className="block text-sm font-medium text-[var(--color-text)] mb-1.5">BYO Capacity</label>
+                  <input type="number" required={form.byo_enabled} value={form.byo_capacity} onChange={set('byo_capacity')} placeholder="e.g. 10" />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-[var(--color-text)] mb-1.5">BYO Price ($)</label>
+                  <input type="number" required={form.byo_enabled} value={form.byo_price} onChange={set('byo_price')} placeholder="e.g. 20" />
+                </div>
+                <div className="md:col-span-2">
+                  <label className="block text-sm font-medium text-[var(--color-text)] mb-1.5">BYO Description / Privileges</label>
+                  <input type="text" value={form.byo_description} onChange={set('byo_description')} placeholder="e.g. Bring your own mat, will be in the last line" />
+                </div>
+              </>
             )}
             <div className="md:col-span-2">
               <label className="flex items-center gap-2.5 cursor-pointer">

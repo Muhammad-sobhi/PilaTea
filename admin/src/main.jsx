@@ -22,6 +22,8 @@ import InstructorForm from './pages/InstructorForm'
 import DiscountCodes from './pages/DiscountCodes'
 import Settings from './pages/Settings'
 import Users from './pages/Users'
+import DashboardUsers from './pages/DashboardUsers'
+import EmailTemplates from './pages/EmailTemplates'
 import EventDrinkOrders from './pages/EventDrinkOrders'
 import Newsletter from './pages/Newsletter'
 import Finance from './pages/Finance'
@@ -47,17 +49,19 @@ createRoot(document.getElementById('root')).render(
           <Route path="tea-items/:id/edit" element={<TeaItemForm />} />
           <Route path="tea-categories" element={<TeaCategories />} />
           <Route path="users" element={<Users />} />
+          <Route path="dashboard-users" element={<DashboardUsers />} />
           <Route path="memberships" element={<Memberships />} />
           <Route path="memberships/new" element={<MembershipForm />} />
           <Route path="memberships/:id/edit" element={<MembershipForm />} />
           <Route path="gallery" element={<Gallery />} />
           <Route path="testimonials" element={<Testimonials />} />
           <Route path="contacts" element={<Contacts />} />
+          <Route path="email-templates" element={<EmailTemplates />} />
           <Route path="instructors" element={<Instructors />} />
           <Route path="instructors/new" element={<InstructorForm />} />
           <Route path="instructors/:id/edit" element={<InstructorForm />} />
           <Route path="discount-codes" element={<DiscountCodes />} />
-          <Route path="events/:id/drinks" element={<EventDrinkOrders />} />
+          <Route path="bookings/:id/drinks" element={<EventDrinkOrders />} />
           <Route path="newsletter" element={<Newsletter />} />
           <Route path="finance" element={<Finance />} />
           <Route path="expenses" element={<Expenses />} />

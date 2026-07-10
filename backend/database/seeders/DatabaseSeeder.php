@@ -194,5 +194,9 @@ class DatabaseSeeder extends Seeder
         Setting::create(['key' => 'instagram', 'value' => '@pilatea.official']);
         Setting::create(['key' => 'tiktok', 'value' => '@pilatea']);
         Setting::create(['key' => 'pinterest', 'value' => 'pilatea']);
+
+        $this->call([
+            EmailTemplateSeeder::class,
+        ]);
     }
 }

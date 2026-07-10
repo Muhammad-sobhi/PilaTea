@@ -11,31 +11,29 @@ use Illuminate\Http\Request;
 
 class TeaOrderController extends Controller
 {
-    public function index($eventId)
+    public function index($bookingId)
     {
-        $event = Event::with('bookings.teaOrders.teaItem')->findOrFail($eventId);
-
-        $orders = BookingTeaOrder::whereHas('booking', function ($q) use ($eventId) {
-            $q->where('event_id', $eventId);
-        })->with(['booking', 'teaItem'])->orderBy('created_at', 'desc')->get();
+        $orders = BookingTeaOrder::where('booking_id', $bookingId)
+            ->with(['booking', 'teaItem'])
+            ->orderBy('created_at', 'desc')
+            ->get();
 
         return response()->json(['data' => $orders]);
     }
 
-    public function store(Request $request, $eventId)
+    public function store(Request $request, $bookingId)
     {
         $data = $request->validate([
-            'booking_id' => 'required|exists:bookings,id',
             'tea_item_id' => 'required|exists:tea_items,id',
             'quantity' => 'required|integer|min:1',
             'notes' => 'nullable|string',
         ]);
 
-        $booking = Booking::where('id', $data['booking_id'])->where('event_id', $eventId)->firstOrFail();
+        $booking = Booking::findOrFail($bookingId);
         $teaItem = TeaItem::findOrFail($data['tea_item_id']);
 
         $order = BookingTeaOrder::create([
-            'booking_id' => $data['booking_id'],
+            'booking_id' => $bookingId,
             'tea_item_id' => $data['tea_item_id'],
             'quantity' => $data['quantity'],
             'unit_price' => $teaItem->price,
@@ -46,13 +44,11 @@ class TeaOrderController extends Controller
         return response()->json($order->load(['booking', 'teaItem']), 201);
     }
 
-    public function summary($eventId)
+    public function summary($bookingId)
     {
-        $event = Event::findOrFail($eventId);
-
-        $orders = BookingTeaOrder::whereHas('booking', function ($q) use ($eventId) {
-            $q->where('event_id', $eventId);
-        })->with('teaItem')->get();
+        $orders = BookingTeaOrder::where('booking_id', $bookingId)
+            ->with('teaItem')
+            ->get();
 
         $totalItems = $orders->sum('quantity');
         $byItem = $orders->groupBy('tea_item_id')->map(function ($items) {

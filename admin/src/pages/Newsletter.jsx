@@ -71,10 +71,16 @@ export default function Newsletter() {
               <input type="text" required value={form.subject} onChange={e => setForm({ ...form, subject: e.target.value })} placeholder="Your email subject" />
             </div>
             <div>
-              <label className="block text-sm font-medium mb-1">Message (HTML)</label>
+              <label className="block text-sm font-medium mb-1">Message</label>
               <textarea rows="8" required value={form.body} onChange={e => setForm({ ...form, body: e.target.value })}
-                placeholder={'<h2>Hello!</h2>\n<p>Your newsletter content here...</p>\n<p>Warmly,<br>The PILATEA Team</p>'} />
+                placeholder={'Hello!\n\nYour newsletter content here...\n\nWarmly,\nThe PILATEA Team'} />
             </div>
+            {form.body && (
+              <div className="mt-4">
+                <label className="block text-xs font-semibold uppercase tracking-wider text-[var(--color-text-muted)] mb-2">Message Live Preview</label>
+                <div className="border border-[var(--color-border)] rounded-xl p-4 bg-white min-h-[150px]" dangerouslySetInnerHTML={{ __html: form.body.replace(/\n/g, '<br />') }} />
+              </div>
+            )}
           </div>
           <div className="flex gap-3 mt-6">
             <button type="submit" disabled={sending} className="btn-primary">

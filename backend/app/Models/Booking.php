@@ -9,13 +9,14 @@ class Booking extends Model
     protected $fillable = [
         'event_id', 'user_id', 'name', 'email', 'phone', 'spots_booked',
         'total_price', 'payment_status', 'payment_method', 'discount_code',
-        'notes', 'reference',
+        'notes', 'reference', 'is_byo',
     ];
 
     protected function casts(): array
     {
         return [
             'total_price' => 'decimal:2',
+            'is_byo' => 'boolean',
         ];
     }
 

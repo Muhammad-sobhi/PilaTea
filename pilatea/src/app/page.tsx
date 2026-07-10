@@ -24,10 +24,10 @@ const YogaIcon = (props: React.SVGProps<SVGSVGElement>) => (
 );
 
 const floatBubbles = [
-  { Icon: YogaIcon, title: "Mindful Movement", top: "10%", left: "10%", delay: 0.7, duration: 10 },
-  { Icon: Coffee, title: "Premium Tea", top: "15%", left: "80%", delay: 2.1, duration: 12 },
-  { Icon: Sun, title: "Outdoor Wellness", top: "70%", left: "5%", delay: 0, duration: 9 },
-  { Icon: Users, title: "Community & Connection", top: "75%", left: "75%", delay: 1.4, duration: 11 },
+  { Icon: YogaIcon, title: "Mindful Movement", top: "22%", left: "15%", delay: 0.7, duration: 10 },
+  { Icon: Coffee, title: "Premium Tea", top: "25%", left: "70%", delay: 2.1, duration: 12 },
+  { Icon: Sun, title: "Outdoor Wellness", top: "60%", left: "12%", delay: 0, duration: 9 },
+  { Icon: Users, title: "Community & Connection", top: "62%", left: "68%", delay: 1.4, duration: 11 },
 ];
 
 export default function Home() {
