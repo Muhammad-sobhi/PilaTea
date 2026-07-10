@@ -6,7 +6,7 @@ import { useState, useEffect } from "react";
 import { Loading } from "@/components/Loading";
 import { ScrollReveal } from "@/components/ScrollReveal";
 import { BackButton } from "@/components/BackButton";
-import { getEvent, createBooking, getExistingBooking, addGuestsToBooking } from "@/lib/api";
+import { getEvent, createBooking, getExistingBooking, addGuestsToBooking, validateDiscountCode } from "@/lib/api";
 import { useAuth } from "@/context/AuthContext";
 import { useSettings } from "@/context/SettingsContext";
 import { storageUrl, formatDate } from "@/lib/utils";
