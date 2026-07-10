@@ -35,7 +35,7 @@ export function Footer() {
         {/* Brand */}
         <div className="relative z-10">
           <div className="flex items-center gap-3">
-            <Image src="/logo.png" alt="PILATEA" width={80} height={38} className="h-[38px] w-[80px] object-contain" />
+            <img src="/logo.png" alt="PILATEA" className="h-[38px] w-[80px] object-contain" />
             <span className="font-heading text-[40px] font-semibold tracking-[3px] text-dark">
               {settings.site_name || "PILATEA"}
             </span>
