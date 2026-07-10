@@ -299,7 +299,7 @@ export default function Home() {
       <ScrollReveal>
         <section className="go-section">
           <div className="go-image-wrapper">
-            <img src={signatureBgUrl || "/hero-background.PNG?v=2"} alt="Pilates on the Go" />
+            <img src={signatureBgUrl || "hero-background.PNG?v=2"} alt="Pilates on the Go" />
           </div>
           <div className="go-content">
             <p className="go-label">{s("signature_label", "OUR SIGNATURE EXPERIENCE")}</p>
