@@ -72,18 +72,22 @@ export default function Bookings() {
     {
       key: 'actions', label: 'Actions',
       render: (row) => (
-        <div className="flex flex-wrap items-center gap-2">
-          <Link to={`/admin/bookings/${row.id}`} className="btn-secondary text-xs !px-3 !py-1.5 no-underline"><Eye size={14} /> View</Link>
-          <Link to={`/admin/bookings/${row.id}/drinks`} className="btn-secondary text-xs !px-3 !py-1.5 no-underline text-sky-600">
-            <Coffee size={14} /> Drinks
-          </Link>
-          <button onClick={() => handleSendTemplateEmail(row.id, 'post_event')} className="btn-secondary text-xs !px-3 !py-1.5 text-indigo-600">
-            <Mail size={14} /> Thank You
-          </button>
-          <button onClick={() => handleSendTemplateEmail(row.id, 'review_request')} className="btn-secondary text-xs !px-3 !py-1.5 text-purple-600">
-            <Mail size={14} /> Review Request
-          </button>
-          <button onClick={() => handleDelete(row.id)} className="btn-danger"><Trash2 size={14} /> Delete</button>
+        <div className="flex flex-col gap-2 min-w-[200px]">
+          {/* Row 1: Core management */}
+          <div className="flex items-center gap-1.5">
+            <Link to={`/admin/bookings/${row.id}`} className="btn-secondary text-xs !px-2 py-1 no-underline flex items-center gap-1 flex-1 justify-center"><Eye size={12} /> View</Link>
+            <Link to={`/admin/bookings/${row.id}/drinks`} className="btn-secondary text-xs !px-2 py-1 no-underline text-sky-600 flex items-center gap-1 flex-1 justify-center"><Coffee size={12} /> Drinks</Link>
+            <button onClick={() => handleDelete(row.id)} className="btn-danger text-xs !px-2 py-1 flex items-center gap-1 justify-center"><Trash2 size={12} /></button>
+          </div>
+          {/* Row 2: Mail triggers */}
+          <div className="flex items-center gap-1.5">
+            <button onClick={() => handleSendTemplateEmail(row.id, 'post_event')} className="btn-secondary text-[11px] !px-2 py-1 text-indigo-600 flex-1 flex items-center gap-1 justify-center">
+              <Mail size={12} /> Thank You
+            </button>
+            <button onClick={() => handleSendTemplateEmail(row.id, 'review_request')} className="btn-secondary text-[11px] !px-2 py-1 text-purple-600 flex-1 flex items-center gap-1 justify-center">
+              <Mail size={12} /> Review
+            </button>
+          </div>
         </div>
       )
     },
