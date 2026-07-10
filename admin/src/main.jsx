@@ -32,7 +32,7 @@ import PageHeader from './components/PageHeader'
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-    <BrowserRouter>
+    <BrowserRouter basename={import.meta.env.BASE_URL}>
       <Routes>
         <Route path="/admin/login" element={<Login />} />
         <Route path="/admin" element={<App />}>
