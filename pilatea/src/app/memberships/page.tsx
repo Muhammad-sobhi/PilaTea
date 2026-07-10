@@ -40,7 +40,7 @@ export default function MembershipsPage() {
     setPurchasing(plan.id);
     setMessage(null);
     try {
-      await purchaseMembership(plan.id, billing);
+      await purchaseMembership(plan.id);
       setMessage({ type: "success", text: "Successfully subscribed to " + plan.name + "! Welcome aboard." });
     } catch (err: unknown) {
       setMessage({ type: "error", text: err instanceof Error ? err.message : "Purchase failed" });
