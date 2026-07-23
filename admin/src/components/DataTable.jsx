@@ -6,21 +6,23 @@ export default function DataTable({ columns, rows, emptyMessage, loading, pageSi
 
   if (loading) {
     return (
-      <div className="bg-white border border-slate-100 rounded-2xl shadow-sm overflow-hidden">
+      <div className="bg-white border border-slate-100 rounded-3xl p-6 shadow-sm overflow-hidden">
         <div className="overflow-x-auto">
-          <table className="w-full text-sm border-collapse">
+          <table className="w-full text-sm border-separate border-spacing-y-2">
             <thead>
-              <tr className="bg-slate-50/70 border-b border-slate-100">
+              <tr>
                 {columns.map(col => (
-                  <th key={col.key} className="text-left text-xs font-semibold uppercase tracking-wider text-slate-500 px-6 py-4">{col.label}</th>
+                  <th key={col.key} className="text-left text-[11px] font-bold uppercase tracking-wider text-slate-400 px-5 py-2">{col.label}</th>
                 ))}
               </tr>
             </thead>
             <tbody>
               {[1, 2, 3, 4].map(i => (
-                <tr key={i} className="border-b border-slate-100/60 last:border-0">
+                <tr key={i} className="bg-slate-50/60 rounded-2xl">
                   {columns.map(col => (
-                    <td key={col.key} className="px-6 py-4"><div className="skeleton h-4 w-3/4 rounded bg-slate-100 animate-pulse" /></td>
+                    <td key={col.key} className="px-5 py-4 first:rounded-l-2xl last:rounded-r-2xl">
+                      <div className="skeleton h-4 w-3/4 rounded-lg bg-slate-200/60 animate-pulse" />
+                    </td>
                   ))}
                 </tr>
               ))}
@@ -33,8 +35,8 @@ export default function DataTable({ columns, rows, emptyMessage, loading, pageSi
 
   if (!rows || rows.length === 0) {
     return (
-      <div className="bg-white border border-slate-100 rounded-2xl shadow-sm p-12 text-center">
-        <p className="text-slate-400 text-sm font-medium">{emptyMessage || 'No records found.'}</p>
+      <div className="bg-white border border-slate-100 rounded-3xl p-12 text-center shadow-sm">
+        <p className="text-slate-400 text-sm font-semibold">{emptyMessage || 'No records found.'}</p>
       </div>
     )
   }
@@ -53,21 +55,23 @@ export default function DataTable({ columns, rows, emptyMessage, loading, pageSi
   }
 
   return (
-    <div className="bg-white border border-slate-100 rounded-2xl shadow-sm overflow-hidden flex flex-col">
+    <div className="bg-white border border-slate-100 rounded-3xl p-5 sm:p-6 shadow-sm overflow-hidden flex flex-col">
       <div className="overflow-x-auto">
-        <table className="w-full text-sm border-collapse">
+        <table className="w-full text-sm border-separate border-spacing-y-2.5">
           <thead>
-            <tr className="bg-slate-50/70 border-b border-slate-100">
+            <tr>
               {columns.map(col => (
-                <th key={col.key} className="text-left text-xs font-semibold uppercase tracking-wider text-slate-500 px-6 py-4">{col.label}</th>
+                <th key={col.key} className="text-left text-[11px] font-extrabold uppercase tracking-wider text-slate-400 px-5 pb-1">{col.label}</th>
               ))}
             </tr>
           </thead>
-          <tbody className="divide-y divide-slate-100">
+          <tbody>
             {paginatedRows.map((row, i) => (
-              <tr key={row.id || i} className="hover:bg-slate-50/40 transition-colors duration-150 group">
+              <tr key={row.id || i} className="bg-slate-50/70 hover:bg-slate-100/70 transition-all duration-200 group rounded-2xl">
                 {columns.map(col => (
-                  <td key={col.key} className="px-6 py-4 text-slate-700 font-medium group-hover:text-slate-900">{col.render ? col.render(row) : row[col.key]}</td>
+                  <td key={col.key} className="px-5 py-3.5 text-slate-700 font-semibold text-xs first:rounded-l-2xl last:rounded-r-2xl border-y border-slate-100/80 first:border-l last:border-r">
+                    {col.render ? col.render(row) : row[col.key]}
+                  </td>
                 ))}
               </tr>
             ))}
@@ -77,15 +81,15 @@ export default function DataTable({ columns, rows, emptyMessage, loading, pageSi
 
       {/* Pagination Bar */}
       {totalPages > 1 && (
-        <div className="flex items-center justify-between border-t border-slate-100 px-6 py-4 bg-white">
-          <div className="text-xs text-slate-500">
-            Showing <span className="font-semibold text-slate-700">{startIndex + 1}</span> to <span className="font-semibold text-slate-700">{endIndex}</span> of <span className="font-semibold text-slate-700">{totalRows}</span> entries
+        <div className="flex items-center justify-between pt-5 mt-2 border-t border-slate-100 px-2 bg-white">
+          <div className="text-xs text-slate-400 font-medium">
+            Showing <span className="font-bold text-slate-700">{startIndex + 1}</span> to <span className="font-bold text-slate-700">{endIndex}</span> of <span className="font-bold text-slate-700">{totalRows}</span> entries
           </div>
-          <div className="flex items-center gap-1.5">
+          <div className="flex items-center gap-2">
             <button
               onClick={() => goToPage(currentPage - 1)}
               disabled={currentPage === 1}
-              className="p-1.5 rounded-lg border border-slate-100 text-slate-500 hover:bg-slate-50 hover:text-slate-700 disabled:opacity-50 disabled:hover:bg-transparent disabled:cursor-not-allowed transition-all"
+              className="p-2 rounded-xl border border-slate-200 text-slate-500 hover:bg-slate-50 disabled:opacity-40 disabled:hover:bg-transparent disabled:cursor-not-allowed transition-all cursor-pointer"
             >
               <ChevronLeft size={16} />
             </button>
@@ -94,10 +98,10 @@ export default function DataTable({ columns, rows, emptyMessage, loading, pageSi
               <button
                 key={page}
                 onClick={() => goToPage(page)}
-                className={`w-7.5 h-7.5 text-xs font-semibold rounded-lg transition-all ${
+                className={`w-8 h-8 text-xs font-bold rounded-xl transition-all cursor-pointer ${
                   currentPage === page
-                    ? 'bg-indigo-600 text-white shadow-sm'
-                    : 'text-slate-600 border border-slate-100 hover:bg-slate-50 hover:text-slate-800'
+                    ? 'bg-gradient-to-r from-[#00d2ff] to-[#0082ff] text-white shadow-md shadow-cyan-500/20'
+                    : 'text-slate-600 border border-slate-200 hover:bg-slate-50'
                 }`}
               >
                 {page}
@@ -107,7 +111,7 @@ export default function DataTable({ columns, rows, emptyMessage, loading, pageSi
             <button
               onClick={() => goToPage(currentPage + 1)}
               disabled={currentPage === totalPages}
-              className="p-1.5 rounded-lg border border-slate-100 text-slate-500 hover:bg-slate-50 hover:text-slate-700 disabled:opacity-50 disabled:hover:bg-transparent disabled:cursor-not-allowed transition-all"
+              className="p-2 rounded-xl border border-slate-200 text-slate-500 hover:bg-slate-50 disabled:opacity-40 disabled:hover:bg-transparent disabled:cursor-not-allowed transition-all cursor-pointer"
             >
               <ChevronRight size={16} />
             </button>
@@ -117,3 +121,4 @@ export default function DataTable({ columns, rows, emptyMessage, loading, pageSi
     </div>
   )
 }
+

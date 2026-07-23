@@ -131,19 +131,23 @@ export default function Finance() {
         </div>
       </div>
 
-      <div className="card p-6">
+      {/* Monthly Breakdown Card */}
+      <div className="bg-white border border-slate-100 rounded-[28px] p-6 shadow-sm">
         <div className="flex flex-wrap items-center justify-between gap-4 mb-6">
-          <h2 className="text-base font-semibold tracking-tight">Monthly Breakdown</h2>
+          <div>
+            <h2 className="text-base font-extrabold text-slate-800 tracking-tight">Monthly Breakdown</h2>
+            <p className="text-xs text-slate-400 font-medium mt-0.5">Overview of monthly revenue vs expenses</p>
+          </div>
           <div className="flex items-center gap-3">
-            <div className="flex items-center gap-1">
-              <button onClick={() => changeYear(-1)} className="btn-secondary !px-2 !py-1.5"><ChevronLeft size={16} /></button>
-              <span className="text-sm font-semibold px-3 min-w-[80px] text-center">{selectedYear}</span>
-              <button onClick={() => changeYear(1)} className="btn-secondary !px-2 !py-1.5"><ChevronRight size={16} /></button>
+            <div className="flex items-center gap-1 bg-slate-50 p-1 rounded-2xl border border-slate-100">
+              <button onClick={() => changeYear(-1)} className="p-1.5 rounded-xl hover:bg-white text-slate-500 transition-colors cursor-pointer border-0"><ChevronLeft size={16} /></button>
+              <span className="text-xs font-bold px-3 text-slate-700">{selectedYear}</span>
+              <button onClick={() => changeYear(1)} className="p-1.5 rounded-xl hover:bg-white text-slate-500 transition-colors cursor-pointer border-0"><ChevronRight size={16} /></button>
             </div>
             <select
               value={selectedMonth}
               onChange={e => setSelectedMonth(e.target.value)}
-              className="text-sm min-w-[130px]"
+              className="text-xs font-semibold !w-36 !py-2 border-slate-200"
             >
               <option value="all">All Months</option>
               {MONTHS.map((name, i) => {
@@ -155,85 +159,98 @@ export default function Finance() {
         </div>
 
         {selectedMonth === 'all' ? (
-          <div className="space-y-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-4">
             {monthlyData.map((m) => {
+              const monthLabel = new Date(m.month + '-01').toLocaleDateString('en-US', { month: 'short', year: 'numeric' })
+              const revWidth = allMonthsMax > 0 ? (m.revenue / allMonthsMax) * 100 : 0
+              const expWidth = allMonthsMax > 0 ? (m.expenses / allMonthsMax) * 100 : 0
+
               return (
-                <div key={m.month}>
-                  <div className="flex justify-between text-sm mb-1.5">
-                    <span className="font-medium text-[var(--color-text)]">{new Date(m.month + '-01').toLocaleDateString('en-US', { year: 'numeric', month: 'short' })}</span>
-                    <span className={`font-semibold tabular-nums text-sm ${m.net >= 0 ? 'text-green-600' : 'text-red-600'}`}>
+                <div key={m.month} className="bg-slate-50/60 hover:bg-slate-100/60 p-4 rounded-2xl border border-slate-100/80 transition-colors">
+                  <div className="flex items-center justify-between mb-2">
+                    <span className="text-xs font-extrabold text-slate-800">{monthLabel}</span>
+                    <span className={`text-xs font-bold tabular-nums px-2 py-0.5 rounded-lg ${m.net >= 0 ? 'bg-emerald-50 text-emerald-700 border border-emerald-100' : 'bg-rose-50 text-rose-700 border border-rose-100'}`}>
                       {m.net >= 0 ? '+' : ''}{fmt(m.net)}
                     </span>
                   </div>
+
                   <div className="space-y-1.5">
-                    <div className="flex items-center gap-3">
-                      <span className="text-xs text-green-600 w-14 font-medium">Income</span>
-                      <div className="flex-1 bg-gray-100 dark:bg-gray-800 rounded-full h-4 overflow-hidden">
-                        <div className="bg-green-400 h-full rounded-full transition-all" style={{ width: `${(m.revenue / allMonthsMax) * 100}%` }} />
+                    {/* Income Bar */}
+                    <div className="flex items-center gap-2 text-[11px]">
+                      <span className="w-12 text-slate-500 font-semibold">Income</span>
+                      <div className="flex-1 bg-slate-200/50 rounded-full h-2 overflow-hidden">
+                        <div className="bg-emerald-500 h-full rounded-full transition-all duration-300" style={{ width: `${Math.max(revWidth, m.revenue > 0 ? 3 : 0)}%` }} />
                       </div>
-                      <span className="text-xs w-20 text-right tabular-nums text-[var(--color-text-secondary)] font-medium">{fmt(m.revenue)}</span>
+                      <span className="w-16 text-right font-bold text-slate-700 tabular-nums">{fmt(m.revenue)}</span>
                     </div>
-                    <div className="flex items-center gap-3">
-                      <span className="text-xs text-red-600 w-14 font-medium">Outcome</span>
-                      <div className="flex-1 bg-gray-100 dark:bg-gray-800 rounded-full h-4 overflow-hidden">
-                        <div className="bg-red-400 h-full rounded-full transition-all" style={{ width: `${(m.expenses / allMonthsMax) * 100}%` }} />
+
+                    {/* Outcome Bar */}
+                    <div className="flex items-center gap-2 text-[11px]">
+                      <span className="w-12 text-slate-500 font-semibold">Outcome</span>
+                      <div className="flex-1 bg-slate-200/50 rounded-full h-2 overflow-hidden">
+                        <div className="bg-rose-500 h-full rounded-full transition-all duration-300" style={{ width: `${Math.max(expWidth, m.expenses > 0 ? 3 : 0)}%` }} />
                       </div>
-                      <span className="text-xs w-20 text-right tabular-nums text-[var(--color-text-secondary)] font-medium">{fmt(m.expenses)}</span>
+                      <span className="w-16 text-right font-bold text-slate-700 tabular-nums">{fmt(m.expenses)}</span>
                     </div>
                   </div>
                 </div>
               )
             })}
             {monthlyData.length === 0 && (
-              <p className="text-sm text-[var(--color-text-muted)] text-center py-6">No data for {selectedYear}</p>
+              <div className="col-span-2 text-center py-8 text-xs text-slate-400 font-medium">
+                No data for {selectedYear}
+              </div>
             )}
           </div>
         ) : selectedData ? (
-          <div>
-            <div className="text-center mb-6">
-              <p className="text-lg font-bold text-[var(--color-text)]">{new Date(selectedData.month + '-01').toLocaleDateString('en-US', { year: 'numeric', month: 'long' })}</p>
+          <div className="bg-slate-50/70 rounded-2xl p-6 border border-slate-100 max-w-xl mx-auto">
+            <div className="text-center mb-5">
+              <h3 className="text-sm font-extrabold text-slate-800">{new Date(selectedData.month + '-01').toLocaleDateString('en-US', { year: 'numeric', month: 'long' })}</h3>
             </div>
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
-              <div className="rounded-xl bg-green-50 border border-green-100 p-4 text-center">
-                <p className="text-xs text-green-600 font-medium uppercase tracking-wider">Income</p>
-                <p className="text-xl font-bold text-green-700 tabular-nums mt-1">{fmt(selectedData.revenue)}</p>
+            
+            <div className="grid grid-cols-3 gap-3 mb-6">
+              <div className="rounded-xl bg-white border border-slate-100 p-3 text-center shadow-2xs">
+                <p className="text-[10px] text-emerald-600 font-bold uppercase tracking-wider">Income</p>
+                <p className="text-base font-extrabold text-slate-800 tabular-nums mt-0.5">{fmt(selectedData.revenue)}</p>
               </div>
-              <div className="rounded-xl bg-red-50 border border-red-100 p-4 text-center">
-                <p className="text-xs text-red-600 font-medium uppercase tracking-wider">Outcome</p>
-                <p className="text-xl font-bold text-red-700 tabular-nums mt-1">{fmt(selectedData.expenses)}</p>
+              <div className="rounded-xl bg-white border border-slate-100 p-3 text-center shadow-2xs">
+                <p className="text-[10px] text-rose-600 font-bold uppercase tracking-wider">Outcome</p>
+                <p className="text-base font-extrabold text-slate-800 tabular-nums mt-0.5">{fmt(selectedData.expenses)}</p>
               </div>
-              <div className={`rounded-xl p-4 text-center border ${selectedData.net >= 0 ? 'bg-blue-50 border-blue-100' : 'bg-red-50 border-red-100'}`}>
-                <p className={`text-xs font-medium uppercase tracking-wider ${selectedData.net >= 0 ? 'text-blue-600' : 'text-red-600'}`}>Net</p>
-                <p className={`text-xl font-bold tabular-nums mt-1 ${selectedData.net >= 0 ? 'text-blue-700' : 'text-red-700'}`}>
+              <div className={`rounded-xl p-3 text-center border bg-white shadow-2xs`}>
+                <p className={`text-[10px] font-bold uppercase tracking-wider ${selectedData.net >= 0 ? 'text-emerald-600' : 'text-rose-600'}`}>Net</p>
+                <p className={`text-base font-extrabold tabular-nums mt-0.5 ${selectedData.net >= 0 ? 'text-emerald-600' : 'text-rose-600'}`}>
                   {selectedData.net >= 0 ? '+' : ''}{fmt(selectedData.net)}
                 </p>
               </div>
             </div>
+
             <div className="space-y-3">
               <div>
-                <div className="flex justify-between text-sm mb-1">
-                  <span className="text-green-600 font-medium">Income</span>
-                  <span className="font-semibold tabular-nums">{fmt(selectedData.revenue)}</span>
+                <div className="flex justify-between text-xs font-bold mb-1">
+                  <span className="text-slate-600">Income</span>
+                  <span className="text-emerald-600 tabular-nums">{fmt(selectedData.revenue)}</span>
                 </div>
-                <div className="bg-gray-100 dark:bg-gray-800 rounded-full h-5 overflow-hidden">
-                  <div className="bg-green-400 h-full rounded-full transition-all" style={{ width: `${(selectedData.revenue / Math.max(selectedData.revenue, selectedData.expenses, 1)) * 100}%` }} />
+                <div className="bg-slate-200/60 rounded-full h-2.5 overflow-hidden">
+                  <div className="bg-emerald-500 h-full rounded-full transition-all" style={{ width: `${(selectedData.revenue / Math.max(selectedData.revenue, selectedData.expenses, 1)) * 100}%` }} />
                 </div>
               </div>
               <div>
-                <div className="flex justify-between text-sm mb-1">
-                  <span className="text-red-600 font-medium">Outcome</span>
-                  <span className="font-semibold tabular-nums">{fmt(selectedData.expenses)}</span>
+                <div className="flex justify-between text-xs font-bold mb-1">
+                  <span className="text-slate-600">Outcome</span>
+                  <span className="text-rose-600 tabular-nums">{fmt(selectedData.expenses)}</span>
                 </div>
-                <div className="bg-gray-100 dark:bg-gray-800 rounded-full h-5 overflow-hidden">
-                  <div className="bg-red-400 h-full rounded-full transition-all" style={{ width: `${(selectedData.expenses / Math.max(selectedData.revenue, selectedData.expenses, 1)) * 100}%` }} />
+                <div className="bg-slate-200/60 rounded-full h-2.5 overflow-hidden">
+                  <div className="bg-rose-500 h-full rounded-full transition-all" style={{ width: `${(selectedData.expenses / Math.max(selectedData.revenue, selectedData.expenses, 1)) * 100}%` }} />
                 </div>
               </div>
             </div>
           </div>
         ) : (
-          <p className="text-sm text-[var(--color-text-muted)] text-center py-6">No data for this month</p>
+          <p className="text-xs text-slate-400 font-medium text-center py-6">No data for this month</p>
         )}
       </div>
+
 
       <div className="card p-6">
         <h2 className="text-base font-semibold tracking-tight mb-4">Recent Transactions</h2>

@@ -1,9 +1,10 @@
 import { useState, useEffect } from 'react'
 import { getEvents, deleteEvent, completeEvent, sendTemplateEmail } from '../utils/api'
-import { Link } from 'react-router-dom'
-import { Plus, Search, Pencil, Trash2, CheckCircle, Coffee, Mail } from 'lucide-react'
+import { Plus, Search, Pencil, Trash2, CheckCircle } from 'lucide-react'
 import PageHeader from '../components/PageHeader'
 import DataTable from '../components/DataTable'
+import Modal from '../components/Modal'
+import EventForm from './EventForm'
 import { useConfirm } from '../components/ConfirmDialog'
 
 const fmtDate = (d) => d ? new Date(d + 'T00:00:00').toLocaleDateString('en-GB') : '—'
@@ -12,11 +13,11 @@ const statusBadge = (s, featured) => {
   if (featured) return <span className="badge bg-amber-50 text-amber-700 border border-amber-200">Featured</span>
   const map = {
     published: 'badge bg-green-50 text-green-700 border border-green-200',
-    draft: 'badge bg-gray-50 text-gray-600 border border-gray-200',
+    draft: 'badge bg-slate-100 text-slate-600 border border-slate-200',
     cancelled: 'badge bg-red-50 text-red-700 border border-red-200',
     completed: 'badge bg-blue-50 text-blue-700 border border-blue-200',
   }
-  return <span className={map[s] || 'badge bg-[var(--color-bg-alt)] text-[var(--color-text-secondary)]'}>{s}</span>
+  return <span className={map[s] || 'badge bg-slate-100 text-slate-600'}>{s}</span>
 }
 
 export default function Events() {
@@ -24,6 +25,8 @@ export default function Events() {
   const [search, setSearch] = useState('')
   const [loading, setLoading] = useState(true)
   const [statusMsg, setStatusMsg] = useState('')
+  const [isModalOpen, setIsModalOpen] = useState(false)
+  const [editId, setEditId] = useState(null)
   const { confirm, dialog } = useConfirm()
 
   const load = () => {
@@ -31,6 +34,26 @@ export default function Events() {
     getEvents().then(r => setItems(r.data || [])).catch(() => {}).finally(() => setLoading(false))
   }
   useEffect(() => { load() }, [])
+
+  const handleOpenCreate = () => {
+    setEditId(null)
+    setIsModalOpen(true)
+  }
+
+  const handleOpenEdit = (id) => {
+    setEditId(id)
+    setIsModalOpen(true)
+  }
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false)
+    setEditId(null)
+  }
+
+  const handleFormSuccess = () => {
+    handleCloseModal()
+    load()
+  }
 
   const handleDelete = async (id) => {
     const ok = await confirm('Are you sure you want to delete this event? This cannot be undone.', { confirmLabel: 'Delete' })
@@ -50,33 +73,15 @@ export default function Events() {
     }
   }
 
-  const handleSendTemplateEmail = async (eventId, slug) => {
-    const ok = await confirm(`Are you sure you want to send the ${slug.replace('_', ' ')} email to all attendees of this event?`, { confirmLabel: 'Send' })
-    if (!ok) return
-    setStatusMsg('Sending email...')
-    try {
-      const res = await sendTemplateEmail({
-        slug: slug,
-        recipient_type: 'event_attendees',
-        event_id: eventId
-      })
-      setStatusMsg(res.data?.message || 'Emails sent successfully!')
-      setTimeout(() => setStatusMsg(''), 3000)
-    } catch (err) {
-      setStatusMsg('Error: ' + (err.response?.data?.message || err.message))
-      setTimeout(() => setStatusMsg(''), 5000)
-    }
-  }
-
   const filtered = items.filter(e =>
     !search || e.title?.toLowerCase().includes(search.toLowerCase()) || e.location_name?.toLowerCase().includes(search.toLowerCase()))
 
   const columns = [
-    { key: 'title', label: 'Title', render: (row) => <span className="font-semibold text-[var(--color-text)]">{row.title}</span> },
-    { key: 'event_date', label: 'Date', render: (row) => <span className="text-[var(--color-text-secondary)]">{fmtDate(row.event_date)}</span> },
-    { key: 'start_time', label: 'Time', render: (row) => <span className="text-[var(--color-text-secondary)]">{row.start_time}</span> },
-    { key: 'location_name', label: 'Location', render: (row) => <span className="text-[var(--color-text-secondary)]">{row.location_name}</span> },
-    { key: 'price', label: 'Price', render: (row) => <span className="font-medium text-[var(--color-text)]">${row.price}</span> },
+    { key: 'title', label: 'Title', render: (row) => <span className="font-semibold text-slate-800">{row.title}</span> },
+    { key: 'event_date', label: 'Date', render: (row) => <span className="text-slate-500">{fmtDate(row.event_date)}</span> },
+    { key: 'start_time', label: 'Time', render: (row) => <span className="text-slate-500">{row.start_time}</span> },
+    { key: 'location_name', label: 'Location', render: (row) => <span className="text-slate-500">{row.location_name}</span> },
+    { key: 'price', label: 'Price', render: (row) => <span className="font-semibold text-slate-800">${row.price}</span> },
     {
       key: 'status', label: 'Status',
       render: (row) => statusBadge(row.status, row.featured)
@@ -86,14 +91,14 @@ export default function Events() {
       render: (row) => (
         <div className="flex items-center gap-1.5 whitespace-nowrap">
           {row.status === 'published' && (
-            <button onClick={() => handleComplete(row.id)} title="Mark Event as Completed" className="btn-secondary !p-2 text-emerald-600 border-emerald-100 hover:bg-emerald-50/50 rounded-lg transition-colors">
+            <button onClick={() => handleComplete(row.id)} title="Mark Event as Completed" className="p-2 text-emerald-600 bg-emerald-50 hover:bg-emerald-100 rounded-xl transition-colors cursor-pointer border-0">
               <CheckCircle size={15} />
             </button>
           )}
-          <Link to={`/admin/events/${row.id}/edit`} title="Edit Event" className="btn-secondary !p-2 text-indigo-600 border-indigo-100 hover:bg-indigo-50/50 no-underline rounded-lg transition-colors">
+          <button onClick={() => handleOpenEdit(row.id)} title="Edit Event" className="p-2 text-indigo-600 bg-indigo-50 hover:bg-indigo-100 rounded-xl transition-colors cursor-pointer border-0">
             <Pencil size={15} />
-          </Link>
-          <button onClick={() => handleDelete(row.id)} title="Delete Event" className="btn-danger !p-2 rounded-lg transition-colors">
+          </button>
+          <button onClick={() => handleDelete(row.id)} title="Delete Event" className="btn-danger !p-2 rounded-xl transition-colors border-0">
             <Trash2 size={15} />
           </button>
         </div>
@@ -109,21 +114,30 @@ export default function Events() {
         actions={(
           <>
             <div className="relative">
-              <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-[var(--color-text-muted)]" />
+              <Search size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" />
               <input type="text" placeholder="Search events..." value={search} onChange={e => setSearch(e.target.value)}
                 className="!w-56 !pl-9" />
             </div>
-            <Link to="/admin/events/new" className="btn-primary no-underline text-sm"><Plus size={16} /> New Event</Link>
+            <button onClick={handleOpenCreate} className="btn-primary text-xs cursor-pointer border-0">
+              <Plus size={16} strokeWidth={2.5} /> New Event
+            </button>
           </>
         )}
       />
       {statusMsg && (
-        <div className={`mb-6 rounded-lg px-4 py-3 text-sm font-semibold border ${statusMsg.includes('Error') ? 'bg-red-50 text-red-700 border-red-100' : 'bg-blue-50 text-blue-700 border-blue-100'}`}>
+        <div className={`mb-6 rounded-2xl px-4 py-3 text-xs font-semibold border ${statusMsg.includes('Error') ? 'bg-red-50 text-red-700 border-red-100' : 'bg-blue-50 text-blue-700 border-blue-100'}`}>
           {statusMsg}
         </div>
       )}
       <DataTable columns={columns} rows={filtered} loading={loading} emptyMessage="No events found. Create your first event to get started." />
+      
+      {/* Event Form Modal */}
+      <Modal isOpen={isModalOpen} onClose={handleCloseModal} title={editId ? 'Edit Event' : 'Create New Event'} maxWidth="max-w-2xl">
+        <EventForm editId={editId} onSuccess={handleFormSuccess} onCancel={handleCloseModal} />
+      </Modal>
+
       {dialog}
     </div>
   )
 }
+
