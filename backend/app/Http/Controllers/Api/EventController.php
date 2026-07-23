@@ -14,8 +14,6 @@ class EventController extends Controller
     {
         return response()->json(
             Event::with('instructor')
-                ->published()
-                ->upcoming()
                 ->orderBy('event_date')
                 ->orderBy('start_time')
                 ->get()

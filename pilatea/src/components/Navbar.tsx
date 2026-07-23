@@ -8,11 +8,21 @@ import { useAuth } from "@/context/AuthContext";
 
 export function Navbar() {
   const [open, setOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
   const pathname = usePathname();
   const { user, logout } = useAuth();
   const navRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => { setOpen(false); }, [pathname]);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 30);
+    };
+    handleScroll();
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
   useEffect(() => {
     if (!open) return;
@@ -31,10 +41,9 @@ export function Navbar() {
   }
 
   return (
-    <div ref={navRef} className="navbar">
-      <Link href="/" className="brand">
-        <img src="/logo.png" alt="PILATEA" width="40" height="40" className="h-10 w-auto object-contain" />
-        PILATEA
+    <div ref={navRef} className={`navbar ${scrolled ? "scrolled" : ""}`}>
+      <Link href="/" className="brand flex items-center max-w-[90%]">
+        <img src="/pilatea/logo.png?v=2" alt="PILATEA" className="max-w-[90%] w-auto h-auto max-h-[70px] object-contain" />
       </Link>
 
       <div className="nav-links">
@@ -54,12 +63,8 @@ export function Navbar() {
             <button onClick={logout} className="btn-ghost-sm">Logout</button>
           </>
         ) : (
-          <>
-            <Link href="/login" className="btn-ghost-sm">Sign In</Link>
-            <Link href="/register" className="btn-sm">Sign Up</Link>
-          </>
+          <Link href="/login" className="btn-sm">Sign In</Link>
         )}
-        <Link href="/events" className="btn-sm">Book a Session</Link>
       </div>
 
       <button
@@ -93,12 +98,8 @@ export function Navbar() {
               <button onClick={logout} className="btn w-full">Logout</button>
             </>
           ) : (
-            <>
-              <Link href="/register" className="btn w-full">Sign Up</Link>
-              <Link href="/login" className="btn-ghost w-full">Sign In</Link>
-            </>
+            <Link href="/login" className="btn w-full">Sign In</Link>
           )}
-          <Link href="/events" className="btn w-full">Book a Session</Link>
         </div>
       </div>
     </div>
