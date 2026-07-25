@@ -35,7 +35,7 @@ export function Footer() {
         {/* Brand */}
         <div className="relative z-10">
           <div className="flex items-center gap-3">
-            <img src="/logo.png?v=2" alt="PILATEA" width="120" height="60" className="h-[60px] w-auto object-contain brightness-0 invert" />
+            <img src="/logo-cream.svg" alt="PILATEA" width="140" height="70" className="h-[70px] w-auto object-contain" />
           </div>
           <p
             className="mt-4 font-script text-[40px] leading-none text-[#F1EADD]"

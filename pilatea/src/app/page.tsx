@@ -176,7 +176,7 @@ export default function Home() {
                 </div>
 
                 <motion.img
-                  src="/logo.png?v=2"
+                  src="/logo.svg"
                   alt="PILATEA"
                   className="flyer-logo relative z-10"
                   animate={{ y: [0, -3, 0] }}
