@@ -1,7 +1,21 @@
+/**
+ * @file DataTable.jsx
+ * @description Reusable paginated data table component with skeleton loading states, empty state handling, and customizable column renderers.
+ */
+
 import { useState } from 'react'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
 
-export default function DataTable({ columns, rows, emptyMessage, loading, pageSize = 8 }) {
+/**
+ * DataTable Component
+ * @param {Object} props
+ * @param {Array<{key: string, label: string, render?: (row: Object) => React.ReactNode}>} props.columns - Column definitions
+ * @param {Array<Object>} props.rows - Array of data rows
+ * @param {string} [props.emptyMessage] - Custom message displayed when rows are empty
+ * @param {boolean} [props.loading] - Skeleton loader state flag
+ * @param {number} [props.pageSize=10] - Rows displayed per page
+ */
+export default function DataTable({ columns, rows, emptyMessage, loading, pageSize = 10 }) {
   const [currentPage, setCurrentPage] = useState(1)
 
   if (loading) {
@@ -55,21 +69,21 @@ export default function DataTable({ columns, rows, emptyMessage, loading, pageSi
   }
 
   return (
-    <div className="bg-white border border-slate-100 rounded-3xl p-5 sm:p-6 shadow-sm overflow-hidden flex flex-col">
+    <div className="bg-white border border-slate-100/80 rounded-2xl p-4 shadow-sm overflow-hidden flex flex-col">
       <div className="overflow-x-auto">
-        <table className="w-full text-sm border-separate border-spacing-y-2.5">
+        <table className="w-full text-xs border-separate border-spacing-y-1.5">
           <thead>
             <tr>
               {columns.map(col => (
-                <th key={col.key} className="text-left text-[11px] font-extrabold uppercase tracking-wider text-slate-400 px-5 pb-1">{col.label}</th>
+                <th key={col.key} className="text-left text-[10px] font-extrabold uppercase tracking-wider text-slate-400 px-4 pb-1">{col.label}</th>
               ))}
             </tr>
           </thead>
           <tbody>
             {paginatedRows.map((row, i) => (
-              <tr key={row.id || i} className="bg-slate-50/70 hover:bg-slate-100/70 transition-all duration-200 group rounded-2xl">
+              <tr key={row.id || i} className="bg-slate-50/70 hover:bg-slate-100/70 transition-all duration-150 group rounded-xl">
                 {columns.map(col => (
-                  <td key={col.key} className="px-5 py-3.5 text-slate-700 font-semibold text-xs first:rounded-l-2xl last:rounded-r-2xl border-y border-slate-100/80 first:border-l last:border-r">
+                  <td key={col.key} className="px-4 py-2 text-slate-700 font-semibold text-xs first:rounded-l-xl last:rounded-r-xl border-y border-slate-100/80 first:border-l last:border-r">
                     {col.render ? col.render(row) : row[col.key]}
                   </td>
                 ))}
@@ -121,4 +135,3 @@ export default function DataTable({ columns, rows, emptyMessage, loading, pageSi
     </div>
   )
 }
-

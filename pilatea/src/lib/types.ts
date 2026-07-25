@@ -1,3 +1,18 @@
+/**
+ * @file types.ts
+ * @description Strongly-typed TypeScript interface definitions for the Pilatea storefront.
+ */
+
+export interface UserMembership {
+  id?: number;
+  end_date?: string;
+  membership?: {
+    id?: number;
+    name?: string;
+    price?: number;
+  };
+}
+
 export interface User {
   id?: number;
   name?: string;
@@ -6,16 +21,6 @@ export interface User {
   role?: string;
   membership?: UserMembership;
   [key: string]: unknown;
-}
-
-interface UserMembership {
-  id?: number;
-  end_date?: string;
-  membership?: {
-    id?: number;
-    name?: string;
-    price?: number;
-  };
 }
 
 export interface Event {
@@ -54,6 +59,12 @@ export interface Booking {
   [key: string]: unknown;
 }
 
+export interface TeaCategory {
+  id: number;
+  name: string;
+  description?: string;
+}
+
 export interface TeaItem {
   id: number;
   name: string;
@@ -61,7 +72,7 @@ export interface TeaItem {
   image?: string;
   price?: number;
   ingredients?: string;
-  category?: { id: number; name: string };
+  category?: TeaCategory;
   [key: string]: unknown;
 }
 
@@ -76,10 +87,20 @@ export interface MembershipPlan {
   [key: string]: unknown;
 }
 
+export interface Testimonial {
+  id: number;
+  name: string;
+  role?: string;
+  comment: string;
+  rating?: number;
+  is_active?: boolean;
+}
+
 export interface GalleryImage {
   id: number;
   image: string;
   title?: string;
+  caption?: string;
   [key: string]: unknown;
 }
 
@@ -89,4 +110,24 @@ export interface Banner {
   title?: string;
   link?: string;
   [key: string]: unknown;
+}
+
+export interface Instructor {
+  id: number;
+  name: string;
+  bio?: string;
+  photo?: string;
+  specialties?: string;
+}
+
+export interface DiscountValidationResponse {
+  valid: boolean;
+  discount_type?: 'percentage' | 'fixed';
+  value?: number;
+  message?: string;
+}
+
+export interface AuthResponse {
+  token: string;
+  user: User;
 }

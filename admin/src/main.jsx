@@ -1,3 +1,9 @@
+/**
+ * @file main.jsx
+ * @description Entry point for the Pilatea Admin Dashboard application.
+ * Configures client-side React Router navigation routes and renders the primary interactive Dashboard view.
+ */
+
 import { StrictMode, useState, useEffect } from 'react'
 import { createRoot } from 'react-dom/client'
 import { BrowserRouter, Routes, Route, Navigate, Link } from 'react-router-dom'
@@ -76,6 +82,11 @@ createRoot(document.getElementById('root')).render(
   </StrictMode>,
 )
 
+/**
+ * Dashboard Component
+ * Primary landing page view for authenticated studio staff and administrators.
+ * Displays key analytical metric cards, recent booking requests, upcoming events, and quick action shortcuts.
+ */
 function Dashboard() {
   const adminUser = typeof window !== 'undefined' ? JSON.parse(localStorage.getItem('admin_user') || '{}') : {}
   const [stats, setStats] = useState([
@@ -136,37 +147,37 @@ function Dashboard() {
   }
 
   return (
-    <div className="animate-fadeIn space-y-6">
+    <div className="animate-fadeIn space-y-4">
       {/* Welcome Banner */}
-      <div className="flex items-center justify-between bg-gradient-to-r from-slate-900 via-indigo-950 to-slate-900 text-white rounded-[28px] p-6 sm:p-7 shadow-lg">
+      <div className="flex items-center justify-between bg-gradient-to-r from-slate-900 via-indigo-950 to-slate-900 text-white rounded-2xl p-4 sm:p-5 shadow-sm">
         <div>
-          <h2 className="text-xl sm:text-2xl font-extrabold tracking-tight">Welcome back, {adminUser.name || 'Admin'} 👋</h2>
-          <p className="text-xs text-slate-300 mt-1 max-w-xl font-medium">
+          <h2 className="text-lg sm:text-xl font-extrabold tracking-tight">Welcome back, {adminUser.name || 'Admin'} 👋</h2>
+          <p className="text-[11px] text-slate-300 mt-0.5 max-w-xl font-medium">
             Manage your PILATEA studio classes, customer bookings, tea menu, and memberships seamlessly.
           </p>
         </div>
-        <div className="hidden sm:flex items-center gap-3">
-          <button onClick={() => { setSelectedEventId(null); setIsEventModalOpen(true); }} className="btn-primary text-xs cursor-pointer border-0">
-            <Plus size={16} strokeWidth={2.5} /> New Event
+        <div className="hidden sm:flex items-center gap-2">
+          <button onClick={() => { setSelectedEventId(null); setIsEventModalOpen(true); }} className="btn-primary text-xs py-2 px-3 cursor-pointer border-0">
+            <Plus size={14} strokeWidth={2.5} /> New Event
           </button>
         </div>
       </div>
 
       {/* Top Row - 4 Vivid Stat Cards */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
         {stats.map((s, i) => {
           const Icon = s.icon || Package
           return (
-            <div key={i} className={`${s.bg} text-white rounded-[24px] p-5 shadow-lg shadow-purple-500/10 flex items-center gap-4 transition-transform hover:-translate-y-1 duration-200`}>
-              <div className="w-12 h-12 rounded-2xl bg-white/20 backdrop-blur-sm border border-white/20 flex items-center justify-center shrink-0">
-                <Icon size={22} className="text-white" />
+            <div key={i} className={`${s.bg} text-white rounded-2xl p-3.5 shadow-sm flex items-center gap-3 transition-transform hover:-translate-y-0.5 duration-200`}>
+              <div className="w-10 h-10 rounded-xl bg-white/20 backdrop-blur-sm border border-white/20 flex items-center justify-center shrink-0">
+                <Icon size={18} className="text-white" />
               </div>
               <div className="min-w-0">
-                <div className="flex items-center gap-2">
-                  <span className="text-xl sm:text-2xl font-black tabular-nums">{loading ? '...' : s.count}</span>
-                  <span className="text-[11px] font-bold tracking-wider uppercase opacity-90">{s.label}</span>
+                <div className="flex items-center gap-1.5">
+                  <span className="text-lg font-black tabular-nums">{loading ? '...' : s.count}</span>
+                  <span className="text-[10px] font-bold tracking-wider uppercase opacity-90">{s.label}</span>
                 </div>
-                <p className="text-[10px] font-medium opacity-75 mt-0.5 truncate">{s.subtitle}</p>
+                <p className="text-[9px] font-medium opacity-75 truncate">{s.subtitle}</p>
               </div>
             </div>
           )
@@ -174,51 +185,51 @@ function Dashboard() {
       </div>
 
       {/* Middle Row Grid: Recent Bookings Table + Quick Action Shortcuts */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-4">
         {/* Recent Bookings Card (8 Columns) */}
-        <div className="lg:col-span-8 bg-white border border-slate-100/80 rounded-[28px] p-6 shadow-sm flex flex-col justify-between">
+        <div className="lg:col-span-8 bg-white border border-slate-100/80 rounded-2xl p-4 shadow-sm flex flex-col justify-between">
           <div>
-            <div className="flex items-center justify-between mb-4">
+            <div className="flex items-center justify-between mb-3">
               <div>
-                <h2 className="text-base font-bold text-slate-800 tracking-tight">Recent Bookings</h2>
-                <p className="text-xs text-slate-400 font-medium">Click any row to view full details</p>
+                <h2 className="text-sm font-bold text-slate-800 tracking-tight">Recent Bookings</h2>
+                <p className="text-[11px] text-slate-400 font-medium">Click any row to view details</p>
               </div>
-              <Link to="/admin/bookings" className="text-xs font-bold text-cyan-600 hover:text-cyan-700 no-underline">
+              <Link to="/admin/bookings" className="text-[11px] font-bold text-cyan-600 hover:text-cyan-700 no-underline">
                 View All →
               </Link>
             </div>
 
             {/* Table */}
             <div className="overflow-x-auto">
-              <table className="w-full text-left border-separate border-spacing-y-2">
+              <table className="w-full text-left border-separate border-spacing-y-1.5">
                 <thead>
                   <tr>
-                    <th className="text-[11px] font-bold text-slate-400 uppercase tracking-wider px-4 pb-2">REFERENCE</th>
-                    <th className="text-[11px] font-bold text-slate-400 uppercase tracking-wider px-4 pb-2">CUSTOMER</th>
-                    <th className="text-[11px] font-bold text-slate-400 uppercase tracking-wider px-4 pb-2">EVENT</th>
-                    <th className="text-[11px] font-bold text-slate-400 uppercase tracking-wider px-4 pb-2">STATUS</th>
+                    <th className="text-[10px] font-bold text-slate-400 uppercase tracking-wider px-3 pb-1">REF</th>
+                    <th className="text-[10px] font-bold text-slate-400 uppercase tracking-wider px-3 pb-1">CUSTOMER</th>
+                    <th className="text-[10px] font-bold text-slate-400 uppercase tracking-wider px-3 pb-1">EVENT</th>
+                    <th className="text-[10px] font-bold text-slate-400 uppercase tracking-wider px-3 pb-1">STATUS</th>
                   </tr>
                 </thead>
                 <tbody>
                   {loading ? (
-                    [1, 2, 3, 4].map(i => (
-                      <tr key={i} className="bg-slate-50/60 rounded-2xl">
-                        <td className="px-4 py-3.5 first:rounded-l-2xl"><div className="skeleton h-4 w-20 bg-slate-200/60" /></td>
-                        <td className="px-4 py-3.5"><div className="skeleton h-4 w-36 bg-slate-200/60" /></td>
-                        <td className="px-4 py-3.5"><div className="skeleton h-4 w-28 bg-slate-200/60" /></td>
-                        <td className="px-4 py-3.5 last:rounded-r-2xl"><div className="skeleton h-4 w-16 bg-slate-200/60" /></td>
+                    [1, 2, 3].map(i => (
+                      <tr key={i} className="bg-slate-50/60 rounded-xl">
+                        <td className="px-3 py-2 first:rounded-l-xl"><div className="skeleton h-3.5 w-16 bg-slate-200/60" /></td>
+                        <td className="px-3 py-2"><div className="skeleton h-3.5 w-28 bg-slate-200/60" /></td>
+                        <td className="px-3 py-2"><div className="skeleton h-3.5 w-24 bg-slate-200/60" /></td>
+                        <td className="px-3 py-2 last:rounded-r-xl"><div className="skeleton h-3.5 w-14 bg-slate-200/60" /></td>
                       </tr>
                     ))
                   ) : recentBookings.length > 0 ? (
-                    recentBookings.map((b) => (
-                      <tr key={b.id} onClick={() => handleOpenBooking(b.id)} className="bg-slate-50/70 hover:bg-cyan-50/50 transition-all rounded-2xl group cursor-pointer">
-                        <td className="px-4 py-3 text-xs font-bold text-slate-700 first:rounded-l-2xl">
-                          <code className="bg-slate-200/60 px-2 py-0.5 rounded-md text-[11px] text-slate-800">{b.reference || `#${b.id}`}</code>
+                    recentBookings.slice(0, 4).map((b) => (
+                      <tr key={b.id} onClick={() => handleOpenBooking(b.id)} className="bg-slate-50/70 hover:bg-cyan-50/50 transition-all rounded-xl group cursor-pointer">
+                        <td className="px-3 py-2 text-[11px] font-bold text-slate-700 first:rounded-l-xl">
+                          <code className="bg-slate-200/60 px-1.5 py-0.5 rounded text-[10px] text-slate-800">{b.reference || `#${b.id}`}</code>
                         </td>
-                        <td className="px-4 py-3 text-xs font-semibold text-slate-800 truncate max-w-[180px]">{b.name || 'Guest User'}</td>
-                        <td className="px-4 py-3 text-xs font-medium text-slate-500 truncate max-w-[180px]">{b.event?.title || 'Studio Class'}</td>
-                        <td className="px-4 py-3 text-xs last:rounded-r-2xl">
-                          <span className={`badge text-[10px] ${b.payment_status === 'confirmed' ? 'bg-green-50 text-green-700 border border-green-200' : b.payment_status === 'cancelled' ? 'bg-red-50 text-red-700 border border-red-200' : 'bg-blue-50 text-blue-700 border border-blue-200'}`}>
+                        <td className="px-3 py-2 text-[11px] font-semibold text-slate-800 truncate max-w-[150px]">{b.name || 'Guest User'}</td>
+                        <td className="px-3 py-2 text-[11px] font-medium text-slate-500 truncate max-w-[150px]">{b.event?.title || 'Studio Class'}</td>
+                        <td className="px-3 py-2 text-[11px] last:rounded-r-xl">
+                          <span className={`badge text-[9px] py-0.5 px-2 ${b.payment_status === 'confirmed' ? 'bg-green-50 text-green-700 border border-green-200' : b.payment_status === 'cancelled' ? 'bg-red-50 text-red-700 border border-red-200' : 'bg-blue-50 text-blue-700 border border-blue-200'}`}>
                             {b.payment_status || 'pending'}
                           </span>
                         </td>
@@ -226,7 +237,7 @@ function Dashboard() {
                     ))
                   ) : (
                     <tr>
-                      <td colSpan="4" className="text-center py-6 text-xs text-slate-400 font-medium">
+                      <td colSpan="4" className="text-center py-4 text-xs text-slate-400 font-medium">
                         No recent bookings found.
                       </td>
                     </tr>
@@ -238,54 +249,54 @@ function Dashboard() {
         </div>
 
         {/* Quick Shortcuts Card (4 Columns) */}
-        <div className="lg:col-span-4 bg-white border border-slate-100/80 rounded-[28px] p-6 shadow-sm flex flex-col justify-between">
+        <div className="lg:col-span-4 bg-white border border-slate-100/80 rounded-2xl p-4 shadow-sm flex flex-col justify-between">
           <div>
-            <h2 className="text-base font-bold text-slate-800 tracking-tight mb-4">Quick Shortcuts</h2>
+            <h2 className="text-sm font-bold text-slate-800 tracking-tight mb-3">Quick Shortcuts</h2>
 
-            <div className="space-y-3">
-              <button onClick={() => { setSelectedEventId(null); setIsEventModalOpen(true); }} className="w-full text-left p-3.5 bg-purple-50/60 hover:bg-purple-100/60 border border-purple-100 rounded-2xl transition-colors flex items-center justify-between group cursor-pointer">
-                <div className="flex items-center gap-3">
-                  <div className="w-9 h-9 rounded-xl bg-purple-600 text-white flex items-center justify-center shadow-sm">
-                    <Calendar size={18} />
+            <div className="space-y-2">
+              <button onClick={() => { setSelectedEventId(null); setIsEventModalOpen(true); }} className="w-full text-left p-2.5 bg-purple-50/60 hover:bg-purple-100/60 border border-purple-100 rounded-xl transition-colors flex items-center justify-between group cursor-pointer">
+                <div className="flex items-center gap-2.5">
+                  <div className="w-7 h-7 rounded-lg bg-purple-600 text-white flex items-center justify-center shadow-sm">
+                    <Calendar size={14} />
                   </div>
                   <div>
                     <h3 className="text-xs font-bold text-slate-800">New Studio Event</h3>
-                    <p className="text-[10px] text-slate-500 font-medium">Create a class or workshop</p>
+                    <p className="text-[9px] text-slate-500 font-medium">Create class or workshop</p>
                   </div>
                 </div>
-                <ChevronRight size={16} className="text-slate-400 group-hover:translate-x-0.5 transition-transform" />
+                <ChevronRight size={14} className="text-slate-400 group-hover:translate-x-0.5 transition-transform" />
               </button>
 
-              <Link to="/admin/tea-items" className="no-underline w-full text-left p-3.5 bg-cyan-50/60 hover:bg-cyan-100/60 border border-cyan-100 rounded-2xl transition-colors flex items-center justify-between group">
-                <div className="flex items-center gap-3">
-                  <div className="w-9 h-9 rounded-xl bg-cyan-600 text-white flex items-center justify-center shadow-sm">
-                    <Coffee size={18} />
+              <Link to="/admin/tea-items" className="no-underline w-full text-left p-2.5 bg-cyan-50/60 hover:bg-cyan-100/60 border border-cyan-100 rounded-xl transition-colors flex items-center justify-between group">
+                <div className="flex items-center gap-2.5">
+                  <div className="w-7 h-7 rounded-lg bg-cyan-600 text-white flex items-center justify-center shadow-sm">
+                    <Coffee size={14} />
                   </div>
                   <div>
                     <h3 className="text-xs font-bold text-slate-800">Tea Menu Items</h3>
-                    <p className="text-[10px] text-slate-500 font-medium">Manage tea & drinks menu</p>
+                    <p className="text-[9px] text-slate-500 font-medium">Manage tea & drinks menu</p>
                   </div>
                 </div>
-                <ChevronRight size={16} className="text-slate-400 group-hover:translate-x-0.5 transition-transform" />
+                <ChevronRight size={14} className="text-slate-400 group-hover:translate-x-0.5 transition-transform" />
               </Link>
 
-              <Link to="/admin/memberships" className="no-underline w-full text-left p-3.5 bg-amber-50/60 hover:bg-amber-100/60 border border-amber-100 rounded-2xl transition-colors flex items-center justify-between group">
-                <div className="flex items-center gap-3">
-                  <div className="w-9 h-9 rounded-xl bg-amber-600 text-white flex items-center justify-center shadow-sm">
-                    <Award size={18} />
+              <Link to="/admin/memberships" className="no-underline w-full text-left p-2.5 bg-amber-50/60 hover:bg-amber-100/60 border border-amber-100 rounded-xl transition-colors flex items-center justify-between group">
+                <div className="flex items-center gap-2.5">
+                  <div className="w-7 h-7 rounded-lg bg-amber-600 text-white flex items-center justify-center shadow-sm">
+                    <Award size={14} />
                   </div>
                   <div>
                     <h3 className="text-xs font-bold text-slate-800">Membership Plans</h3>
-                    <p className="text-[10px] text-slate-500 font-medium">Configure packages & plans</p>
+                    <p className="text-[9px] text-slate-500 font-medium">Configure packages & plans</p>
                   </div>
                 </div>
-                <ChevronRight size={16} className="text-slate-400 group-hover:translate-x-0.5 transition-transform" />
+                <ChevronRight size={14} className="text-slate-400 group-hover:translate-x-0.5 transition-transform" />
               </Link>
             </div>
           </div>
 
-          <div className="pt-4 text-center border-t border-slate-50 mt-4">
-            <Link to="/admin/settings" className="text-xs font-extrabold text-slate-500 hover:text-slate-700 no-underline">
+          <div className="pt-2 text-center border-t border-slate-50 mt-3">
+            <Link to="/admin/settings" className="text-[11px] font-extrabold text-slate-500 hover:text-slate-700 no-underline">
               Studio Settings →
             </Link>
           </div>
@@ -293,56 +304,56 @@ function Dashboard() {
       </div>
 
       {/* Bottom Row Grid: Upcoming Events List + Analytics Donut Chart */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-4">
         {/* Upcoming Events Card (8 Columns) */}
-        <div className="lg:col-span-8 bg-white border border-slate-100/80 rounded-[28px] p-6 shadow-sm">
-          <div className="flex items-center justify-between mb-4">
+        <div className="lg:col-span-8 bg-white border border-slate-100/80 rounded-2xl p-4 shadow-sm">
+          <div className="flex items-center justify-between mb-3">
             <div>
-              <h2 className="text-base font-bold text-slate-800 tracking-tight">Upcoming Studio Events</h2>
-              <p className="text-xs text-slate-400 font-medium">Click to edit or update event details</p>
+              <h2 className="text-sm font-bold text-slate-800 tracking-tight">Upcoming Studio Events</h2>
+              <p className="text-[11px] text-slate-400 font-medium">Click to view details</p>
             </div>
-            <Link to="/admin/events" className="text-xs font-bold text-cyan-600 hover:text-cyan-700 no-underline">
+            <Link to="/admin/events" className="text-[11px] font-bold text-cyan-600 hover:text-cyan-700 no-underline">
               View All →
             </Link>
           </div>
 
           <div className="overflow-x-auto">
-            <table className="w-full text-left border-separate border-spacing-y-2">
+            <table className="w-full text-left border-separate border-spacing-y-1.5">
               <thead>
                 <tr>
-                  <th className="text-[11px] font-bold text-slate-400 uppercase tracking-wider px-4 pb-2">TITLE</th>
-                  <th className="text-[11px] font-bold text-slate-400 uppercase tracking-wider px-4 pb-2">LOCATION</th>
-                  <th className="text-[11px] font-bold text-slate-400 uppercase tracking-wider px-4 pb-2">CAPACITY</th>
-                  <th className="text-[11px] font-bold text-slate-400 uppercase tracking-wider px-4 pb-2">PRICE</th>
+                  <th className="text-[10px] font-bold text-slate-400 uppercase tracking-wider px-3 pb-1">TITLE</th>
+                  <th className="text-[10px] font-bold text-slate-400 uppercase tracking-wider px-3 pb-1">LOCATION</th>
+                  <th className="text-[10px] font-bold text-slate-400 uppercase tracking-wider px-3 pb-1">CAPACITY</th>
+                  <th className="text-[10px] font-bold text-slate-400 uppercase tracking-wider px-3 pb-1">PRICE</th>
                 </tr>
               </thead>
               <tbody>
                 {loading ? (
                   [1, 2, 3].map(i => (
-                    <tr key={i} className="bg-slate-50/60 rounded-2xl">
-                      <td className="px-4 py-3.5 first:rounded-l-2xl"><div className="skeleton h-4 w-32 bg-slate-200/60" /></td>
-                      <td className="px-4 py-3.5"><div className="skeleton h-4 w-24 bg-slate-200/60" /></td>
-                      <td className="px-4 py-3.5"><div className="skeleton h-4 w-16 bg-slate-200/60" /></td>
-                      <td className="px-4 py-3.5 last:rounded-r-2xl"><div className="skeleton h-4 w-16 bg-slate-200/60" /></td>
+                    <tr key={i} className="bg-slate-50/60 rounded-xl">
+                      <td className="px-3 py-2 first:rounded-l-xl"><div className="skeleton h-3.5 w-28 bg-slate-200/60" /></td>
+                      <td className="px-3 py-2"><div className="skeleton h-3.5 w-20 bg-slate-200/60" /></td>
+                      <td className="px-3 py-2"><div className="skeleton h-3.5 w-14 bg-slate-200/60" /></td>
+                      <td className="px-3 py-2 last:rounded-r-xl"><div className="skeleton h-3.5 w-12 bg-slate-200/60" /></td>
                     </tr>
                   ))
                 ) : recentEvents.length > 0 ? (
-                  recentEvents.map((ev) => (
-                    <tr key={ev.id} onClick={() => handleOpenEvent(ev.id)} className="bg-slate-50/70 hover:bg-indigo-50/50 transition-all rounded-2xl group cursor-pointer">
-                      <td className="px-4 py-3 text-xs font-bold text-slate-800 first:rounded-l-2xl flex items-center gap-3">
-                        <div className="w-7 h-7 rounded-xl bg-purple-100 text-purple-700 flex items-center justify-center font-bold text-xs">
-                          <Calendar size={14} />
+                  recentEvents.slice(0, 3).map((ev) => (
+                    <tr key={ev.id} onClick={() => handleOpenEvent(ev.id)} className="bg-slate-50/70 hover:bg-indigo-50/50 transition-all rounded-xl group cursor-pointer">
+                      <td className="px-3 py-2 text-[11px] font-bold text-slate-800 first:rounded-l-xl flex items-center gap-2">
+                        <div className="w-6 h-6 rounded-lg bg-purple-100 text-purple-700 flex items-center justify-center font-bold text-xs shrink-0">
+                          <Calendar size={12} />
                         </div>
-                        <span>{ev.title}</span>
+                        <span className="truncate max-w-[160px]">{ev.title}</span>
                       </td>
-                      <td className="px-4 py-3 text-xs font-medium text-slate-500 truncate max-w-[150px]">{ev.location_name || 'Studio'}</td>
-                      <td className="px-4 py-3 text-xs font-semibold text-slate-700">{ev.capacity || 20} spots</td>
-                      <td className="px-4 py-3 text-xs font-bold text-slate-900 last:rounded-r-2xl">${ev.price}</td>
+                      <td className="px-3 py-2 text-[11px] font-medium text-slate-500 truncate max-w-[130px]">{ev.location_name || 'Studio'}</td>
+                      <td className="px-3 py-2 text-[11px] font-semibold text-slate-700">{ev.capacity || 20} spots</td>
+                      <td className="px-3 py-2 text-[11px] font-bold text-slate-900 last:rounded-r-xl">${ev.price}</td>
                     </tr>
                   ))
                 ) : (
                   <tr>
-                    <td colSpan="4" className="text-center py-6 text-xs text-slate-400 font-medium">
+                    <td colSpan="4" className="text-center py-4 text-xs text-slate-400 font-medium">
                       No events scheduled yet.
                     </td>
                   </tr>
@@ -353,10 +364,10 @@ function Dashboard() {
         </div>
 
         {/* Doughnut Chart Analytics Right Card (4 Columns) */}
-        <div className="lg:col-span-4 bg-white border border-slate-100/80 rounded-[28px] p-6 shadow-sm flex flex-col items-center justify-center text-center">
-          <h2 className="text-xs font-extrabold uppercase tracking-wider text-slate-400 mb-2">Booking Status Breakdown</h2>
+        <div className="lg:col-span-4 bg-white border border-slate-100/80 rounded-2xl p-4 shadow-sm flex flex-col items-center justify-center text-center">
+          <h2 className="text-[10px] font-extrabold uppercase tracking-wider text-slate-400 mb-1">Booking Status Breakdown</h2>
           
-          <div className="relative w-36 h-36 flex items-center justify-center my-2">
+          <div className="relative w-28 h-28 flex items-center justify-center my-1">
             <svg className="w-full h-full transform -rotate-90" viewBox="0 0 36 36">
               <path
                 className="text-slate-100"
@@ -386,18 +397,18 @@ function Dashboard() {
               />
             </svg>
             <div className="absolute inset-0 flex flex-col items-center justify-center">
-              <span className="text-xl font-black text-slate-800">{confirmedPercent}%</span>
-              <span className="text-[9px] font-bold text-slate-400 uppercase">Confirmed</span>
+              <span className="text-lg font-black text-slate-800">{confirmedPercent}%</span>
+              <span className="text-[8px] font-bold text-slate-400 uppercase">Confirmed</span>
             </div>
           </div>
 
-          <div className="flex items-center gap-5 mt-3 text-[11px] font-bold text-slate-500">
-            <div className="flex items-center gap-1.5">
-              <span className="w-2.5 h-2.5 rounded-full bg-[#7963F0]" />
+          <div className="flex items-center gap-4 mt-2 text-[10px] font-bold text-slate-500">
+            <div className="flex items-center gap-1">
+              <span className="w-2 h-2 rounded-full bg-[#7963F0]" />
               <span>Confirmed ({confirmedPercent}%)</span>
             </div>
-            <div className="flex items-center gap-1.5">
-              <span className="w-2.5 h-2.5 rounded-full bg-[#00D2FF]" />
+            <div className="flex items-center gap-1">
+              <span className="w-2 h-2 rounded-full bg-[#00D2FF]" />
               <span>Other ({100 - confirmedPercent}%)</span>
             </div>
           </div>

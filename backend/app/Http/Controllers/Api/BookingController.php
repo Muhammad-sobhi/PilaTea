@@ -7,11 +7,26 @@ use App\Models\Booking;
 use App\Models\Event;
 use App\Models\DiscountCode;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Laravel\Sanctum\PersonalAccessToken;
 
 class BookingController extends Controller
 {
+    /**
+     * Resolve authenticated user model from Bearer token if provided.
+     */
+    private function resolveUserFromBearerToken(Request $request)
+    {
+        if ($token = $request->bearerToken()) {
+            $accessToken = PersonalAccessToken::findToken($token);
+            if ($accessToken) {
+                return $accessToken->tokenable;
+            }
+        }
+        return null;
+    }
+
     public function index()
     {
         return response()->json(
@@ -34,67 +49,65 @@ class BookingController extends Controller
             'tax_rate' => 'nullable|numeric|min:0|max:100',
         ]);
 
-        $user = null;
-        if ($token = $request->bearerToken()) {
-            $accessToken = PersonalAccessToken::findToken($token);
-            if ($accessToken) {
-                $user = $accessToken->tokenable;
-            }
-        }
+        $user = $this->resolveUserFromBearerToken($request);
         if ($user) {
             $data['user_id'] = $user->id;
         }
 
-        $event = Event::findOrFail($data['event_id']);
-        $isByo = !empty($data['is_byo']);
+        return DB::transaction(function () use ($data, $request) {
+            // Lock event row for update to avoid concurrency race conditions
+            $event = Event::where('id', $data['event_id'])->lockForUpdate()->firstOrFail();
+            $isByo = !empty($data['is_byo']);
 
-        if ($isByo) {
-            if (!$event->byo_enabled) {
-                return response()->json(['message' => 'BYO is not enabled for this event'], 422);
-            }
-            if ($event->byo_spots_remaining < $data['spots_booked']) {
-                return response()->json(['message' => 'Not enough BYO spots available'], 422);
-            }
-            $pricePerSpot = $event->byo_price ?? $event->price;
-        } else {
-            if ($event->spots_remaining < $data['spots_booked']) {
-                return response()->json(['message' => 'Not enough spots available'], 422);
-            }
-            $pricePerSpot = $event->price;
-        }
-
-        $totalPrice = $pricePerSpot * $data['spots_booked'];
-
-        if (!empty($data['discount_code'])) {
-            $discount = DiscountCode::where('code', $data['discount_code'])
-                ->where('active', true)
-                ->first();
-
-            if ($discount && (!$discount->max_uses || $discount->used_count < $discount->max_uses)) {
-                if ($discount->discount_type === 'percentage') {
-                    $totalPrice -= ($totalPrice * $discount->value / 100);
-                } else {
-                    $totalPrice -= $discount->value;
+            if ($isByo) {
+                if (!$event->byo_enabled) {
+                    return response()->json(['message' => 'BYO is not enabled for this event'], 422);
                 }
-                $totalPrice = max(0, $totalPrice);
-                $discount->increment('used_count');
+                if ($event->byo_spots_remaining < $data['spots_booked']) {
+                    return response()->json(['message' => 'Not enough BYO spots available'], 422);
+                }
+                $pricePerSpot = $event->byo_price ?? $event->price;
+            } else {
+                if ($event->spots_remaining < $data['spots_booked']) {
+                    return response()->json(['message' => 'Not enough spots available'], 422);
+                }
+                $pricePerSpot = $event->price;
             }
-        }
 
-        $data['total_price'] = $totalPrice;
-        $data['tax_rate'] = (float)($request->input('tax_rate', 0));
-        $data['reference'] = 'PLT-' . strtoupper(Str::random(8));
-        $data['payment_status'] = ($data['payment_method'] ?? '') === 'pay_on_arrival' ? 'pay_on_arrival' : 'pending';
+            $totalPrice = $pricePerSpot * $data['spots_booked'];
 
-        $booking = Booking::create($data);
+            if (!empty($data['discount_code'])) {
+                $discount = DiscountCode::where('code', $data['discount_code'])
+                    ->where('active', true)
+                    ->lockForUpdate()
+                    ->first();
 
-        if ($isByo) {
-            $event->decrement('byo_spots_remaining', $data['spots_booked']);
-        } else {
-            $event->decrement('spots_remaining', $data['spots_booked']);
-        }
+                if ($discount && (!$discount->max_uses || $discount->used_count < $discount->max_uses)) {
+                    if ($discount->discount_type === 'percentage') {
+                        $totalPrice -= ($totalPrice * $discount->value / 100);
+                    } else {
+                        $totalPrice -= $discount->value;
+                    }
+                    $totalPrice = max(0, $totalPrice);
+                    $discount->increment('used_count');
+                }
+            }
 
-        return response()->json($booking->load('user'), 201);
+            $data['total_price'] = $totalPrice;
+            $data['tax_rate'] = (float)($request->input('tax_rate', 0));
+            $data['reference'] = 'PLT-' . strtoupper(Str::random(8));
+            $data['payment_status'] = ($data['payment_method'] ?? '') === 'pay_on_arrival' ? 'pay_on_arrival' : 'pending';
+
+            $booking = Booking::create($data);
+
+            if ($isByo) {
+                $event->decrement('byo_spots_remaining', $data['spots_booked']);
+            } else {
+                $event->decrement('spots_remaining', $data['spots_booked']);
+            }
+
+            return response()->json($booking->load('user'), 201);
+        });
     }
 
     public function show($id)
@@ -122,13 +135,7 @@ class BookingController extends Controller
 
     public function checkExisting(Request $request, $eventId)
     {
-        $user = null;
-        if ($token = $request->bearerToken()) {
-            $accessToken = PersonalAccessToken::findToken($token);
-            if ($accessToken) {
-                $user = $accessToken->tokenable;
-            }
-        }
+        $user = $this->resolveUserFromBearerToken($request);
         if (!$user) {
             return response()->json(['booking' => null]);
         }
@@ -143,13 +150,7 @@ class BookingController extends Controller
 
     public function myBookings(Request $request)
     {
-        $user = null;
-        if ($token = $request->bearerToken()) {
-            $accessToken = PersonalAccessToken::findToken($token);
-            if ($accessToken) {
-                $user = $accessToken->tokenable;
-            }
-        }
+        $user = $this->resolveUserFromBearerToken($request);
         if (!$user) {
             return response()->json(['message' => 'Unauthenticated'], 401);
         }
@@ -169,34 +170,30 @@ class BookingController extends Controller
             'payment_method' => 'nullable|string|in:card,pay_on_arrival',
         ]);
 
-        $user = null;
-        if ($token = $request->bearerToken()) {
-            $accessToken = PersonalAccessToken::findToken($token);
-            if ($accessToken) {
-                $user = $accessToken->tokenable;
+        $user = $this->resolveUserFromBearerToken($request);
+
+        return DB::transaction(function () use ($data, $user, $id) {
+            $booking = Booking::where('id', $id)->lockForUpdate()->firstOrFail();
+
+            if (!$user || $booking->user_id !== $user->id) {
+                return response()->json(['message' => 'Unauthorized'], 403);
             }
-        }
 
-        $booking = Booking::findOrFail($id);
+            $event = Event::where('id', $booking->event_id)->lockForUpdate()->firstOrFail();
 
-        if (!$user || $booking->user_id !== $user->id) {
-            return response()->json(['message' => 'Unauthorized'], 403);
-        }
+            if ($event->spots_remaining < $data['additional_spots']) {
+                return response()->json(['message' => 'Not enough spots available'], 422);
+            }
 
-        $event = Event::findOrFail($booking->event_id);
+            $booking->spots_booked += $data['additional_spots'];
+            $booking->total_price = $event->price * $booking->spots_booked;
+            $booking->payment_method = $data['payment_method'] ?? $booking->payment_method;
+            $booking->payment_status = ($data['payment_method'] ?? '') === 'pay_on_arrival' ? 'pay_on_arrival' : 'pending';
+            $booking->save();
 
-        if ($event->spots_remaining < $data['additional_spots']) {
-            return response()->json(['message' => 'Not enough spots available'], 422);
-        }
+            $event->decrement('spots_remaining', $data['additional_spots']);
 
-        $booking->spots_booked += $data['additional_spots'];
-        $booking->total_price = $event->price * $booking->spots_booked;
-        $booking->payment_method = $data['payment_method'] ?? $booking->payment_method;
-        $booking->payment_status = ($data['payment_method'] ?? '') === 'pay_on_arrival' ? 'pay_on_arrival' : 'pending';
-        $booking->save();
-
-        $event->decrement('spots_remaining', $data['additional_spots']);
-
-        return response()->json($booking->load('event'));
+            return response()->json($booking->load('event'));
+        });
     }
 }

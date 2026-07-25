@@ -129,7 +129,7 @@ export default function Home() {
           {/* Top lake photo section */}
           <div
             className="flyer-photo-section"
-            style={{ backgroundImage: `url('/pilatea/hero-background.png?v=5')`, backgroundPosition: 'center 60%' }}
+            style={{ backgroundImage: `url('/hero-background.png?v=5')`, backgroundPosition: 'center 60%' }}
           >
             {/* Spots Available Badge on top right */}
             <div className="flyer-spots-badge">
@@ -176,7 +176,7 @@ export default function Home() {
                 </div>
 
                 <motion.img
-                  src="/pilatea/logo.png?v=2"
+                  src="/logo.png?v=2"
                   alt="PILATEA"
                   className="flyer-logo relative z-10"
                   animate={{ y: [0, -3, 0] }}
@@ -313,19 +313,19 @@ export default function Home() {
             ) : (
               <div className="tea-items-grid mt-6">
                 <div className="tea-card-item">
-                  <img src="/pilatea/calm-bloom.png" alt="Calm Bloom" />
+                  <img src="/calm-bloom.png" alt="Calm Bloom" />
                   <strong>CALM BLOOM</strong>
                   <p>Lavender, Chamomile, Rose, Lemon Balm</p>
                   <span className="tea-price">$6</span>
                 </div>
                 <div className="tea-card-item">
-                  <img src="/pilatea/matcha-glow.png" alt="Matcha Glow" />
+                  <img src="/matcha-glow.png" alt="Matcha Glow" />
                   <strong>MATCHA GLOW</strong>
                   <p>Ceremonial Matcha, Oat Milk, Vanilla</p>
                   <span className="tea-price">$7</span>
                 </div>
                 <div className="tea-card-item">
-                  <img src="/pilatea/berry-balance.png" alt="Berry Balance" />
+                  <img src="/berry-balance.png" alt="Berry Balance" />
                   <strong>BERRY BALANCE</strong>
                   <p>Hibiscus, Mixed Berries, Mint, Lemon</p>
                   <span className="tea-price">$8</span>
@@ -365,7 +365,7 @@ export default function Home() {
         <ScrollReveal>
           <section className="go-section">
             <div className="go-image-wrapper">
-              <img src={signatureBgUrl || "hero-background.png"} alt="Pilates on the Go" />
+              <img src={signatureBgUrl || "/hero-background.png"} alt="Pilates on the Go" />
             </div>
             <div className="go-content">
               <p className="go-label">{s("signature_label", "OUR SIGNATURE EXPERIENCE")}</p>

@@ -1,5 +1,20 @@
+/**
+ * @file ConfirmDialog.jsx
+ * @description Confirmation modal dialog component and reusable custom hook for user action confirmation (deleting, status changes).
+ */
+
 import { useState } from 'react'
 
+/**
+ * ConfirmDialog Component
+ * @param {Object} props
+ * @param {boolean} props.open - Modal display trigger state
+ * @param {string} [props.title='Confirm'] - Dialog title header
+ * @param {string} props.message - Descriptive text asking user to confirm action
+ * @param {Function} props.onConfirm - Action callback on positive confirmation
+ * @param {Function} props.onCancel - Cancellation callback
+ * @param {string} [props.confirmLabel='Confirm'] - Button label text
+ */
 export default function ConfirmDialog({ open, title, message, onConfirm, onCancel, confirmLabel }) {
   if (!open) return null
   return (
@@ -16,6 +31,10 @@ export default function ConfirmDialog({ open, title, message, onConfirm, onCance
   )
 }
 
+/**
+ * Custom React Hook for triggering promise-based confirmation dialogs programmatically.
+ * @returns {{ confirm: (message: string, opts?: Object) => Promise<boolean>, dialog: JSX.Element }}
+ */
 export function useConfirm() {
   const [state, setState] = useState({ open: false, title: '', message: '', resolve: null, confirmLabel: '' })
 

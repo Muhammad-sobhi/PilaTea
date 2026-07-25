@@ -1,7 +1,6 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  basePath: "/pilatea",
   images: {
     remotePatterns: [
       { protocol: "https", hostname: "picsum.photos" },

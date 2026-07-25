@@ -1,5 +1,19 @@
+/**
+ * @file Modal.jsx
+ * @description Reusable popup Modal dialog component with backdrop blur and customizable width.
+ */
+
 import { X } from 'lucide-react'
 
+/**
+ * Modal Component
+ * @param {Object} props
+ * @param {boolean} props.isOpen - Controls modal visibility state
+ * @param {Function} props.onClose - Callback triggered when closing the modal
+ * @param {string} props.title - Modal title header text
+ * @param {React.ReactNode} props.children - Modal content elements
+ * @param {string} [props.maxWidth='max-w-2xl'] - Tailwind max-width CSS utility class
+ */
 export default function Modal({ isOpen, onClose, title, children, maxWidth = 'max-w-2xl' }) {
   if (!isOpen) return null
 

@@ -47,7 +47,7 @@ Route::post('auth/logout', [AuthController::class, 'logout'])->middleware('auth:
 Route::get('auth/user', [AuthController::class, 'user'])->middleware('auth:sanctum');
 
 // Admin routes (protected)
-Route::middleware('auth:sanctum')->prefix('admin')->group(function () {
+Route::middleware(['auth:sanctum', 'role:admin,employee'])->prefix('admin')->group(function () {
     Route::get('email-templates', [EmailTemplateController::class, 'index']);
     Route::get('email-templates/{slug}', [EmailTemplateController::class, 'show']);
     Route::post('email-templates/{slug}', [EmailTemplateController::class, 'update']);

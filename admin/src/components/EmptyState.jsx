@@ -1,3 +1,16 @@
+/**
+ * @file EmptyState.jsx
+ * @description Card container component displayed when table rows or data collections are empty.
+ */
+
+/**
+ * EmptyState Component
+ * @param {Object} props
+ * @param {React.ComponentType} [props.icon] - Lucide UI Icon component
+ * @param {string} props.title - Main headline message
+ * @param {string} [props.description] - Additional explanatory context
+ * @param {React.ReactNode} [props.action] - Optional call-to-action button or link
+ */
 export default function EmptyState({ icon: Icon, title, description, action }) {
   return (
     <div className="flex flex-col items-center justify-center py-16 px-6 card">

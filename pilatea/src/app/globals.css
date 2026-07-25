@@ -1849,7 +1849,7 @@ button:active {
   position: relative;
   width: 100%;
   min-height: 150vh;
-  background: url('/pilatea/hero-background.png?v=5') center top / cover no-repeat;
+  background: url('/hero-background.png?v=5') center top / cover no-repeat;
   display: flex;
   align-items: flex-start;
   justify-content: center;
