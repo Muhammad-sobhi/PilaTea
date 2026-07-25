@@ -31,6 +31,7 @@ class BookingController extends Controller
             'discount_code' => 'nullable|string|exists:discount_codes,code',
             'notes' => 'nullable|string',
             'is_byo' => 'nullable|boolean',
+            'tax_rate' => 'nullable|numeric|min:0|max:100',
         ]);
 
         $user = null;
@@ -81,6 +82,7 @@ class BookingController extends Controller
         }
 
         $data['total_price'] = $totalPrice;
+        $data['tax_rate'] = (float)($request->input('tax_rate', 0));
         $data['reference'] = 'PLT-' . strtoupper(Str::random(8));
         $data['payment_status'] = ($data['payment_method'] ?? '') === 'pay_on_arrival' ? 'pay_on_arrival' : 'pending';
 
@@ -103,7 +105,7 @@ class BookingController extends Controller
     public function update(Request $request, $id)
     {
         $booking = Booking::findOrFail($id);
-        $booking->update($request->only('payment_status', 'notes'));
+        $booking->update($request->only('payment_status', 'notes', 'tax_rate'));
         return response()->json($booking);
     }
 

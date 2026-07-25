@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
-import { getBookings, deleteBooking, sendTemplateEmail } from '../utils/api'
+import { getBookings, deleteBooking, downloadBookingInvoice, sendBookingInvoice } from '../utils/api'
 import { Link } from 'react-router-dom'
-import { Search, Eye, Trash2, Coffee, Mail } from 'lucide-react'
+import { Search, Eye, Trash2, Coffee, Download, Mail } from 'lucide-react'
 import PageHeader from '../components/PageHeader'
 import DataTable from '../components/DataTable'
 import Modal from '../components/Modal'
@@ -26,6 +26,7 @@ export default function Bookings() {
   const [loading, setLoading] = useState(true)
   const [selectedBookingId, setSelectedBookingId] = useState(null)
   const [isModalOpen, setIsModalOpen] = useState(false)
+  const [sendingId, setSendingId] = useState(null)
   const { confirm, dialog } = useConfirm()
 
   const load = () => {
@@ -55,6 +56,34 @@ export default function Bookings() {
     load()
   }
 
+  const handleDownloadPdf = async (row) => {
+    try {
+      const res = await downloadBookingInvoice(row.id)
+      const url = window.URL.createObjectURL(new Blob([res.data], { type: 'application/pdf' }))
+      const link = document.createElement('a')
+      link.href = url
+      link.setAttribute('download', `Invoice_${row.reference}.pdf`)
+      document.body.appendChild(link)
+      link.click()
+      link.remove()
+    } catch (err) {
+      setStatusMsg('Error downloading PDF invoice.')
+    }
+  }
+
+  const handleSendEmail = async (row) => {
+    setSendingId(row.id)
+    setStatusMsg('')
+    try {
+      const res = await sendBookingInvoice(row.id)
+      setStatusMsg(res.data?.message || 'Invoice sent successfully!')
+    } catch (err) {
+      setStatusMsg('Error sending invoice email.')
+    } finally {
+      setSendingId(null)
+    }
+  }
+
   const filtered = items.filter(b =>
     !search || b.name?.toLowerCase().includes(search.toLowerCase()) || b.email?.toLowerCase().includes(search.toLowerCase()) || b.reference?.toLowerCase().includes(search.toLowerCase()))
 
@@ -76,6 +105,12 @@ export default function Bookings() {
           <Link to={`/admin/bookings/${row.id}/drinks`} title="Manage Drinks" className="p-2 text-sky-600 bg-sky-50 hover:bg-sky-100 rounded-xl transition-colors cursor-pointer border-0 no-underline">
             <Coffee size={15} />
           </Link>
+          <button onClick={() => handleDownloadPdf(row)} title="Download PDF Invoice" className="p-2 text-purple-600 bg-purple-50 hover:bg-purple-100 rounded-xl transition-colors cursor-pointer border-0">
+            <Download size={15} />
+          </button>
+          <button onClick={() => handleSendEmail(row)} disabled={sendingId === row.id} title="Email Invoice to Attendee" className="p-2 text-emerald-600 bg-emerald-50 hover:bg-emerald-100 rounded-xl transition-colors cursor-pointer border-0">
+            <Mail size={15} />
+          </button>
           <button onClick={() => handleDelete(row.id)} title="Delete Booking" className="btn-danger !p-2 rounded-xl transition-colors border-0">
             <Trash2 size={15} />
           </button>
@@ -86,7 +121,7 @@ export default function Bookings() {
 
   return (
     <div className="animate-fadeIn">
-      <PageHeader title="Bookings" description="View and manage customer bookings"
+      <PageHeader title="Bookings" description="View and manage customer bookings & invoices"
         actions={(
           <div className="relative">
             <Search size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" />
@@ -94,7 +129,7 @@ export default function Bookings() {
           </div>
         )} />
       {statusMsg && (
-        <div className={`mb-6 rounded-2xl px-4 py-3 text-xs font-semibold border ${statusMsg.includes('Error') ? 'bg-red-50 text-red-700 border-red-100' : 'bg-blue-50 text-blue-700 border-blue-100'}`}>
+        <div className={`mb-6 rounded-2xl px-4 py-3 text-xs font-semibold border ${statusMsg.includes('Error') ? 'bg-red-50 text-red-700 border-red-100' : 'bg-purple-50 text-purple-700 border-purple-100'}`}>
           {statusMsg}
         </div>
       )}

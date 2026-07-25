@@ -8,7 +8,7 @@ class Booking extends Model
 {
     protected $fillable = [
         'event_id', 'user_id', 'name', 'email', 'phone', 'spots_booked',
-        'total_price', 'payment_status', 'payment_method', 'discount_code',
+        'total_price', 'tax_rate', 'payment_status', 'payment_method', 'discount_code',
         'notes', 'reference', 'is_byo',
     ];
 
@@ -16,6 +16,7 @@ class Booking extends Model
     {
         return [
             'total_price' => 'decimal:2',
+            'tax_rate' => 'decimal:2',
             'is_byo' => 'boolean',
         ];
     }

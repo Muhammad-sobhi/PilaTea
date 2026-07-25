@@ -144,3 +144,6 @@ export const updateEmailTemplate = (slug, data) => api.post(`/admin/email-templa
 });
 export const previewEmailTemplate = (slug) => api.get(`/admin/email-templates/${slug}/preview`);
 export const sendTemplateEmail = (data) => api.post('/admin/email-templates/send', data);
+
+export const downloadBookingInvoice = (bookingId) => api.get('/admin/bookings/' + bookingId + '/invoice/download', { responseType: 'blob' });
+export const sendBookingInvoice = (bookingId) => api.post('/admin/bookings/' + bookingId + '/invoice/send');

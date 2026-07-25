@@ -153,3 +153,10 @@ Route::middleware('auth:sanctum')->prefix('admin')->group(function () {
     Route::delete('expenses/{id}', [ExpenseController::class, 'destroy']);
     Route::get('finance/summary', [FinanceController::class, 'summary']);
 });
+
+// Invoice routes for PilaTea Studio
+use App\Http\Controllers\Api\InvoiceController;
+Route::middleware('auth:sanctum')->prefix('admin')->group(function () {
+    Route::get('bookings/{id}/invoice/download', [InvoiceController::class, 'download']);
+    Route::post('bookings/{id}/invoice/send', [InvoiceController::class, 'send']);
+});
