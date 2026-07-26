@@ -157,6 +157,8 @@ Route::middleware(['auth:sanctum', 'role:admin,employee'])->prefix('admin')->gro
 // Invoice routes for PilaTea Studio
 use App\Http\Controllers\Api\InvoiceController;
 Route::middleware('auth:sanctum')->prefix('admin')->group(function () {
+    Route::get('bookings/{id}/invoice', [InvoiceController::class, 'download']);
     Route::get('bookings/{id}/invoice/download', [InvoiceController::class, 'download']);
+    Route::post('bookings/{id}/send-invoice', [InvoiceController::class, 'send']);
     Route::post('bookings/{id}/invoice/send', [InvoiceController::class, 'send']);
 });
