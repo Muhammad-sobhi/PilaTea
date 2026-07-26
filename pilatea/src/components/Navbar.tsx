@@ -42,8 +42,12 @@ export function Navbar() {
 
   return (
     <div ref={navRef} className={`navbar ${scrolled ? "scrolled" : ""}`}>
-      <Link href="/" className="brand flex items-center max-w-[90%]">
-        <img src="/logo.svg" alt="PILATEA" className="max-w-[90%] w-auto h-auto max-h-[70px] object-contain" />
+      <Link href="/" className="brand flex items-center shrink-0">
+        <img
+          src={scrolled ? "/logo-cream.png" : "/logo.png"}
+          alt="PILATEA"
+          className="h-9 sm:h-10 w-auto object-contain transition-opacity duration-300"
+        />
       </Link>
 
       <div className="nav-links">
