@@ -123,9 +123,9 @@ export default function Home() {
   if (!ready) return <Loading />;
 
   return (
-    <div>
-      <section className="hero-flyer-container">
-        <div className="flyer-card">
+    <div style={{ width: '100%', maxWidth: '100%', overflowX: 'hidden' }}>
+      <section className="hero-flyer-container" style={{ width: '100%', maxWidth: '100%', overflow: 'hidden' }}>
+        <div className="flyer-card" style={{ overflow: 'hidden' }}>
           {/* Top lake photo section */}
           <div
             className="flyer-photo-section"
@@ -144,7 +144,7 @@ export default function Home() {
             <div className="flyer-header">
               <div className="relative flex flex-col items-center justify-center min-h-[140px] w-full">
                 {/* Dropping leaves animation */}
-                <div className="absolute inset-0 pointer-events-none overflow-visible flex justify-center">
+                <div className="absolute inset-0 pointer-events-none overflow-hidden flex justify-center">
                   {[
                     { id: 1, left: "-45px", delay: 0, duration: 4.2, scale: 0.95, rotateEnd: 60, xOffset: -35 },
                     { id: 2, left: "40px", delay: 0.9, duration: 4.8, scale: 1.1, rotateEnd: -75, xOffset: 40 },
@@ -198,7 +198,7 @@ export default function Home() {
             </div>
           </div>
           {/* Floating Events Bar over bottom of hero section (Shows 1 featured event with View All) */}
-          <div className="w-full max-w-[1100px] px-4 mx-auto -mt-36 relative z-20">
+          <div className="w-full max-w-[1100px] px-4 mx-auto -mt-36 relative z-20" style={{ overflow: 'hidden' }}>
             <div className="flex flex-col gap-3">
               {events.length > 0 ? (
                 events.slice(0, 1).map((ev) => {

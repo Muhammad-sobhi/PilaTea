@@ -9,13 +9,15 @@ import { Footer } from "@/components/Footer";
 
 export function ClientLayout({ children }: { children: ReactNode }) {
   return (
-    <AuthProvider>
-      <SettingsProvider>
-        <AuroraBackground />
-        <Navbar />
-        <main>{children}</main>
-        <Footer />
-      </SettingsProvider>
-    </AuthProvider>
+    <div style={{ width: '100%', maxWidth: '100%', overflowX: 'hidden', position: 'relative' }}>
+      <AuthProvider>
+        <SettingsProvider>
+          <AuroraBackground />
+          <Navbar />
+          <main style={{ width: '100%', maxWidth: '100%', overflowX: 'hidden' }}>{children}</main>
+          <Footer />
+        </SettingsProvider>
+      </AuthProvider>
+    </div>
   );
 }

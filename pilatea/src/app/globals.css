@@ -23,24 +23,31 @@
   --radius-full: 999px;
 }
 
-* {
-  box-sizing: border-box;
-}
+@layer base {
+  *, *::before, *::after {
+    box-sizing: border-box;
+  }
 
-html {
-  scroll-behavior: smooth;
-}
+  html {
+    scroll-behavior: smooth;
+    overflow-x: clip;
+    overflow-x: hidden;
+  }
 
-body {
-  background-color: #F1EADD;
-  color: #4A354F;
-  font-family: var(--font-body);
-  font-size: 18px;
-  line-height: 1.7;
-  -webkit-font-smoothing: antialiased;
-  overflow-x: hidden;
-  width: 100%;
-  max-width: 100%;
+  body {
+    background-color: #F1EADD;
+    color: #4A354F;
+    font-family: var(--font-body);
+    font-size: 18px;
+    line-height: 1.7;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: clip !important;
+    overflow-x: hidden !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: 0;
+    padding: 0;
+  }
 }
 
 img,
@@ -176,9 +183,11 @@ h1,
 
 /* ---------- Layout & utility classes ---------- */
 .page {
+  width: 100%;
   max-width: 1320px;
   margin: 0 auto;
   padding: 0 48px;
+  box-sizing: border-box;
 }
 
 .glass-card {
@@ -258,7 +267,7 @@ h1,
 .hero::before {
   content: "";
   position: absolute;
-  inset: -80px -80px 0 -80px;
+  inset: -80px 0 0 0;
   z-index: -1;
   background:
     linear-gradient(to bottom, rgba(248, 244, 248, 0) 0%, var(--color-bg) 100%),
@@ -537,7 +546,7 @@ h1,
   }
 
   .hero::before {
-    inset: -60px -60px 0 -60px;
+    inset: -60px 0 0 0;
   }
 
   .hero-visual {
@@ -1133,7 +1142,7 @@ h1,
   display: flex;
   align-items: center;
   justify-content: space-between;
-  width: calc(100% - 40px);
+  width: calc(100% - 32px);
   max-width: 1080px;
   padding: 0 24px;
   height: 60px;
@@ -1168,9 +1177,7 @@ h1,
   background: #ffffff !important;
 }
 
-.navbar.scrolled .mobile-toggle {
-  color: #F1EADD !important;
-}
+
 
 .navbar.scrolled .brand img {
   filter: none;
@@ -1413,14 +1420,8 @@ h1,
 }
 
 /* ---------- Mobile menu ---------- */
-.mobile-toggle {
+.floating-mobile-btn {
   display: none;
-  background: none;
-  border: none;
-  font-size: 24px;
-  cursor: pointer;
-  color: #686868;
-  padding: 8px;
 }
 
 .mobile-backdrop {
@@ -1446,8 +1447,28 @@ h1,
     display: none;
   }
 
-  .mobile-toggle {
-    display: block;
+  .floating-mobile-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: fixed;
+    bottom: 24px;
+    left: 20px;
+    z-index: 998;
+    width: 54px;
+    height: 54px;
+    border-radius: 50%;
+    background: #5B1D2E;
+    color: #ffffff;
+    box-shadow: 0 10px 30px rgba(91, 29, 46, 0.45), 0 4px 12px rgba(0, 0, 0, 0.2);
+    border: 2px solid rgba(255, 255, 255, 0.4);
+    font-size: 22px;
+    cursor: pointer;
+    transition: transform 0.2s cubic-bezier(.4, 0, .2, 1), background-color 0.2s ease;
+  }
+
+  .floating-mobile-btn:active {
+    transform: scale(0.92);
   }
 
   .mobile-backdrop {
@@ -1475,18 +1496,51 @@ h1,
     right: 0;
     width: min(320px, 85vw);
     height: 100vh;
-    background: rgba(255, 255, 255, 0.95);
+    height: 100dvh;
+    background: rgba(255, 255, 255, 0.98);
     backdrop-filter: blur(30px);
-    padding: 100px 24px 30px;
+    padding: 80px 24px 30px;
     transform: translateX(100%);
-    transition: transform 0.3s cubic-bezier(.4, 0, .2, 1);
-    z-index: 99;
-    box-shadow: -10px 0 40px rgba(0, 0, 0, 0.08);
+    visibility: hidden;
+    opacity: 0;
+    transition: transform 0.3s cubic-bezier(.4, 0, .2, 1), opacity 0.3s ease, visibility 0.3s ease;
+    z-index: 999;
+    box-shadow: -10px 0 40px rgba(0, 0, 0, 0.15);
     overflow-y: auto;
+    pointer-events: none;
   }
 
   .mobile-menu.open {
     transform: translateX(0);
+    visibility: visible;
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  .mobile-menu-close {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: #5B1D2E;
+    color: #ffffff !important;
+    border: none;
+    font-size: 20px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(91, 29, 46, 0.3);
+    transition: transform 0.2s ease, background-color 0.2s ease;
+    z-index: 1000;
+  }
+
+  .mobile-menu-close:hover {
+    background: #7A283E;
+    transform: scale(1.08);
   }
 
   .mobile-nav-section {
@@ -1546,7 +1600,7 @@ h1,
 
   .mobile-menu {
     padding: 80px 16px 24px;
-    width: 85vw;
+    width: min(320px, 85vw);
   }
 
   .mobile-nav-section a {
@@ -1565,10 +1619,7 @@ h1,
     width: 32px;
   }
 
-  .mobile-toggle {
-    font-size: 20px;
-    padding: 6px;
-  }
+
 
   .mobile-cta-section {
     gap: 8px;
@@ -2459,6 +2510,12 @@ button:active {
     flex-direction: column;
     gap: 4px;
   }
+
+  .event-line-bar {
+    grid-template-columns: 1fr !important;
+    gap: 14px !important;
+    padding: 16px 20px !important;
+  }
 }
 
 @media (max-width: 480px) {
@@ -2468,22 +2525,25 @@ button:active {
   }
 
   .flyer-main-title {
-    font-size: clamp(36px, 10vw, 52px) !important;
-    letter-spacing: 3px;
+    font-size: clamp(28px, 8vw, 42px) !important;
+    letter-spacing: 1px !important;
+    word-break: break-word;
   }
 
   .flyer-cursive-title {
-    font-size: clamp(32px, 8vw, 42px);
+    font-size: clamp(26px, 7vw, 36px) !important;
+    word-break: break-word;
   }
 
   .flyer-brand-name {
-    font-size: 22px;
-    letter-spacing: 4px;
+    font-size: 18px !important;
+    letter-spacing: 2px !important;
   }
 
   .flyer-spaced-tagline {
-    font-size: 11px;
-    letter-spacing: 3px;
+    font-size: 10px !important;
+    letter-spacing: 1px !important;
+    padding: 0 10px;
   }
 
   .flyer-spots-badge {
@@ -2503,5 +2563,21 @@ button:active {
 
   .tea-items-grid {
     grid-template-columns: 1fr 1fr;
+  }
+
+  .event-line-bar {
+    grid-template-columns: 1fr !important;
+    gap: 12px !important;
+    padding: 14px 16px !important;
+  }
+
+  .flyer-photo-section {
+    overflow: hidden !important;
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+
+  .flyer-spots-badge {
+    right: 10px !important;
   }
 }

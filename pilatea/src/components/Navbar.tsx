@@ -41,46 +41,55 @@ export function Navbar() {
   }
 
   return (
-    <div ref={navRef} className={`navbar ${scrolled ? "scrolled" : ""}`}>
-      <Link href="/" className="brand flex items-center shrink-0">
-        <img
-          src={scrolled ? "/logo-cream.png" : "/logo.png"}
-          alt="PILATEA"
-          className="h-9 sm:h-10 w-auto object-contain transition-opacity duration-300"
-        />
-      </Link>
+    <>
+      <div ref={navRef} className={`navbar ${scrolled ? "scrolled" : ""}`}>
+        <Link href="/" className="brand flex items-center shrink-0">
+          <img
+            src={scrolled ? "/logo-cream.png" : "/logo.png"}
+            alt="PILATEA"
+            className="h-9 sm:h-10 w-auto object-contain transition-opacity duration-300"
+          />
+        </Link>
 
-      <div className="nav-links">
-        <Link href="/" aria-current={isActive("/") ? "page" : undefined}>Home</Link>
-        <Link href="/about" aria-current={isActive("/about") ? "page" : undefined}>About</Link>
-        <Link href="/pilates-on-the-go" aria-current={isActive("/pilates-on-the-go") ? "page" : undefined}>Pilates on the Go</Link>
-        <Link href="/tea-experience" aria-current={isActive("/tea-experience") ? "page" : undefined}>Tea Experience</Link>
-        <Link href="/events" aria-current={isActive("/events") ? "page" : undefined}>Events</Link>
-        <Link href="/memberships" aria-current={isActive("/memberships") ? "page" : undefined}>Memberships</Link>
-        <Link href="/contact" aria-current={isActive("/contact") ? "page" : undefined}>Contact</Link>
-      </div>
+        <div className="nav-links">
+          <Link href="/" aria-current={isActive("/") ? "page" : undefined}>Home</Link>
+          <Link href="/about" aria-current={isActive("/about") ? "page" : undefined}>About</Link>
+          <Link href="/pilates-on-the-go" aria-current={isActive("/pilates-on-the-go") ? "page" : undefined}>Pilates on the Go</Link>
+          <Link href="/tea-experience" aria-current={isActive("/tea-experience") ? "page" : undefined}>Tea Experience</Link>
+          <Link href="/events" aria-current={isActive("/events") ? "page" : undefined}>Events</Link>
+          <Link href="/memberships" aria-current={isActive("/memberships") ? "page" : undefined}>Memberships</Link>
+          <Link href="/contact" aria-current={isActive("/contact") ? "page" : undefined}>Contact</Link>
+        </div>
 
-      <div className="nav-actions">
-        {user ? (
-          <>
-            <Link href="/account" className="btn-ghost-sm">My Account</Link>
-            <button onClick={logout} className="btn-ghost-sm">Logout</button>
-          </>
-        ) : (
-          <Link href="/login" className="btn-sm">Sign In</Link>
-        )}
+        <div className="nav-actions">
+          {user ? (
+            <>
+              <Link href="/account" className="btn-ghost-sm">My Account</Link>
+              <button onClick={logout} className="btn-ghost-sm">Logout</button>
+            </>
+          ) : (
+            <Link href="/login" className="btn-sm">Sign In</Link>
+          )}
+        </div>
       </div>
 
       <button
-        className="mobile-toggle"
+        className="floating-mobile-btn"
         onClick={() => setOpen(!open)}
         aria-label="Toggle menu"
       >
-        {open ? "✕" : "☰"}
+        ☰
       </button>
 
       <div className={`mobile-backdrop ${open ? "open" : ""}`} onClick={() => setOpen(false)} />
       <div className={`mobile-menu ${open ? "open" : ""}`}>
+        <button
+          className="mobile-menu-close"
+          onClick={() => setOpen(false)}
+          aria-label="Close menu"
+        >
+          ✕
+        </button>
         <div className="mobile-nav-section">
           <Link href="/" aria-current={isActive("/") ? "page" : undefined}>Home</Link>
           <Link href="/about" aria-current={isActive("/about") ? "page" : undefined}>About</Link>
@@ -106,6 +115,6 @@ export function Navbar() {
           )}
         </div>
       </div>
-    </div>
+    </>
   );
 }

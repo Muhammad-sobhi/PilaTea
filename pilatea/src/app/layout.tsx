@@ -24,6 +24,12 @@ const allura = Allura({
   display: "swap",
 });
 
+export const viewport = {
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 1,
+};
+
 export const metadata: Metadata = {
   title: "PILATEA — Sip. Stretch. Glow.",
   description:
@@ -54,8 +60,9 @@ export default function RootLayout({
     <html
       lang="en"
       className={`${darkerGrotesque.variable} ${poppins.variable} ${allura.variable}`}
+      style={{ overflowX: 'hidden', width: '100%', maxWidth: '100%' }}
     >
-      <body className="antialiased">
+      <body className="antialiased" style={{ overflowX: 'hidden', width: '100%', maxWidth: '100%', margin: 0 }}>
         <ClientLayout>{children}</ClientLayout>
       </body>
     </html>
