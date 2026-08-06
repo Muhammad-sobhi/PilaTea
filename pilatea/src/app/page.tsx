@@ -152,17 +152,19 @@ export default function Home() {
                     animate={{ y: [0, -3, 0] }}
                     transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
                   />
-                  {/* Large steam.png placed at top-center directly above logo2.png */}
+                  {/* Smooth slowly swaying steam.png positioned at top: 10px and left: 48% over logo2.png steam lines */}
                   <motion.img
                     src="/steam.png"
                     alt=""
-                    className="absolute -top-[55px] left-1/2 -translate-x-1/2 z-20 w-[120px] h-auto object-contain pointer-events-none filter drop-shadow(0 2px 12px rgba(91,29,46,0.65))"
+                    className="absolute top-[10px] left-[48%] -translate-x-1/2 z-20 w-[45px] h-auto object-contain pointer-events-none filter drop-shadow(0 1px 4px rgba(91,29,46,0.4))"
                     animate={{
-                      x: ["-50%", "calc(-50% + 6px)", "calc(-50% - 6px)", "calc(-50% + 4px)", "calc(-50% - 4px)", "-50%"],
-                      rotate: [0, 4, -4, 2, -2, 0],
+                      x: ["-50%", "calc(-50% + 4px)", "calc(-50% - 4px)", "-50%"],
+                      y: [0, -4, 0],
+                      opacity: [0.75, 1, 0.75],
+                      scale: [0.96, 1.05, 0.96],
                     }}
                     transition={{
-                      duration: 2.0,
+                      duration: 4.8,
                       repeat: Infinity,
                       ease: "easeInOut",
                     }}
