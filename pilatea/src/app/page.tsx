@@ -175,31 +175,31 @@ export default function Home() {
                   ))}
                 </div>
 
-                {/* Single steam image moving slightly right and left in place */}
-                <motion.img
-                  src="/steam.png"
-                  alt=""
-                  className="absolute -top-7 left-1/2 -translate-x-1/2 z-20 w-12 h-auto object-contain pointer-events-none"
-                  animate={{
-                    x: ["-50%", "calc(-50% + 8px)", "calc(-50% - 8px)", "-50%"],
-                    y: [0, -2, 0, -2, 0],
-                    rotate: [0, 4, -4, 0],
-                    opacity: [0.8, 1, 0.8],
-                  }}
-                  transition={{
-                    duration: 4.5,
-                    repeat: Infinity,
-                    ease: "easeInOut",
-                  }}
-                />
-
-                <motion.img
-                  src="/logo2.png"
-                  alt="PILATEA"
-                  className="flyer-logo relative z-10"
-                  animate={{ y: [0, -3, 0] }}
-                  transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-                />
+                {/* logo2.png container with shaking steam.png over the cup's steam lines */}
+                <div className="relative inline-block">
+                  <motion.img
+                    src="/logo2.png"
+                    alt="PILATEA"
+                    className="flyer-logo relative z-10"
+                    animate={{ y: [0, -3, 0] }}
+                    transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+                  />
+                  {/* steam.png positioned right over the cup's top steam lines with shaking motion */}
+                  <motion.img
+                    src="/steam.png"
+                    alt=""
+                    className="absolute top-[2px] left-[48%] -translate-x-1/2 z-20 w-[24px] h-auto object-contain pointer-events-none"
+                    animate={{
+                      x: ["-50%", "calc(-50% + 4px)", "calc(-50% - 4px)", "calc(-50% + 3px)", "calc(-50% - 3px)", "-50%"],
+                      rotate: [0, 3, -3, 2, -2, 0],
+                    }}
+                    transition={{
+                      duration: 2.2,
+                      repeat: Infinity,
+                      ease: "easeInOut",
+                    }}
+                  />
+                </div>
               </div>
 
               <div className="flyer-brand-tagline">Sip. Stretch. Glow.</div>
