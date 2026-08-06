@@ -350,8 +350,8 @@ export default function Home() {
 
         <ScrollReveal>
           <section className="go-section">
-            <div className="go-image-wrapper">
-              <img src={signatureBgUrl || "/hero-background.png"} alt="Pilates on the Go" />
+            <div className="go-image-wrapper" style={{ maxHeight: 260, width: '100%' }}>
+              <img src={signatureBgUrl || "/hero-background.png"} alt="Pilates on the Go" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
             </div>
             <div className="go-content">
               <p className="go-label">{s("signature_label", "OUR SIGNATURE EXPERIENCE")}</p>
@@ -395,7 +395,7 @@ export default function Home() {
               <h2 style={{ fontSize: 22, fontWeight: 600, marginBottom: 6 }}>{s("social_title", "Follow Our Journey")}</h2>
               <p className="opacity-70">{s("social_cta_text", "Join our community")}</p>
             </motion.div>
-            <motion.div className="mini-gallery" variants={staggerContainer} initial="hidden" whileInView="visible" viewport={{ once: true }}>
+            <motion.div className="flex flex-wrap items-center justify-center gap-3 my-6 max-w-sm mx-auto" variants={staggerContainer} initial="hidden" whileInView="visible" viewport={{ once: true }}>
               {[1, 2, 3, 4, 5].map((num) => {
                 const imgVal = s(`social_img_${num}`, "");
                 const defaultImgs = [
@@ -407,8 +407,8 @@ export default function Home() {
                 ];
                 const imgSrc = imgVal ? storageUrl(imgVal) : defaultImgs[num - 1];
                 return (
-                  <motion.div key={num} variants={staggerItem} style={{ overflow: "hidden" }}>
-                    <img src={imgSrc} alt="" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+                  <motion.div key={num} variants={staggerItem} className="w-16 h-16 sm:w-20 sm:h-20 rounded-2xl overflow-hidden shadow-sm shrink-0">
+                    <img src={imgSrc} alt="" className="w-full h-full object-cover" />
                   </motion.div>
                 );
               })}
