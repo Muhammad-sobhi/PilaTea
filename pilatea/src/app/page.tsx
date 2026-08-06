@@ -175,8 +175,36 @@ export default function Home() {
                   ))}
                 </div>
 
+                {/* Rising steam animation */}
+                <div className="absolute -top-10 z-20 pointer-events-none flex justify-center items-center gap-2">
+                  {[
+                    { id: 1, delay: 0, duration: 3.5, scale: 0.9, x: [-5, 8, -3] },
+                    { id: 2, delay: 1.2, duration: 4.0, scale: 1.1, x: [4, -6, 5] },
+                    { id: 3, delay: 2.1, duration: 3.8, scale: 0.85, x: [-2, 5, -8] },
+                  ].map((s) => (
+                    <motion.img
+                      key={s.id}
+                      src="/steam.png"
+                      alt=""
+                      className="w-10 h-auto object-contain opacity-70"
+                      animate={{
+                        y: [10, -25, -55],
+                        x: s.x,
+                        opacity: [0, 0.7, 0.4, 0],
+                        scale: [s.scale * 0.8, s.scale * 1.1, s.scale * 1.3],
+                      }}
+                      transition={{
+                        duration: s.duration,
+                        repeat: Infinity,
+                        delay: s.delay,
+                        ease: "easeOut",
+                      }}
+                    />
+                  ))}
+                </div>
+
                 <motion.img
-                  src="/logo.png"
+                  src="/logo2.png"
                   alt="PILATEA"
                   className="flyer-logo relative z-10"
                   animate={{ y: [0, -3, 0] }}
