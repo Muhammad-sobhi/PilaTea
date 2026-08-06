@@ -175,29 +175,31 @@ export default function Home() {
                   ))}
                 </div>
 
-                {/* Rising steam animation */}
-                <div className="absolute -top-10 z-20 pointer-events-none flex justify-center items-center gap-2">
+                {/* Rising & swaying animated steam above tea cup */}
+                <div className="absolute -top-16 left-1/2 -translate-x-1/2 z-20 pointer-events-none flex justify-center items-end h-24 w-36 overflow-visible">
                   {[
-                    { id: 1, delay: 0, duration: 3.5, scale: 0.9, x: [-5, 8, -3] },
-                    { id: 2, delay: 1.2, duration: 4.0, scale: 1.1, x: [4, -6, 5] },
-                    { id: 3, delay: 2.1, duration: 3.8, scale: 0.85, x: [-2, 5, -8] },
-                  ].map((s) => (
+                    { id: 1, delay: 0, duration: 3.2, xSequence: [-15, 12, -18, 10], width: "44px" },
+                    { id: 2, delay: 1.0, duration: 3.6, xSequence: [10, -16, 14, -12], width: "52px" },
+                    { id: 3, delay: 1.9, duration: 3.4, xSequence: [-6, 18, -10, 16], width: "46px" },
+                  ].map((steam) => (
                     <motion.img
-                      key={s.id}
+                      key={steam.id}
                       src="/steam.png"
                       alt=""
-                      className="w-10 h-auto object-contain opacity-70"
+                      style={{ width: steam.width }}
+                      className="absolute bottom-0 h-auto object-contain filter drop-shadow(0 0 8px rgba(255,255,255,0.9))"
                       animate={{
-                        y: [10, -25, -55],
-                        x: s.x,
-                        opacity: [0, 0.7, 0.4, 0],
-                        scale: [s.scale * 0.8, s.scale * 1.1, s.scale * 1.3],
+                        y: [0, -30, -60, -90],
+                        x: steam.xSequence,
+                        opacity: [0, 0.9, 0.6, 0],
+                        scale: [0.65, 1.1, 1.45, 1.8],
+                        rotate: [-8, 12, -10, 8],
                       }}
                       transition={{
-                        duration: s.duration,
+                        duration: steam.duration,
                         repeat: Infinity,
-                        delay: s.delay,
-                        ease: "easeOut",
+                        delay: steam.delay,
+                        ease: "easeInOut",
                       }}
                     />
                   ))}
