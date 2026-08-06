@@ -152,11 +152,11 @@ export default function Home() {
                     animate={{ y: [0, -3, 0] }}
                     transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
                   />
-                  {/* Extra large steam.png centered directly over logo2.png with shaking motion */}
+                  {/* Large steam.png placed at top-center directly above logo2.png */}
                   <motion.img
                     src="/steam.png"
                     alt=""
-                    className="absolute -top-[18px] left-1/2 -translate-x-1/2 z-20 w-[120px] h-auto object-contain pointer-events-none filter drop-shadow(0 2px 12px rgba(91,29,46,0.65))"
+                    className="absolute -top-[55px] left-1/2 -translate-x-1/2 z-20 w-[120px] h-auto object-contain pointer-events-none filter drop-shadow(0 2px 12px rgba(91,29,46,0.65))"
                     animate={{
                       x: ["-50%", "calc(-50% + 6px)", "calc(-50% - 6px)", "calc(-50% + 4px)", "calc(-50% - 4px)", "-50%"],
                       rotate: [0, 4, -4, 2, -2, 0],
