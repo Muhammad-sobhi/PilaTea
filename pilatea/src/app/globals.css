@@ -635,16 +635,18 @@ h1,
   }
 
   .mini-gallery {
-    gap: 12px;
+    display: flex;
     flex-wrap: wrap;
     justify-content: center;
-    max-width: 320px;
-    margin: 16px auto;
+    align-items: center;
+    width: 100%;
+    margin: 20px auto;
+    gap: 12px;
   }
 
   .mini-gallery>div {
-    width: 72px;
-    height: 72px;
+    width: 80px;
+    height: 80px;
   }
 
   .panel {
@@ -1680,19 +1682,22 @@ h1,
   }
 
   .mini-gallery {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    max-width: 280px;
-    margin: 16px auto;
-    gap: 10px;
+    display: flex !important;
+    flex-wrap: wrap !important;
+    justify-content: center !important;
+    align-items: center !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: 20px auto !important;
+    gap: 12px !important;
   }
 
-  .mini-gallery>div {
-    width: 72px;
-    height: 72px;
-    border-radius: 16px;
-    flex-shrink: 0;
+  .mini-gallery > div {
+    width: 80px !important;
+    height: 80px !important;
+    border-radius: 16px !important;
+    flex-shrink: 0 !important;
+    margin: 0 !important;
   }
 
   .hero h1 {
