@@ -175,35 +175,23 @@ export default function Home() {
                   ))}
                 </div>
 
-                {/* Rising & swaying animated steam above tea cup */}
-                <div className="absolute -top-16 left-1/2 -translate-x-1/2 z-20 pointer-events-none flex justify-center items-end h-24 w-36 overflow-visible">
-                  {[
-                    { id: 1, delay: 0, duration: 3.2, xSequence: [-15, 12, -18, 10], width: "44px" },
-                    { id: 2, delay: 1.0, duration: 3.6, xSequence: [10, -16, 14, -12], width: "52px" },
-                    { id: 3, delay: 1.9, duration: 3.4, xSequence: [-6, 18, -10, 16], width: "46px" },
-                  ].map((steam) => (
-                    <motion.img
-                      key={steam.id}
-                      src="/steam.png"
-                      alt=""
-                      style={{ width: steam.width }}
-                      className="absolute bottom-0 h-auto object-contain filter drop-shadow(0 0 8px rgba(255,255,255,0.9))"
-                      animate={{
-                        y: [0, -30, -60, -90],
-                        x: steam.xSequence,
-                        opacity: [0, 0.9, 0.6, 0],
-                        scale: [0.65, 1.1, 1.45, 1.8],
-                        rotate: [-8, 12, -10, 8],
-                      }}
-                      transition={{
-                        duration: steam.duration,
-                        repeat: Infinity,
-                        delay: steam.delay,
-                        ease: "easeInOut",
-                      }}
-                    />
-                  ))}
-                </div>
+                {/* Single steam image moving slightly right and left in place */}
+                <motion.img
+                  src="/steam.png"
+                  alt=""
+                  className="absolute -top-7 left-1/2 -translate-x-1/2 z-20 w-12 h-auto object-contain pointer-events-none"
+                  animate={{
+                    x: ["-50%", "calc(-50% + 8px)", "calc(-50% - 8px)", "-50%"],
+                    y: [0, -2, 0, -2, 0],
+                    rotate: [0, 4, -4, 0],
+                    opacity: [0.8, 1, 0.8],
+                  }}
+                  transition={{
+                    duration: 4.5,
+                    repeat: Infinity,
+                    ease: "easeInOut",
+                  }}
+                />
 
                 <motion.img
                   src="/logo2.png"
