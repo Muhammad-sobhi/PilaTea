@@ -91,15 +91,15 @@ export function Navbar() {
           ✕
         </button>
         <div className="mobile-nav-section">
-          <Link href="/" aria-current={isActive("/") ? "page" : undefined}>Home</Link>
-          <Link href="/about" aria-current={isActive("/about") ? "page" : undefined}>About</Link>
-          <Link href="/pilates-on-the-go" aria-current={isActive("/pilates-on-the-go") ? "page" : undefined}>Pilates on the Go</Link>
-          <Link href="/tea-experience" aria-current={isActive("/tea-experience") ? "page" : undefined}>Tea Experience</Link>
-          <Link href="/events" aria-current={isActive("/events") ? "page" : undefined}>Events</Link>
-          <Link href="/memberships" aria-current={isActive("/memberships") ? "page" : undefined}>Memberships</Link>
-          <Link href="/gallery" aria-current={isActive("/gallery") ? "page" : undefined}>Gallery</Link>
-          <Link href="/contact" aria-current={isActive("/contact") ? "page" : undefined}>Contact</Link>
-          <Link href="/faq" aria-current={isActive("/faq") ? "page" : undefined}>FAQ</Link>
+          <Link href="/" aria-current={isActive("/") ? "page" : undefined} onClick={() => setOpen(false)}>Home</Link>
+          <Link href="/about" aria-current={isActive("/about") ? "page" : undefined} onClick={() => setOpen(false)}>About</Link>
+          <Link href="/pilates-on-the-go" aria-current={isActive("/pilates-on-the-go") ? "page" : undefined} onClick={() => setOpen(false)}>Pilates on the Go</Link>
+          <Link href="/tea-experience" aria-current={isActive("/tea-experience") ? "page" : undefined} onClick={() => setOpen(false)}>Tea Experience</Link>
+          <Link href="/events" aria-current={isActive("/events") ? "page" : undefined} onClick={() => setOpen(false)}>Events</Link>
+          <Link href="/memberships" aria-current={isActive("/memberships") ? "page" : undefined} onClick={() => setOpen(false)}>Memberships</Link>
+          <Link href="/gallery" aria-current={isActive("/gallery") ? "page" : undefined} onClick={() => setOpen(false)}>Gallery</Link>
+          <Link href="/contact" aria-current={isActive("/contact") ? "page" : undefined} onClick={() => setOpen(false)}>Contact</Link>
+          <Link href="/faq" aria-current={isActive("/faq") ? "page" : undefined} onClick={() => setOpen(false)}>FAQ</Link>
         </div>
 
         <div className="mobile-divider" />
