@@ -152,13 +152,13 @@ export default function Home() {
                     animate={{ y: [0, -3, 0] }}
                     transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
                   />
-                  {/* Big steam.png positioned right on top of the cup's steam lines with shaking motion */}
+                  {/* Extra large steam.png centered directly over logo2.png with shaking motion */}
                   <motion.img
                     src="/steam.png"
                     alt=""
-                    className="absolute top-[8px] left-[48.5%] -translate-x-1/2 z-20 w-[75px] h-auto object-contain pointer-events-none filter drop-shadow(0 2px 10px rgba(91,29,46,0.6))"
+                    className="absolute -top-[18px] left-1/2 -translate-x-1/2 z-20 w-[120px] h-auto object-contain pointer-events-none filter drop-shadow(0 2px 12px rgba(91,29,46,0.65))"
                     animate={{
-                      x: ["-50%", "calc(-50% + 5px)", "calc(-50% - 5px)", "calc(-50% + 3px)", "calc(-50% - 3px)", "-50%"],
+                      x: ["-50%", "calc(-50% + 6px)", "calc(-50% - 6px)", "calc(-50% + 4px)", "calc(-50% - 4px)", "-50%"],
                       rotate: [0, 4, -4, 2, -2, 0],
                     }}
                     transition={{
