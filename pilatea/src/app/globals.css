@@ -635,17 +635,16 @@ h1,
   }
 
   .mini-gallery {
-    gap: 10px;
+    gap: 12px;
     flex-wrap: wrap;
+    justify-content: center;
     max-width: 320px;
-    margin-left: auto;
-    margin-right: auto;
+    margin: 16px auto;
   }
 
   .mini-gallery>div {
-    width: 60px;
-    height: 60px;
-    font-size: 28px;
+    width: 72px;
+    height: 72px;
   }
 
   .panel {
@@ -897,8 +896,15 @@ h1,
 
 @media (max-width: 480px) {
   .go-section {
-    padding: 48px 16px;
-    min-height: 280px;
+    padding: 20px 16px;
+    min-height: auto;
+    overflow: hidden;
+  }
+
+  .go-image-wrapper {
+    height: 220px;
+    width: 100%;
+    border-radius: 16px;
   }
 }
 
@@ -1674,15 +1680,19 @@ h1,
   }
 
   .mini-gallery {
-    max-width: 180px;
-    gap: 6px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    max-width: 280px;
+    margin: 16px auto;
+    gap: 10px;
   }
 
   .mini-gallery>div {
-    width: 36px;
-    height: 36px;
-    font-size: 16px;
-    border-radius: 10px;
+    width: 72px;
+    height: 72px;
+    border-radius: 16px;
+    flex-shrink: 0;
   }
 
   .hero h1 {
