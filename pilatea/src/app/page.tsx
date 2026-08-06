@@ -152,11 +152,11 @@ export default function Home() {
                     animate={{ y: [0, -3, 0] }}
                     transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
                   />
-                  {/* steam.png size 120px, top: 10px, left: 80% leaning smoothly right and left */}
+                  {/* Responsive steam.png size 140px, top: 5px, left: 50% with gentle leaning tilt animation */}
                   <motion.img
                     src="/steam.png"
                     alt=""
-                    className="absolute top-[10px] left-[80%] -translate-x-1/2 z-20 w-[120px] h-auto object-contain pointer-events-none filter drop-shadow(0 2px 8px rgba(91,29,46,0.5))"
+                    className="flyer-steam absolute top-[5px] left-1/2 -translate-x-1/2 z-20 w-[140px] h-auto object-contain pointer-events-none filter drop-shadow(0 2px 8px rgba(91,29,46,0.5))"
                     animate={{
                       rotate: [0, 4, -4, 0],
                       y: [0, -6, 0],

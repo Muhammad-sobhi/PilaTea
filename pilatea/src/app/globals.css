@@ -2526,6 +2526,16 @@ button:active {
     padding-top: 80px;
   }
 
+  .flyer-logo {
+    max-width: 170px;
+    height: 110px;
+  }
+
+  .flyer-steam {
+    width: 105px !important;
+    top: 2px !important;
+  }
+
   .flyer-main-title {
     font-size: clamp(28px, 8vw, 42px) !important;
     letter-spacing: 1px !important;
