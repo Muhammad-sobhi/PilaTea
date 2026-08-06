@@ -145,12 +145,10 @@ export default function Home() {
               <div className="relative flex flex-col items-center justify-center min-h-[140px] w-full">
                 {/* logo2.png container with shaking steam.png positioned right over the cup's top steam lines */}
                 <div className="relative inline-block">
-                  <motion.img
+                  <img
                     src="/logo2.png"
                     alt="PILATEA"
                     className="flyer-logo relative z-10"
-                    animate={{ y: [0, -3, 0] }}
-                    transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
                   />
                   {/* Responsive steam.png size 140px, top: 5px, left: 50% with gentle leaning tilt animation */}
                   <motion.img

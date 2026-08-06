@@ -1941,7 +1941,6 @@ button:active {
   align-items: center;
   justify-content: center;
   box-shadow: 0 12px 30px rgba(91, 29, 46, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.3);
-  animation: float 6s ease-in-out infinite;
   z-index: 5;
 }
 
