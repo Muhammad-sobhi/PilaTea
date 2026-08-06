@@ -152,19 +152,19 @@ export default function Home() {
                     animate={{ y: [0, -3, 0] }}
                     transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
                   />
-                  {/* steam.png size 120px, top: 10px, left: 80% with smooth 3-second gentle drift */}
+                  {/* steam.png size 120px, top: 10px, left: 80% leaning smoothly right and left */}
                   <motion.img
                     src="/steam.png"
                     alt=""
                     className="absolute top-[10px] left-[80%] -translate-x-1/2 z-20 w-[120px] h-auto object-contain pointer-events-none filter drop-shadow(0 2px 8px rgba(91,29,46,0.5))"
                     animate={{
-                      x: ["-50%", "calc(-50% + 6px)", "calc(-50% - 6px)", "-50%"],
-                      y: [0, -4, 0],
-                      opacity: [0.8, 1, 0.8],
-                      scale: [0.97, 1.03, 0.97],
+                      rotate: [0, 4, -4, 0],
+                      y: [0, -6, 0],
+                      opacity: [0.75, 1, 0.75],
+                      scale: [0.98, 1.04, 0.98],
                     }}
                     transition={{
-                      duration: 3.0,
+                      duration: 4.2,
                       repeat: Infinity,
                       ease: "easeInOut",
                     }}
