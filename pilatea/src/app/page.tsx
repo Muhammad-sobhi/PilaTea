@@ -143,39 +143,7 @@ export default function Home() {
             {/* Logo, Title and subtitle container */}
             <div className="flyer-header">
               <div className="relative flex flex-col items-center justify-center min-h-[140px] w-full">
-                {/* Dropping leaves animation */}
-                <div className="absolute inset-0 pointer-events-none overflow-hidden flex justify-center">
-                  {[
-                    { id: 1, left: "-45px", delay: 0, duration: 4.2, scale: 0.95, rotateEnd: 60, xOffset: -35 },
-                    { id: 2, left: "40px", delay: 0.9, duration: 4.8, scale: 1.1, rotateEnd: -75, xOffset: 40 },
-                    { id: 3, left: "-70px", delay: 1.8, duration: 5.2, scale: 0.8, rotateEnd: 90, xOffset: -25 },
-                    { id: 4, left: "65px", delay: 2.7, duration: 4.5, scale: 1.0, rotateEnd: -50, xOffset: 30 },
-                    { id: 5, left: "-10px", delay: 3.5, duration: 4.0, scale: 0.85, rotateEnd: 40, xOffset: -20 },
-                    { id: 6, left: "15px", delay: 1.4, duration: 5.0, scale: 0.75, rotateEnd: -90, xOffset: 45 },
-                  ].map((leaf) => (
-                    <motion.div
-                      key={leaf.id}
-                      className="absolute top-2 text-[#5B1D2E]"
-                      style={{ left: `calc(50% + ${leaf.left})` }}
-                      animate={{
-                        y: [0, 45, 100, 150],
-                        x: [0, leaf.xOffset, -leaf.xOffset * 0.4, leaf.xOffset * 0.7],
-                        opacity: [0, 0.85, 0.75, 0],
-                        rotate: [0, leaf.rotateEnd * 0.5, leaf.rotateEnd],
-                      }}
-                      transition={{
-                        duration: leaf.duration,
-                        repeat: Infinity,
-                        delay: leaf.delay,
-                        ease: "easeInOut",
-                      }}
-                    >
-                      <Leaf size={16 * leaf.scale} strokeWidth={1.5} fill="#5B1D2E" fillOpacity={0.2} />
-                    </motion.div>
-                  ))}
-                </div>
-
-                {/* logo2.png container with shaking steam.png over the cup's steam lines */}
+                {/* logo2.png container with shaking steam.png positioned right over the cup's top steam lines */}
                 <div className="relative inline-block">
                   <motion.img
                     src="/logo2.png"
@@ -184,14 +152,14 @@ export default function Home() {
                     animate={{ y: [0, -3, 0] }}
                     transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
                   />
-                  {/* steam.png scaled up for clear visibility, positioned over the cup's top steam lines with shaking motion */}
+                  {/* Big steam.png positioned right on top of the cup's steam lines with shaking motion */}
                   <motion.img
                     src="/steam.png"
                     alt=""
-                    className="absolute -top-[12px] left-[48%] -translate-x-1/2 z-20 w-[48px] h-auto object-contain pointer-events-none filter drop-shadow(0 2px 8px rgba(91,29,46,0.5))"
+                    className="absolute top-[8px] left-[48.5%] -translate-x-1/2 z-20 w-[75px] h-auto object-contain pointer-events-none filter drop-shadow(0 2px 10px rgba(91,29,46,0.6))"
                     animate={{
-                      x: ["-50%", "calc(-50% + 6px)", "calc(-50% - 6px)", "calc(-50% + 4px)", "calc(-50% - 4px)", "-50%"],
-                      rotate: [0, 5, -5, 3, -3, 0],
+                      x: ["-50%", "calc(-50% + 5px)", "calc(-50% - 5px)", "calc(-50% + 3px)", "calc(-50% - 3px)", "-50%"],
+                      rotate: [0, 4, -4, 2, -2, 0],
                     }}
                     transition={{
                       duration: 2.0,
