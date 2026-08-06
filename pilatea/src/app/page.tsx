@@ -184,17 +184,17 @@ export default function Home() {
                     animate={{ y: [0, -3, 0] }}
                     transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
                   />
-                  {/* steam.png positioned right over the cup's top steam lines with shaking motion */}
+                  {/* steam.png scaled up for clear visibility, positioned over the cup's top steam lines with shaking motion */}
                   <motion.img
                     src="/steam.png"
                     alt=""
-                    className="absolute top-[2px] left-[48%] -translate-x-1/2 z-20 w-[24px] h-auto object-contain pointer-events-none"
+                    className="absolute -top-[12px] left-[48%] -translate-x-1/2 z-20 w-[48px] h-auto object-contain pointer-events-none filter drop-shadow(0 2px 8px rgba(91,29,46,0.5))"
                     animate={{
-                      x: ["-50%", "calc(-50% + 4px)", "calc(-50% - 4px)", "calc(-50% + 3px)", "calc(-50% - 3px)", "-50%"],
-                      rotate: [0, 3, -3, 2, -2, 0],
+                      x: ["-50%", "calc(-50% + 6px)", "calc(-50% - 6px)", "calc(-50% + 4px)", "calc(-50% - 4px)", "-50%"],
+                      rotate: [0, 5, -5, 3, -3, 0],
                     }}
                     transition={{
-                      duration: 2.2,
+                      duration: 2.0,
                       repeat: Infinity,
                       ease: "easeInOut",
                     }}
