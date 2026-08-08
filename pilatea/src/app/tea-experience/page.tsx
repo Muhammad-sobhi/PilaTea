@@ -158,10 +158,10 @@ export default function TeaExperiencePage() {
           {/* Floating Transparent Glassy Tea Cards Carousel & Burgundy Card overlapping bottom of background image */}
           <div className="relative z-20 -mt-16 sm:-mt-24 md:-mt-32 px-3 sm:px-6 md:px-8 pb-8">
             <ScrollReveal>
-              <div id="collection" className="grid lg:grid-cols-12 gap-6 items-stretch mb-6">
+              <div id="collection" className="flex flex-col lg:grid lg:grid-cols-12 gap-6 items-stretch mb-6">
 
                 {/* Left Floating Tea Slider */}
-                <div className="lg:col-span-9 relative flex flex-col justify-center px-1 sm:px-6">
+                <div className="w-full lg:col-span-9 relative flex flex-col justify-center px-1 sm:px-6">
                   {/* Left Floating Circular Arrow Button */}
                   <button
                     onClick={scrollLeft}
@@ -174,7 +174,7 @@ export default function TeaExperiencePage() {
                   {/* Right Floating Circular Arrow Button */}
                   <button
                     onClick={scrollRight}
-                    className="absolute right-1 sm:right-0 md:-right-4 top-1/2 -translate-y-1/2 z-50 w-8 h-8 sm:w-11 sm:h-11 rounded-full bg-[#5B1D2E] text-white hover:bg-[#481523] flex items-center justify-center transition-all shadow-2xl active:scale-95 border-2 border-white text-2xl font-black leading-none pb-0.5"
+                    className="absolute right-1 sm:right-0 md:-right-4 top-1/2 -translate-y-1/2 z-50 w-8 h-8 sm:w-11 sm:h-11 rounded-full bg-[#5B1D2E] text-white hover:bg-[#481523] flex items-center justify-center transition-all shadow-2xl active:scale-95 border-2 border-white text-lg sm:text-2xl font-black leading-none pb-0.5"
                     aria-label="Scroll right"
                   >
                     &#8250;
@@ -183,7 +183,7 @@ export default function TeaExperiencePage() {
                   {/* Horizontal Scrollable Slider of Glassy Transparent Tea Cards */}
                   <div
                     ref={carouselRef}
-                    className="flex gap-3 sm:gap-4 overflow-x-auto scroll-smooth py-3 px-2 sm:px-4 snap-x snap-mandatory no-scrollbar"
+                    className="flex gap-3 sm:gap-4 overflow-x-auto scroll-smooth py-3 px-2 sm:px-4 snap-x snap-mandatory no-scrollbar w-full"
                     style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
                   >
                     {displayTeas.map((item) => (
@@ -194,12 +194,11 @@ export default function TeaExperiencePage() {
                         <div>
                           {/* Thumbnail */}
                           <div className="relative w-full h-24 sm:h-28 rounded-xl overflow-hidden mb-2.5 sm:mb-3 bg-[#E0D5C3]">
-                            {item.image && storageUrl(item.image) ? (
-                              <Image
-                                src={storageUrl(item.image)!}
+                            {item.image ? (
+                              <img
+                                src={storageUrl(item.image)}
                                 alt={item.name}
-                                fill
-                                className="object-cover"
+                                className="w-full h-full object-cover"
                               />
                             ) : (
                               <div className="w-full h-full flex items-center justify-center text-2xl sm:text-3xl bg-amber-100/60">
@@ -227,7 +226,7 @@ export default function TeaExperiencePage() {
                 </div>
 
                 {/* Right Floating Burgundy Card: Tea, Community & Connection */}
-                <div className="lg:col-span-3 bg-[#5B1D2E] text-[#F7F2E9] rounded-[28px] py-8 px-6 sm:px-8 flex flex-col items-center justify-center text-center shadow-xl w-full min-h-[280px] lg:min-h-[300px] mt-4 lg:mt-0">
+                <div className="w-full lg:col-span-3 bg-[#5B1D2E] text-[#F7F2E9] rounded-[28px] py-8 px-6 sm:px-8 flex flex-col items-center justify-center text-center shadow-xl min-h-[280px] lg:min-h-[300px] mt-2 lg:mt-0">
                   {/* Top Circle Clock Icon */}
                   <div className="w-10 h-10 rounded-full border border-[#F7F2E9]/40 flex items-center justify-center text-[#F7F2E9] mb-3 shrink-0">
                     <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="1.5" viewBox="0 0 24 24">
