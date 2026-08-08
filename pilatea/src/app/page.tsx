@@ -278,50 +278,79 @@ export default function Home() {
             </div>
 
             {teaItems.length > 0 ? (
-              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 mt-6">
-                {teaItems.map((item) => (
-                  <div key={item.id} className="tea-card-item flex flex-col items-center text-center p-4 rounded-2xl bg-[#F1EADD] border border-[#5B1D2E]/15 shadow-sm hover:shadow-md transition-shadow">
-                    <div className="w-24 h-24 mb-3 flex items-center justify-center overflow-hidden rounded-xl">
-                      {item.image ? (
-                        <img src={storageUrl(item.image)} alt={item.name} className="w-full h-full object-contain" />
-                      ) : (
-                        <span className="text-4xl opacity-40">🍵</span>
-                      )}
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5 mt-6">
+                {teaItems.slice(0, 4).map((item) => (
+                  <div
+                    key={item.id}
+                    className="bg-[#F7F2E9]/80 backdrop-blur-xl rounded-[24px] p-4 flex flex-col justify-between border border-[#EBE3D5]/80 text-center shadow-lg hover:shadow-xl hover:bg-[#F7F2E9]/95 transition-all shrink-0 hover:-translate-y-1"
+                  >
+                    <div>
+                      {/* Card Thumbnail */}
+                      <div className="relative w-full h-28 rounded-xl overflow-hidden mb-3 bg-[#E0D5C3]">
+                        {item.image ? (
+                          <img
+                            src={storageUrl(item.image)}
+                            alt={item.name}
+                            className="w-full h-full object-cover"
+                          />
+                        ) : (
+                          <div className="w-full h-full flex items-center justify-center text-3xl bg-amber-100/60">
+                            🍵
+                          </div>
+                        )}
+                      </div>
+
+                      <h3 className="font-bold text-xs uppercase tracking-wide text-[#5B1D2E] mb-1.5 truncate">
+                        {item.name}
+                      </h3>
+                      <p className="text-[11px] text-[#6A5A64] leading-relaxed mb-3 line-clamp-2">
+                        {item.description || item.ingredients}
+                      </p>
                     </div>
-                    <strong className="text-sm text-[#5B1D2E] font-bold tracking-wider uppercase">{item.name}</strong>
-                    <p className="text-xs text-[#5B1D2E]/80 my-1 line-clamp-2">{item.description || item.ingredients}</p>
+
                     {item.price != null && (
-                      <span className="tea-price text-base font-bold text-[#5B1D2E] mt-1">${item.price}</span>
+                      <p className="font-semibold text-xs text-[#4A354F]">
+                        ${typeof item.price === "number" ? item.price.toFixed(2) : item.price}
+                      </p>
                     )}
                   </div>
                 ))}
               </div>
             ) : (
-              <div className="tea-items-grid mt-6">
-                <div className="tea-card-item">
-                  <img src="/calm-bloom.png" alt="Calm Bloom" />
-                  <strong>CALM BLOOM</strong>
-                  <p>Lavender, Chamomile, Rose, Lemon Balm</p>
-                  <span className="tea-price">$6</span>
-                </div>
-                <div className="tea-card-item">
-                  <img src="/matcha-glow.png" alt="Matcha Glow" />
-                  <strong>MATCHA GLOW</strong>
-                  <p>Ceremonial Matcha, Oat Milk, Vanilla</p>
-                  <span className="tea-price">$7</span>
-                </div>
-                <div className="tea-card-item">
-                  <img src="/berry-balance.png" alt="Berry Balance" />
-                  <strong>BERRY BALANCE</strong>
-                  <p>Hibiscus, Mixed Berries, Mint, Lemon</p>
-                  <span className="tea-price">$8</span>
-                </div>
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5 mt-6">
+                {[
+                  { name: "CALM BLOOM", desc: "Lavender, Chamomile, Rose, Lemon Balm", price: "$6.50", icon: "🌸" },
+                  { name: "MATCHA GLOW", desc: "Ceremonial Matcha, Oat Milk, Vanilla", price: "$8.00", icon: "🍵" },
+                  { name: "BERRY BALANCE", desc: "Hibiscus, Mixed Berries, Mint, Lemon", price: "$7.00", icon: "🫐" },
+                  { name: "GOLDEN TURMERIC", desc: "Anti-inflammatory golden milk blend for post-workout.", price: "$7.50", icon: "✨" },
+                ].map((item, idx) => (
+                  <div
+                    key={idx}
+                    className="bg-[#F7F2E9]/80 backdrop-blur-xl rounded-[24px] p-4 flex flex-col justify-between border border-[#EBE3D5]/80 text-center shadow-lg hover:shadow-xl hover:bg-[#F7F2E9]/95 transition-all shrink-0 hover:-translate-y-1"
+                  >
+                    <div>
+                      <div className="w-full h-28 rounded-xl bg-[#EFE8DC] border border-[#E4DAC9] flex items-center justify-center text-3xl mb-3">
+                        {item.icon}
+                      </div>
+                      <h3 className="font-bold text-xs uppercase tracking-wide text-[#5B1D2E] mb-1.5 truncate">
+                        {item.name}
+                      </h3>
+                      <p className="text-[11px] text-[#6A5A64] leading-relaxed mb-3 line-clamp-2">
+                        {item.desc}
+                      </p>
+                    </div>
+                    <p className="font-semibold text-xs text-[#4A354F]">{item.price}</p>
+                  </div>
+                ))}
               </div>
             )}
 
-            <div className="flex justify-center mt-6">
-              <Link href="/tea-experience" className="btn text-sm">
-                View Full Tea Menu
+            <div className="flex justify-center mt-8">
+              <Link
+                href="/tea-experience"
+                className="bg-[#5B1D2E] hover:bg-[#481523] text-white font-medium px-8 py-3 rounded-full transition-all shadow-md hover:shadow-lg text-sm tracking-wide"
+              >
+                View All Tea Menu
               </Link>
             </div>
           </section>
