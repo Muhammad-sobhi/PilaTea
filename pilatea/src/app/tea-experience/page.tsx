@@ -51,38 +51,17 @@ export default function TeaExperiencePage() {
 
   const displayTeas = teas.length > 0 ? teas : defaultTeas;
 
-  /* Reusable tea card */
-  const TeaCard = ({ item }: { item: { id: number; name: string; description?: string; price?: string | number | null; image?: string | null } }) => (
-    <div className="bg-[#F7F2E9]/90 backdrop-blur-xl rounded-[24px] p-3.5 sm:p-4 flex flex-col justify-between border border-[#EBE3D5]/80 text-center shadow-xl hover:shadow-2xl hover:bg-[#F7F2E9] transition-all shrink-0 hover:-translate-y-1 h-full">
-      <div>
-        <div className="relative w-full h-24 sm:h-28 rounded-xl overflow-hidden mb-2.5 sm:mb-3 bg-[#E0D5C3]">
-          {item.image && storageUrl(item.image) ? (
-            <Image src={storageUrl(item.image)!} alt={item.name} fill className="object-cover" />
-          ) : (
-            <div className="w-full h-full flex items-center justify-center text-2xl sm:text-3xl bg-amber-100/60">🍵</div>
-          )}
-        </div>
-        <h3 className="font-bold text-[11px] sm:text-xs uppercase tracking-wide text-[#5B1D2E] mb-1 truncate">{item.name}</h3>
-        <p className="text-[10px] sm:text-[11px] text-[#6A5A64] leading-relaxed mb-2.5 line-clamp-2">{item.description}</p>
-      </div>
-      {item.price != null && (
-        <p className="font-semibold text-xs text-[#4A354F]">
-          ${Number(item.price).toFixed(2)}
-        </p>
-      )}
-    </div>
-  );
-
   return (
     <div className="relative min-h-screen pt-24 pb-32 md:pb-40 mb-12" style={{ overflowX: 'hidden' }}>
       <div className="max-w-[1320px] mx-auto px-4 md:px-8">
         <BackButton />
+
         {/* Outer Container matching mockup */}
         <div className="mt-4 relative rounded-[32px] overflow-hidden border border-[#EBE3D5] shadow-lg bg-[#F7F2E9]">
           
-          {/* Top Main Hero Block with tea.png background */}
-          <div className="relative p-6 sm:p-10 md:p-14 min-h-[460px] sm:min-h-[520px] flex flex-col justify-between">
-            {/* Background Image tea.png */}
+          {/* Top Main Hero Block with tea.png background matching mockup exactly */}
+          <div className="relative p-6 sm:p-10 md:p-14 min-h-[500px] sm:min-h-[580px] lg:min-h-[620px] flex flex-col justify-between">
+            {/* Background Image tea.png - full opacity matching mockup */}
             <div className="absolute inset-0 z-0">
               <Image
                 src="/tea.png"
@@ -91,12 +70,10 @@ export default function TeaExperiencePage() {
                 className="object-cover object-center"
                 priority
               />
-              {/* Left subtle tint for text contrast */}
-              <div className="absolute inset-0 bg-gradient-to-r from-[#F7F2E9]/80 via-[#F7F2E9]/40 to-transparent w-full sm:w-[55%]" />
             </div>
 
             {/* Top Hero Text Column */}
-            <div className="relative z-10 w-full lg:max-w-xl text-[#4A354F] pb-4 sm:pb-8">
+            <div className="relative z-10 w-full lg:max-w-xl text-[#4A354F] pb-8 sm:pb-16">
               <p className="text-[10px] sm:text-[12px] tracking-[0.25em] font-semibold text-[#6E555C] uppercase mb-2 sm:mb-3">
                 {s("tea_subheading", "OUR TEA EXPERIENCE")}
               </p>
@@ -178,40 +155,79 @@ export default function TeaExperiencePage() {
             </div>
           </div>
 
-          {/* Lower Content Block matching mockup: Our Tea Collection Panel + Burgundy Card */}
-          <div className="relative z-20 px-3 sm:px-6 md:px-8 pb-8 pt-4 bg-[#F7F2E9]">
+          {/* Floating Transparent Glassy Tea Cards Carousel & Burgundy Card overlapping bottom of background image */}
+          <div className="relative z-20 -mt-16 sm:-mt-24 md:-mt-32 px-3 sm:px-6 md:px-8 pb-8">
             <ScrollReveal>
               <div id="collection" className="grid lg:grid-cols-12 gap-6 items-stretch mb-6">
 
-                {/* Left Panel: Our Tea Collection with 5 cards */}
-                <div className="lg:col-span-9 bg-[#EFE8DC]/80 rounded-[28px] p-4 sm:p-6 border border-[#E4DAC9]/80 flex flex-col justify-between">
-                  {/* Header */}
-                  <div className="text-center mb-5">
-                    <div className="flex items-center justify-center gap-3 mb-1">
-                      <div className="h-px w-10 bg-[#5B1D2E]/20" />
-                      <span className="text-[#5B1D2E]/40 text-xs">🍃</span>
-                      <div className="h-px w-10 bg-[#5B1D2E]/20" />
-                    </div>
-                    <h2 className="text-lg sm:text-xl font-semibold text-[#5B1D2E] tracking-wide">
-                      Our Tea Collection
-                    </h2>
-                    <p className="text-[11px] sm:text-xs text-[#6A5A64]">
-                      Carefully curated blends to uplift your day.
-                    </p>
-                  </div>
+                {/* Left Floating Tea Slider */}
+                <div className="lg:col-span-9 relative flex flex-col justify-center px-1 sm:px-6">
+                  {/* Left Floating Circular Arrow Button */}
+                  <button
+                    onClick={scrollLeft}
+                    className="absolute left-1 sm:left-0 md:-left-4 top-1/2 -translate-y-1/2 z-50 w-8 h-8 sm:w-11 sm:h-11 rounded-full bg-[#5B1D2E] text-white hover:bg-[#481523] flex items-center justify-center transition-all shadow-2xl active:scale-95 border-2 border-white text-lg sm:text-2xl font-black leading-none pb-0.5"
+                    aria-label="Scroll left"
+                  >
+                    &#8249;
+                  </button>
 
-                  {/* 5 Cards Row on desktop, 2-col grid on mobile */}
-                  <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3">
-                    {displayTeas.slice(0, 5).map((item) => (
-                      <div key={item.id}>
-                        <TeaCard item={item} />
+                  {/* Right Floating Circular Arrow Button */}
+                  <button
+                    onClick={scrollRight}
+                    className="absolute right-1 sm:right-0 md:-right-4 top-1/2 -translate-y-1/2 z-50 w-8 h-8 sm:w-11 sm:h-11 rounded-full bg-[#5B1D2E] text-white hover:bg-[#481523] flex items-center justify-center transition-all shadow-2xl active:scale-95 border-2 border-white text-2xl font-black leading-none pb-0.5"
+                    aria-label="Scroll right"
+                  >
+                    &#8250;
+                  </button>
+
+                  {/* Horizontal Scrollable Slider of Glassy Transparent Tea Cards */}
+                  <div
+                    ref={carouselRef}
+                    className="flex gap-3 sm:gap-4 overflow-x-auto scroll-smooth py-3 px-2 sm:px-4 snap-x snap-mandatory no-scrollbar"
+                    style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
+                  >
+                    {displayTeas.map((item) => (
+                      <div
+                        key={item.id}
+                        className="min-w-[190px] max-w-[210px] sm:min-w-[210px] sm:max-w-[225px] flex-1 snap-start bg-[#F7F2E9]/80 backdrop-blur-xl rounded-[24px] p-3.5 sm:p-4 flex flex-col justify-between border border-[#EBE3D5]/80 text-center shadow-xl hover:shadow-2xl hover:bg-[#F7F2E9]/95 transition-all shrink-0 hover:-translate-y-1"
+                      >
+                        <div>
+                          {/* Thumbnail */}
+                          <div className="relative w-full h-24 sm:h-28 rounded-xl overflow-hidden mb-2.5 sm:mb-3 bg-[#E0D5C3]">
+                            {item.image && storageUrl(item.image) ? (
+                              <Image
+                                src={storageUrl(item.image)!}
+                                alt={item.name}
+                                fill
+                                className="object-cover"
+                              />
+                            ) : (
+                              <div className="w-full h-full flex items-center justify-center text-2xl sm:text-3xl bg-amber-100/60">
+                                🍵
+                              </div>
+                            )}
+                          </div>
+
+                          <h3 className="font-bold text-[11px] sm:text-xs uppercase tracking-wide text-[#5B1D2E] mb-1 truncate">
+                            {item.name}
+                          </h3>
+                          <p className="text-[10px] sm:text-[11px] text-[#6A5A64] leading-relaxed mb-2.5 line-clamp-2">
+                            {item.description}
+                          </p>
+                        </div>
+
+                        {item.price != null && (
+                          <p className="font-semibold text-xs text-[#4A354F]">
+                            ${Number(item.price).toFixed(2)}
+                          </p>
+                        )}
                       </div>
                     ))}
                   </div>
                 </div>
 
-                {/* Right Burgundy Card: Tea, Community & Connection */}
-                <div className="lg:col-span-3 bg-[#5B1D2E] text-[#F7F2E9] rounded-[28px] py-8 px-6 sm:px-8 flex flex-col items-center justify-center text-center shadow-xl w-full min-h-[280px] lg:min-h-[300px]">
+                {/* Right Floating Burgundy Card: Tea, Community & Connection */}
+                <div className="lg:col-span-3 bg-[#5B1D2E] text-[#F7F2E9] rounded-[28px] py-8 px-6 sm:px-8 flex flex-col items-center justify-center text-center shadow-xl w-full min-h-[280px] lg:min-h-[300px] mt-4 lg:mt-0">
                   {/* Top Circle Clock Icon */}
                   <div className="w-10 h-10 rounded-full border border-[#F7F2E9]/40 flex items-center justify-center text-[#F7F2E9] mb-3 shrink-0">
                     <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="1.5" viewBox="0 0 24 24">
